@@ -1,0 +1,55 @@
+section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  background-color: #113C4D;
+  padding: 4rem;
+  color: white;
+  border-radius: 3rem;
+  user-select: none;
+}
+
+.login {
+  font-size: 3rem;
+  padding-bottom: 2rem;
+}
+
+.error {
+  position: absolute;
+  bottom: -5rem;
+  color: red;
+  font-size: 1.8rem;
+  text-align: center;
+
+  max-width: 30rem;
+}
+
+.spacer {
+  height: 64px;
+}
+
+
+@media screen and (max-width: 600px) {
+
+  form {
+    width: 100%;
+    border-radius: 0;
+    padding: 4rem 0;
+  }
+
+  .error {
+    max-width: 90%;
+  }
+
+
+}

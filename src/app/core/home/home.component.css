@@ -1,0 +1,14 @@
+section {
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+}
+
+img {
+  max-width: 75%;
+  user-select: none;
+}
+
+@media screen and (max-width: 600px) {
+
+}

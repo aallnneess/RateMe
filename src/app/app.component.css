@@ -1,35 +1,9 @@
 main {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
 section {
-  display: flex;
-  justify-content: center;
-  margin-top: 5rem;
-}
-
-ul {
-  display: flex;
-  list-style-type: none;
-  justify-content: center;
-  gap: 10rem;
-  padding: 1rem 0;
-
-}
-
-img {
-  max-width: 75%;
-  user-select: none;
-}
-
-@media screen and (max-width: 600px) {
-
-  ul {
-    justify-content: space-between;
-    padding: 1rem;
-  }
-
-
-
-
+  flex-grow: 1;
 }

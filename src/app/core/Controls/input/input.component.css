@@ -1,0 +1,22 @@
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  margin-bottom: 1rem;
+}
+
+.input-box {
+  padding: 1rem;
+  border: solid 2px black;
+  border-radius: 1rem;
+  font-size: 2rem;
+}
+
+.error-text {
+  position: absolute;
+  bottom: -2rem;
+  color: #d58383;
+  font-size: 1.4rem;
+}

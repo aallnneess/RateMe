@@ -1,0 +1,19 @@
+ul {
+  display: flex;
+  list-style-type: none;
+  justify-content: center;
+  gap: 10rem;
+  padding: 1rem 0;
+
+}
+
+
+@media screen and (max-width: 600px) {
+
+  ul {
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+
+}

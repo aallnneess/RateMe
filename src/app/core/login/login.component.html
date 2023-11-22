@@ -1,0 +1,20 @@
+<section>
+
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+    <p class="text_bold login">Login</p>
+
+    <app-input #mailInput [name]="'E-Mail'" [value]="getFormControl('email')"></app-input>
+    <app-input #passwordInput [name]="'Passwort'" [value]="getFormControl('password')"></app-input>
+
+    <button class="blue-button">Login</button>
+
+    <div class="error">
+      <p>{{error}}</p>
+    </div>
+
+  </form>
+
+  <div class="spacer"></div>
+
+</section>

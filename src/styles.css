@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 html,
 input,
 textarea,
@@ -86,7 +88,6 @@ video {
   border: 0;
   font-size: 100%;
   vertical-align: baseline;
-  font-family: "Roboto", sans-serif;
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -134,6 +135,7 @@ html {
 
 body {
   height: 100%;
+  font-family: 'Roboto', sans-serif;
 }
 
 .blue-button {
@@ -156,3 +158,11 @@ body {
   background-color: white;
 }
 
+.text {
+  font-size: 2rem;
+}
+
+.text_bold {
+  font-size: 2rem;
+  font-weight: 700;
+}
