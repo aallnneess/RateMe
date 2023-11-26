@@ -10,6 +10,7 @@ export class InputComponent {
 
   @Input() name!: string;
   @Input() value!: FormControl;
+  @Input() type!: string;
 
   @Input() check = new EventEmitter();
 
@@ -18,7 +19,7 @@ export class InputComponent {
   checkErrors() {
     this.error = '';
 
-    console.log(this.value.errors);
+    //console.log(this.value.errors);
 
     if (this.value.errors?.['required']) {
       this.error = 'Darf nicht fehlen.';

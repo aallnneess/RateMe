@@ -4,8 +4,8 @@
 
     <p class="text_bold login">Login</p>
 
-    <app-input #mailInput [name]="'E-Mail'" [value]="getFormControl('email')"></app-input>
-    <app-input #passwordInput [name]="'Passwort'" [value]="getFormControl('password')"></app-input>
+    <app-input #mailInput type="text" [name]="'E-Mail'" [value]="getFormControl('email')"></app-input>
+    <app-input type="password" #passwordInput [name]="'Passwort'" [value]="getFormControl('password')"></app-input>
 
     <button class="blue-button">Login</button>
 

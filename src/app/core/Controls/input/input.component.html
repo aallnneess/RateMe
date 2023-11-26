@@ -1,4 +1,4 @@
 <label class="text" for="input">{{name}}: </label>
-<input class="input-box" id="input" type="text" [formControl]="value" (keyup)="checkErrors()">
+<input class="input-box" id="input" [type]="type" [formControl]="value" (keyup)="checkErrors()">
 
 <p class="error-text">{{error}}</p>
