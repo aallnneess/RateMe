@@ -4,6 +4,10 @@ main {
   height: 100%;
 }
 
+app-top-nav {
+  padding: 1rem 0;
+}
+
 section {
   flex-grow: 1;
 }

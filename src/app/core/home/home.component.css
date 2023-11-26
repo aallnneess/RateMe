@@ -1,14 +1,24 @@
 section {
   display: flex;
   justify-content: center;
-  margin-top: 5rem;
+  align-items: center;
+  height: 100%;
 }
 
 img {
-  max-width: 75%;
+  border: none;
+  height: 75vh;
   user-select: none;
+  margin-bottom: 3rem;
+  padding: 0;
 }
 
 @media screen and (max-width: 600px) {
+
+  img {
+    width: 100vw;
+    height: auto;
+    margin-bottom: 10rem;
+  }
 
 }
