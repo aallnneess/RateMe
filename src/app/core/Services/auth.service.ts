@@ -12,7 +12,22 @@ export class AuthService {
 
   appwrite = inject(AppwriteService);
 
-  constructor() {}
+  constructor() {
+    this.getSession().subscribe();
+  }
+
+  getSession() {
+    return from(this.appwrite.account.getSession('current')).pipe(
+      tap(response => {
+        this.setSession(response);
+      }),
+      catchError(err => {
+        return throwError(() => {
+          return 'No Session';
+        })
+      })
+    )
+  }
 
   login(email: string, password: string) {
     return from(this.appwrite.account.createEmailSession(
@@ -31,6 +46,8 @@ export class AuthService {
   }
 
   setSession(session: Models.Session) {
+    console.log('Set session:');
     console.log(session);
+    this.loggedIn.set(session);
   }
 }

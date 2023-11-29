@@ -1,6 +1,12 @@
 <nav>
   <ul>
     <li routerLink="/" class="blue-button">Home</li>
-    <li routerLink="login" class="blue-button">Login</li>
+
+    @if (!authService.loggedIn()) {
+      <li routerLink="login" class="blue-button">Login</li>
+    } @else {
+      <li routerLink="members" class="blue-button">Login</li>
+    }
+
   </ul>
 </nav>

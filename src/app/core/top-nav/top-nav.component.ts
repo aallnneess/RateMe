@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {AuthService} from "../Services/auth.service";
 
 @Component({
   selector: 'app-top-nav',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './top-nav.component.css'
 })
 export class TopNavComponent {
+
+  authService = inject(AuthService);
 
 }

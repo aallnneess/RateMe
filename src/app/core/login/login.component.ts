@@ -2,6 +2,7 @@ import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../Services/auth.service";
 import {InputComponent} from "../Controls/input/input.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
   fb: FormBuilder = inject(FormBuilder);
+  router: Router = inject(Router);
 
   error = '';
 
@@ -46,6 +48,7 @@ export class LoginComponent implements OnInit {
     ).subscribe({
       complete: () => {
         this.cleanForm();
+        this.router.navigateByUrl('members');
       },
       error: err => {
         this.createErrorMessages(err);
