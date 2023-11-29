@@ -1,12 +1,14 @@
 <nav>
-  <ul>
-    <li routerLink="/" class="blue-button">Home</li>
-
     @if (!authService.loggedIn()) {
-      <li routerLink="login" class="blue-button">Login</li>
+      <ul>
+        <li routerLink="/" skipLocationChange="true" class="blue-button">Home</li>
+        <li class="blue-button" (click)="autoLogin()">Login</li>
+      </ul>
     } @else {
-      <li routerLink="members" class="blue-button">Login</li>
+      <app-member-nav></app-member-nav>
     }
-
-  </ul>
 </nav>
+
+
+
+

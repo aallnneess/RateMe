@@ -9,6 +9,7 @@ import { MembersComponent } from './members.component';
   declarations: [
     MembersComponent
   ],
+  exports: [],
   imports: [
     CommonModule,
     MembersRoutingModule

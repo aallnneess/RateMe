@@ -8,6 +8,7 @@ import { TopNavComponent } from './core/top-nav/top-nav.component';
 import { LoginComponent } from './core/login/login.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { InputComponent } from './core/Controls/input/input.component';
+import { MemberNavComponent } from './core/top-nav/member-nav/member-nav.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { InputComponent } from './core/Controls/input/input.component';
     HomeComponent,
     TopNavComponent,
     LoginComponent,
-    InputComponent
+    InputComponent,
+    MemberNavComponent
   ],
   imports: [
     BrowserModule,

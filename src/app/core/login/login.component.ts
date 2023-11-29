@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   authService = inject(AuthService);
 
   ngOnInit(): void {
+
     this.loginForm = this.fb.group({
       'email': ['', [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-Z0-9@.]+$')]],
       'password' : ['', [Validators.required, Validators.minLength(8), Validators.pattern('^[a-zA-Z0-9]+$')]]
@@ -48,7 +49,9 @@ export class LoginComponent implements OnInit {
     ).subscribe({
       complete: () => {
         this.cleanForm();
-        this.router.navigateByUrl('members');
+        this.router.navigateByUrl('members', {
+          skipLocationChange: true
+        });
       },
       error: err => {
         this.createErrorMessages(err);

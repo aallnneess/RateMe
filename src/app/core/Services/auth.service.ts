@@ -2,6 +2,7 @@ import {inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {AppwriteService} from "./appwrite.service";
 import {catchError, finalize, from, of, tap, throwError} from "rxjs";
 import {Models} from "appwrite";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,15 @@ export class AuthService {
   loggedIn: WritableSignal<Models.Session|null> = signal(null);
 
   appwrite = inject(AppwriteService);
+  router = inject(Router);
 
-  constructor() {
-    this.getSession().subscribe();
-  }
+  constructor() {}
 
   getSession() {
     return from(this.appwrite.account.getSession('current')).pipe(
       tap(response => {
         this.setSession(response);
+        this.router.navigateByUrl('members')
       }),
       catchError(err => {
         return throwError(() => {
