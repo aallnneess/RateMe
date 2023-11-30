@@ -1,11 +1,50 @@
 ul {
   display: flex;
   list-style-type: none;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10rem;
-  padding: 0;
+  padding: 0 2rem;
 
+  position: relative;
 }
+
+
+.popup-menu {
+  position: absolute;
+  right: 2rem;
+  display: none;
+  cursor: pointer;
+  font-size: 2rem;
+  user-select: none;
+
+/*
+  padding: 1rem;
+  background-color: #e7ebed;
+  border-radius: 1rem;
+
+ */
+}
+
+.popup-menu-li {
+  padding:0.5rem 1rem;
+  border: solid 2px white;
+}
+
+.popup-menu-li:hover {
+  background-color: #113C4D;
+  color: white;
+}
+
+.popup-menu-li:active {
+  color: #113C4D;
+  border: solid 2px #113C4D;
+  background-color: white;
+}
+
+.popup-menu-show {
+  display: block;
+}
+
 
 
 @media screen and (max-width: 600px) {

@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { MembersRoutingModule } from './members-routing.module';
 import { MembersComponent } from './members.component';
+import { RateRecipeComponent } from './rate-recipe/rate-recipe.component';
 
 
 @NgModule({
   declarations: [
-    MembersComponent
+    MembersComponent,
+    RateRecipeComponent
   ],
   exports: [],
   imports: [
