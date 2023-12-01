@@ -1,3 +1,7 @@
+:host {
+  width: 100%;
+}
+
 /* Standart Input ausblenden*/
 input[type="file"] {
   display: none;
@@ -13,7 +17,7 @@ input[type="file"] {
 
 image-cropper {
   max-width: 75vw;
-  max-height: 75vh;
+  max-height: 70vh;
 }
 
 .add-button {

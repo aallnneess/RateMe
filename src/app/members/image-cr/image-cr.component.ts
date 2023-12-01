@@ -21,7 +21,8 @@ export class ImageCrComponent {
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>
 
-  @Output('Image') image = new EventEmitter<Blob>();
+  @Output('Image') images = new EventEmitter<Blob[]>();
+  blobs: Blob[] = [];
 
   @Input() width = 1280;
   @Input() height = 720;
@@ -34,6 +35,7 @@ export class ImageCrComponent {
     this.imageChangedEvent  = '';
     this.croppedImage = '';
     this.input.nativeElement.value = '';
+    this.blobs = [];
   }
 
   fileChangeEvent(event: any): void {
@@ -41,7 +43,8 @@ export class ImageCrComponent {
   }
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.objectUrl;
-    this.image.emit(event.blob as Blob);
+    this.blobs.push(event.blob as Blob);
+    this.images.emit(this.blobs);
 
     console.log('Größe des Bildes in KB: ' + event.blob!.size / 1024);
 

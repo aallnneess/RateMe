@@ -8,7 +8,6 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class RateRecipeComponent implements OnInit {
 
-  croppedImage!: Blob;
   images: Blob[] = [];
 
   form!: FormGroup;
@@ -25,13 +24,8 @@ export class RateRecipeComponent implements OnInit {
     });
   }
 
-  setCroppedImage(blob: Blob) {
-    this.croppedImage = blob;
-  }
-
-  addImageToArray() {
-    this.images.push(this.croppedImage);
-
+  setImages(blobs: Blob[]) {
+    this.images = [...blobs];
   }
 
   getFormControl(name: string) {

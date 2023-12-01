@@ -8,6 +8,7 @@ import {ImageCropperModule} from "ngx-image-cropper";
 import { ImageCrComponent } from './image-cr/image-cr.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { MemberInputComponent } from './MemberControls/member-input/member-input.component';
+import { ImageGalleryComponent } from './image-cr/image-gallery/image-gallery.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { MemberInputComponent } from './MemberControls/member-input/member-input
     MembersComponent,
     RateRecipeComponent,
     ImageCrComponent,
-    MemberInputComponent
+    MemberInputComponent,
+    ImageGalleryComponent
   ],
   exports: [],
   imports: [
