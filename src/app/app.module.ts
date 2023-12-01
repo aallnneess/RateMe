@@ -11,20 +11,23 @@ import { InputComponent } from './core/Controls/input/input.component';
 import { MemberNavComponent } from './core/top-nav/member-nav/member-nav.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    TopNavComponent,
-    LoginComponent,
-    InputComponent,
-    MemberNavComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        TopNavComponent,
+        LoginComponent,
+        InputComponent,
+        MemberNavComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule
+    ],
+    providers: [],
+    exports: [
+        InputComponent
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

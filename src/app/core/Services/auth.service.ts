@@ -47,8 +47,7 @@ export class AuthService {
   }
 
   setSession(session: Models.Session) {
-    console.log('Set session:');
-    console.log(session);
+    //console.log('Set session:');
     this.loggedIn.set(session);
   }
 }

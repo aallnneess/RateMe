@@ -1,0 +1,70 @@
+.input-container {
+  position: relative;
+}
+
+.floating-label {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  cursor: text;
+
+  transition: transform 0.1s;
+}
+
+.floating-label-small {
+  font-size: 1rem;
+  transform: translateY(-0.65rem);
+}
+
+.input-config {
+  padding: 1.1rem 1rem 0.4rem 1rem;
+  border: #113C4D solid 2px;
+  border-radius: 0.5rem;
+  width: 60%;
+}
+
+textarea {
+  padding: 1.1rem 1rem 0.4rem 1rem;
+  border: #113C4D solid 2px;
+  border-radius: 0.5rem;
+  height: 10rem;
+  width: 60%;
+}
+
+.error-text {
+  position: absolute;
+  bottom: -2rem;
+  color: #d58383;
+  font-size: 1.4rem;
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
+
+.slider {
+  width: 60%;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+@media (max-width: 600px) {
+
+  textarea {
+    padding: 1.1rem 1rem 0.4rem 1rem;
+    width: 90%;
+  }
+
+  .input-config {
+    padding: 1.1rem 1rem 0.4rem 1rem;
+    width: 90%;
+  }
+
+  .slider {
+    padding: 0;
+    width: 90%;
+  }
+
+}

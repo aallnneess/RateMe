@@ -1,0 +1,31 @@
+<div class="image-container">
+
+  <label class="blue-button">
+    <input #input type="file" (change)="fileChangeEvent($event)" />
+    <h3 class="text-small">
+      Bild auswählen
+    </h3>
+  </label>
+
+  @if (input.value) {
+    <span class="blue-button add-button" (click)="clear()">Hinzufügen</span>
+  }
+
+
+  <image-cropper
+    [imageChangedEvent]="imageChangedEvent"
+    [maintainAspectRatio]="true"
+    [aspectRatio]="4 / 3"
+    format="jpeg"
+    (imageCropped)="imageCropped($event)"
+    (imageLoaded)="imageLoaded($event)"
+    (cropperReady)="cropperReady()"
+    (loadImageFailed)="loadImageFailed()"
+    [resizeToWidth]="width"
+    [resizeToHeight]="height"
+    [onlyScaleDown]="onlyScaleDown"
+
+  ></image-cropper>
+
+  <!-- <img class="image" [src]="croppedImage" /> -->
+</div>

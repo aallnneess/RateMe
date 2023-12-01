@@ -5,7 +5,7 @@ import {LoginComponent} from "./core/login/login.component";
 import {AuthService} from "./core/Services/auth.service";
 
 const canMatchUser: CanMatchFn = () => {
-  console.log('canMatchFn');
+  //console.log('canMatchFn');
   return !!inject(AuthService).loggedIn();
 }
 

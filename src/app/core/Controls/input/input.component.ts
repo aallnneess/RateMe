@@ -12,8 +12,6 @@ export class InputComponent {
   @Input() value!: FormControl;
   @Input() type!: string;
 
-  @Input() check = new EventEmitter();
-
   error!: string;
 
   checkErrors() {

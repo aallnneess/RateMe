@@ -1,0 +1,24 @@
+/* Standart Input ausblenden*/
+input[type="file"] {
+  display: none;
+}
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+}
+
+image-cropper {
+  max-width: 75vw;
+  max-height: 75vh;
+}
+
+.add-button {
+  font-size: 1.6rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+}

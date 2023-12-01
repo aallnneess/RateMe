@@ -16,9 +16,8 @@ export class TopNavComponent {
 
     this.authService.getSession().subscribe({
       complete: () => {
-        console.log('complete');
-
-        console.log(this.router.url);
+        //console.log('complete');
+        //console.log(this.router.url);
 
         // Checks if the current URL is '/members'
         if (this.router.url === '/members') {

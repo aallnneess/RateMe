@@ -1,0 +1,57 @@
+@if (textarea) {
+
+  <div class="input-container">
+    <label #label2 class="floating-label text-small" for="input2">{{name}} </label>
+    <textarea #textArea class="input-box input-config text-small" id="input2"
+              [formControl]="value" (keyup)="checkErrors()"
+              (focus)="label2.classList.add('floating-label-small')"
+              (focusout)="focusOut()">
+
+  </textarea>
+
+    <p class="error-text">{{error}}</p>
+  </div>
+
+
+
+} @else if (slider) {
+
+
+
+  <div class="input-container slider-container">
+
+    <h3 class="text-small">Punkte: {{slider.value}}</h3>
+
+    <input #slider id="inputSlider"
+           class="slider"
+           [formControl]="value"
+           type="range"
+           min="0"
+           max="10"
+           step="1">
+
+    <p class="error-text">{{error}}</p>
+  </div>
+
+
+
+
+
+} @else {
+
+  <div class="input-container">
+    <label #label class="floating-label text-small" for="input">{{name}} </label>
+    <input #input class="input-box input-config text-small" id="input"
+           [type]="type"
+           [formControl]="value" (keyup)="checkErrors()"
+           (focus)="label.classList.add('floating-label-small')"
+           (focusout)="focusOut()">
+
+    <p class="error-text">{{error}}</p>
+  </div>
+}
+
+
+
+
+
