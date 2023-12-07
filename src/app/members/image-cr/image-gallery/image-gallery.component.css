@@ -1,0 +1,15 @@
+:host {
+  /*
+  width: 75%;
+
+   */
+
+
+  width: 75%;
+  max-width: 350px;
+
+}
+
+gallery {
+  margin-top: 1rem;
+}

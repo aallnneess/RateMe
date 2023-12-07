@@ -1,7 +1,7 @@
 <div class="image-container">
 
   <label class="blue-button">
-    <input #input type="file" (change)="fileChangeEvent($event)" />
+    <input #input type="file" (change)="fileChangeEvent($event)" (input)="imageSelect()" />
     <h3 class="text-small">
       Bild auswählen
     </h3>
@@ -9,26 +9,39 @@
 
   @if (input.value) {
 
-    <span class="blue-button material-symbols-outlined add-button" (click)="clear()">
+    <span class="blue-button material-symbols-outlined add-button" (click)="add()">
       add
     </span>
   }
 
+  @if (showCropper) {
 
-  <image-cropper
-    [imageChangedEvent]="imageChangedEvent"
-    [maintainAspectRatio]="true"
-    [aspectRatio]="4 / 3"
-    format="jpeg"
-    (imageCropped)="imageCropped($event)"
-    (imageLoaded)="imageLoaded($event)"
-    (cropperReady)="cropperReady()"
-    (loadImageFailed)="loadImageFailed()"
-    [resizeToWidth]="width"
-    [resizeToHeight]="height"
-    [onlyScaleDown]="onlyScaleDown"
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="4 / 3"
+      format="jpeg"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded($event)"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+      [resizeToWidth]="width"
+      [resizeToHeight]="height"
+      [onlyScaleDown]="onlyScaleDown"
 
-  ></image-cropper>
+    ></image-cropper>
+
+  } @else {
+    <app-image-gallery #gallery></app-image-gallery>
+  }
+
+
+
+
+
+
+
+
 
   <!-- <img class="image" [src]="croppedImage" /> -->
 </div>
