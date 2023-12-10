@@ -10,6 +10,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MemberInputComponent} from './MemberControls/member-input/member-input.component';
 import {ImageGalleryComponent} from './image-cr/image-gallery/image-gallery.component';
 import { GalleryModule} from "ng-gallery";
+import {SpinnerComponent} from "./MemberControls/spinner/spinner.component";
 
 
 @NgModule({
@@ -18,16 +19,17 @@ import { GalleryModule} from "ng-gallery";
     RateRecipeComponent,
     ImageCrComponent,
     MemberInputComponent,
-    ImageGalleryComponent
+    ImageGalleryComponent,
+    SpinnerComponent
   ],
   exports: [],
-  imports: [
-    CommonModule,
-    MembersRoutingModule,
-    ImageCropperModule,
-    FormsModule,
-    ReactiveFormsModule,
-    GalleryModule
-  ]
+    imports: [
+        CommonModule,
+        MembersRoutingModule,
+        ImageCropperModule,
+        FormsModule,
+        ReactiveFormsModule,
+        GalleryModule
+    ]
 })
 export class MembersModule { }

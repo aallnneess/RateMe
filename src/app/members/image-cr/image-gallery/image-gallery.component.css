@@ -8,8 +8,17 @@
   width: 75%;
   max-width: 350px;
 
+  position: relative;
+
 }
 
 gallery {
   margin-top: 1rem;
+}
+
+button {
+  position: absolute;
+  top: 2rem;
+  right: 1rem;
+  z-index: 1000;
 }

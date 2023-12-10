@@ -10,24 +10,41 @@ export class MemberInputComponent {
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   @ViewChild('label') label!: ElementRef<HTMLLabelElement>;
+  @ViewChild('textArea') textArea!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('label2') label2!: ElementRef<HTMLLabelElement>;
 
-  @Input() name!: string;
-  @Input() value!: FormControl;
-  @Input() type!: string;
 
+  @Input({ required: true }) value!: FormControl;
+  @Input({ required: true }) labelInputId!: string;
+
+  // Nur für Text-Input
+  @Input() textFieldType!: string;
+
+  // Nur für Textarea
   @Input() textarea = false;
 
+  // Text-Input & Textarea
+  @Input() name!: string;
+
+  // Nur für Slider
   @Input() slider = false;
 
   error!: string;
 
   focusOut() {
 
-    console.log(this.input);
-
-    if (this.input.nativeElement.value.length === 0) {
-      this.label.nativeElement.classList.remove('floating-label-small')
+    if (this.input) {
+      if (this.input.nativeElement.value.length === 0) {
+        this.label.nativeElement.classList.remove('floating-label-small')
+      }
     }
+
+    if (this.textArea) {
+      if (this.textArea.nativeElement.value.length === 0) {
+        this.label2.nativeElement.classList.remove('floating-label-small')
+      }
+    }
+
 
   }
 
@@ -42,6 +59,10 @@ export class MemberInputComponent {
 
     if (this.value.errors?.['minlength']) {
       this.error = 'Zu kurz.';
+    }
+
+    if (this.value.errors?.['maxlength']) {
+      this.error = 'Zu lang.';
     }
 
     if (this.value.errors?.['pattern']) {

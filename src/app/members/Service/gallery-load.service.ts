@@ -9,12 +9,11 @@ export class GalleryLoadService {
   imagesGallery: WritableSignal<GalleryItem[]> = signal([]);
   images: WritableSignal<Blob[]> = signal([]);
 
-  constructor() {
-    console.log('GalleryLoadService init');
-  }
 
   addBlobImages(blobs: Blob[]) {
+    console.log('addBlobImages');
     this.images.set(blobs);
+    console.log(this.images());
 
     this.addGalleryItems(blobs);
   }
@@ -25,7 +24,7 @@ export class GalleryLoadService {
     let tmpItems: GalleryItem[] = [];
 
     items.forEach(item => {
-      console.log('convert');
+      //console.log('convert');
       tmpItems.push(
         new ImageItem({
           src: URL.createObjectURL(item)

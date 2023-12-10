@@ -1,13 +1,36 @@
+/*ul {*/
+/*  display: flex;*/
+/*  list-style-type: none;*/
+/*  justify-content: space-between;*/
+/*  gap: 10rem;*/
+/*  padding: 0 2rem;*/
+
+/*  position: relative;*/
+/*}*/
+
+
+/*.popup-menu {*/
+/*  position: absolute;*/
+/*  right: 2rem;*/
+/*  display: none;*/
+/*  cursor: pointer;*/
+/*  font-size: 2rem;*/
+/*  user-select: none;*/
+/*}*/
+
 ul {
   display: flex;
   list-style-type: none;
   justify-content: space-between;
-  gap: 10rem;
+  /* Entfernt gap und ersetzt es durch margin in den Child-Elementen */
   padding: 0 2rem;
-
   position: relative;
 }
 
+/* Stellen Sie sicher, dass Sie die direkten Kinder von ul ansprechen */
+ul > li:not(:last-child) {
+  margin-right: 10rem; /* Ersetzt gap */
+}
 
 .popup-menu {
   position: absolute;
@@ -16,14 +39,18 @@ ul {
   cursor: pointer;
   font-size: 2rem;
   user-select: none;
-
-/*
-  padding: 1rem;
-  background-color: #e7ebed;
-  border-radius: 1rem;
-
- */
+  -webkit-user-select: none; /* Safari Vendor Präfix */
 }
+
+/* Zusätzliche Überprüfung auf ältere Safari-Versionen */
+@media not all and (min-resolution:.001dpcm) {
+  @supports (-webkit-appearance:none) and (not (position: sticky)) {
+    ul > li:not(:last-child) {
+      margin-right: 10rem;
+    }
+  }
+}
+
 
 .popup-menu-li {
   padding:0.5rem 1rem;

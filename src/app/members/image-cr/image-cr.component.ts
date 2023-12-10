@@ -26,7 +26,6 @@ export class ImageCrComponent {
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   @ViewChild('gallery') gallery!: ImageGalleryComponent;
 
-  @Output('Image') images = new EventEmitter<Blob[]>();
   blobs: Blob[] = [];
 
 
@@ -35,6 +34,7 @@ export class ImageCrComponent {
   onlyScaleDown = true;
 
   showCropper = true;
+  showLoader = false;
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -57,6 +57,7 @@ export class ImageCrComponent {
 
   imageSelect() {
     this.showCropper = true;
+    this.showLoader = true;
   }
 
 
@@ -74,6 +75,7 @@ export class ImageCrComponent {
   }
   imageLoaded(image: LoadedImage) {
     // show cropper
+    this.showLoader = false;
 
   }
   cropperReady() {
@@ -83,4 +85,10 @@ export class ImageCrComponent {
     // show message
   }
 
+  removeItem(stateId: number) {
+    this.blobs.splice(stateId,1);
+    this.galleryLoadService.addBlobImages(this.blobs);
+     // console.log('state: ' + stateId);
+     // console.log(this.blobs);
+  }
 }

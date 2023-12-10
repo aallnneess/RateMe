@@ -5,7 +5,14 @@
     <h3 class="text-small">
       Bild auswählen
     </h3>
+
   </label>
+
+  @if (showLoader) {
+    <app-member-spinner></app-member-spinner>
+  }
+
+
 
   @if (input.value) {
 
@@ -14,7 +21,7 @@
     </span>
   }
 
-  @if (showCropper) {
+  @if (showCropper || this.blobs.length === 0) {
 
     <image-cropper
       [imageChangedEvent]="imageChangedEvent"
@@ -32,16 +39,8 @@
     ></image-cropper>
 
   } @else {
-    <app-image-gallery #gallery></app-image-gallery>
+    <app-image-gallery #gallery (remove)="removeItem($event)"></app-image-gallery>
   }
-
-
-
-
-
-
-
-
 
   <!-- <img class="image" [src]="croppedImage" /> -->
 </div>
