@@ -42,7 +42,17 @@
         [value]="getFormControl('rating')">
       </app-member-input>
 
-      <button type="submit" class="blue-button">Abschicken</button>
+
+
+      <button #submitButton [ngClass]="{'add-pointer-events-none' : changeButtonCssClass()}" type="submit" class="blue-button">
+
+        @if (submitButton.disabled) {
+          <app-member-spinner [height]="26" [width]="26"></app-member-spinner>
+        } @else {
+          Abschicken
+        }
+
+      </button>
 
     </form>
 

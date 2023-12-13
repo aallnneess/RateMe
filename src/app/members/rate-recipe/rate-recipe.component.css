@@ -23,6 +23,15 @@ form {
   gap: 3rem;
 }
 
+button {
+  display: flex;
+  justify-content: center;
+}
+
+.add-pointer-events-none {
+  pointer-events: none;
+}
+
 @media (max-width: 1000px) {
 
   .form-container {

@@ -70,6 +70,7 @@ ul > li:not(:last-child) {
 
 .popup-menu-show {
   display: block;
+  background-color: white;
 }
 
 

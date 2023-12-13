@@ -34,4 +34,8 @@ export class FileService {
     return forkJoin(observables);
   }
 
+  getFileforView(bucketId: string, fileId: string) {
+    return this.storage.getFileView(bucketId, fileId);
+  }
+
 }

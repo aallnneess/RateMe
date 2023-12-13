@@ -11,6 +11,7 @@ import {MemberInputComponent} from './MemberControls/member-input/member-input.c
 import {ImageGalleryComponent} from './image-cr/image-gallery/image-gallery.component';
 import { GalleryModule} from "ng-gallery";
 import {SpinnerComponent} from "./MemberControls/spinner/spinner.component";
+import { RecipeCardComponent } from './rate-recipe/recipe-card/recipe-card.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import {SpinnerComponent} from "./MemberControls/spinner/spinner.component";
     ImageCrComponent,
     MemberInputComponent,
     ImageGalleryComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    RecipeCardComponent
   ],
   exports: [],
     imports: [

@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {FileService} from "../../core/Services/file.service";
 import {GalleryLoadService} from "../Service/gallery-load.service";
@@ -6,6 +6,7 @@ import {concatMap} from "rxjs";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {RateBook} from "../../core/common/rate-book";
 import {DatabaseService} from "../../core/Services/database.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-rate-recipe',
@@ -14,13 +15,25 @@ import {DatabaseService} from "../../core/Services/database.service";
 })
 export class RateRecipeComponent implements OnInit {
 
+  @ViewChild('submitButton') submitButton!: ElementRef<HTMLButtonElement>;
+
   galleryLoadService: GalleryLoadService = inject(GalleryLoadService);
   databaseService: DatabaseService = inject(DatabaseService);
   fileService: FileService = inject(FileService);
+  router: Router = inject(Router);
 
   form!: FormGroup;
 
   constructor(private fb: FormBuilder) {
+  }
+
+  changeButtonCssClass() {
+    if (this.submitButton) {
+      return this.submitButton.nativeElement.disabled;
+    }
+
+    return false;
+
   }
 
   ngOnInit(): void {
@@ -31,6 +44,7 @@ export class RateRecipeComponent implements OnInit {
       notes: ['', [Validators.required, Validators.maxLength(500)]],
       tags: [['']]
     });
+
   }
 
   sendData(images: Blob[]) {
@@ -38,6 +52,7 @@ export class RateRecipeComponent implements OnInit {
     if (this.form.invalid || images.length === 0) return;
 
     console.log('absenden');
+    this.submitButton.nativeElement.disabled = true;
 
     this.fileService.addImage(images).pipe(
       concatMap(result => {
@@ -56,12 +71,15 @@ export class RateRecipeComponent implements OnInit {
 
         return this.databaseService.addBookRate(rateBook);
       })
-    ).subscribe();
+    ).subscribe(() => {
+      this.router.navigateByUrl('members', {skipLocationChange: true})
+    }) ;
 
   }
 
   getFormControl(name: string) {
     return this.form.get(name) as FormControl;
   }
+
 
 }

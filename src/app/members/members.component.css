@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+/*section {*/
+/*  display: grid;*/
+/*  grid-template-columns: 22vw 22vw 22vw 22vw;*/
+/*  gap: 1rem;*/
+/*}*/
+
+section {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}

@@ -1,0 +1,20 @@
+<h2 class="text_bold">{{recipe.recipeName}}</h2>
+
+<div class="text-container">
+    <span class="text-small">Rating: {{recipe.rating}}</span>
+    <span class="text-small">Quelle: {{recipe.source}}</span>
+    <span class="text-small">Tags: {{recipe.tags}}</span>
+    <span class="text-small">Notizen: {{recipe.notes}}</span>
+</div>
+
+
+
+  <gallery
+    [id]="random()"
+    [items]="items"
+    [thumb]="false"
+    [autoHeight]="true"
+  ></gallery>
+
+
+

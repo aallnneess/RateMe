@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {AppwriteService} from "./appwrite.service";
 import {Databases, ID} from "appwrite";
-import {from} from "rxjs";
+import {finalize, from, map} from "rxjs";
 import {RateBook} from "../common/rate-book";
 
 @Injectable({
@@ -31,6 +31,25 @@ export class DatabaseService {
         tags: rateBook.tags,
         imageBuckets: JSON.stringify(rateBook.imageBuckets)
       }));
+  }
+
+  // getAllBooks() {
+  //   return from(this.databases.listDocuments(
+  //     this.databaseId,
+  //     this.booksCollectionId
+  //   )).pipe(
+  //     finalize(() => console.log('DatabaseService: getAllBooks - finalize'))
+  //   );
+  // }
+
+  getAllBooks() {
+    return from(this.databases.listDocuments(
+      this.databaseId,
+      this.booksCollectionId
+    )).pipe(
+      map(response => response.documents as unknown as RateBook[]),
+      finalize(() => console.log('DatabaseService: getAllBooks - finalize'))
+    );
   }
 
 
