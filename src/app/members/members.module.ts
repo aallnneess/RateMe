@@ -25,13 +25,14 @@ import { RecipeCardComponent } from './rate-recipe/recipe-card/recipe-card.compo
     RecipeCardComponent
   ],
   exports: [],
-    imports: [
-        CommonModule,
-        MembersRoutingModule,
-        ImageCropperModule,
-        FormsModule,
-        ReactiveFormsModule,
-        GalleryModule
-    ]
+  imports: [
+    CommonModule,
+    MembersRoutingModule,
+    ImageCropperModule,
+    FormsModule,
+    ReactiveFormsModule,
+    GalleryModule
+
+  ]
 })
 export class MembersModule { }

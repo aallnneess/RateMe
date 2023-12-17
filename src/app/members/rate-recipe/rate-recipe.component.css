@@ -32,6 +32,10 @@ button {
   pointer-events: none;
 }
 
+.add-pointer-events-none:hover {
+  background-color: white;
+}
+
 @media (max-width: 1000px) {
 
   .form-container {

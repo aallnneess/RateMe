@@ -8,5 +8,5 @@ export class RateBook {
   imageBuckets: BucketResponse[] = [];
 
   // TODO: Tags in die Form integrieren, ist schon in der Database
-  tags: string[] = [];
+  tags: string = '';
 }

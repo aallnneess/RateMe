@@ -29,6 +29,7 @@ export class RateRecipeComponent implements OnInit {
 
   changeButtonCssClass() {
     if (this.submitButton) {
+      //console.log('changeButtonCssClass: ' + this.submitButton.nativeElement.disabled);
       return this.submitButton.nativeElement.disabled;
     }
 
@@ -42,7 +43,7 @@ export class RateRecipeComponent implements OnInit {
       source: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(150), Validators.pattern(/^[a-zA-Z0-9\s]*$/)]],
       rating: [0, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\s]*$/)]],
       notes: ['', [Validators.required, Validators.maxLength(500)]],
-      tags: [['']]
+      tags: ['']
     });
 
   }

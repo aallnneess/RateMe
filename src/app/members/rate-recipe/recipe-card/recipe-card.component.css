@@ -12,22 +12,25 @@
 }
 
 .text-container {
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+}
+
+.h2-tag-container {
+  position: relative;
+}
+
+.tags {
+  color: rgba(162, 215, 253, 0.45);
+  position: absolute;
+  font-size: 1.3rem;
+  top: 2rem;
+  left: 0;
 }
 
 
 
 
-/*:host {*/
-/*  !**/
-/*  width: 75%;*/
 
-/*   *!*/
-
-
-/*  width: 75%;*/
-/*  max-width: 350px;*/
-
-
-/*}*/

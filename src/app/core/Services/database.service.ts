@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {AppwriteService} from "./appwrite.service";
-import {Databases, ID} from "appwrite";
+import {Databases, ID, Query} from "appwrite";
 import {finalize, from, map} from "rxjs";
 import {RateBook} from "../common/rate-book";
 
@@ -45,10 +45,10 @@ export class DatabaseService {
   getAllBooks() {
     return from(this.databases.listDocuments(
       this.databaseId,
-      this.booksCollectionId
+      this.booksCollectionId,
+      [Query.orderDesc('')]
     )).pipe(
-      map(response => response.documents as unknown as RateBook[]),
-      finalize(() => console.log('DatabaseService: getAllBooks - finalize'))
+      map(response => response.documents as unknown as RateBook[])
     );
   }
 

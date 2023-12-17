@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit, signal} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {RateBook} from "../../../core/common/rate-book";
 import {GalleryItem, ImageItem} from "ng-gallery";
 import {FileService} from "../../../core/Services/file.service";
@@ -19,6 +19,12 @@ export class RecipeCardComponent implements OnInit {
   @Input( {required: true} ) recipe!: RateBook;
 
   items: GalleryItem[] = [];
+  tags = '';
+
+  ngOnInit(): void {
+    this.loadImage();
+    this.galleryId = this.galleryService.getGalleryId();
+  }
 
   random() {
     return this.galleryId.toString();
@@ -26,7 +32,7 @@ export class RecipeCardComponent implements OnInit {
 
   loadImage() {
 
-    console.log(this.recipe.imageBuckets);
+    //console.log(this.recipe.imageBuckets);
 
     this.recipe.imageBuckets.forEach(bucketResponse => {
 
@@ -39,10 +45,6 @@ export class RecipeCardComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.loadImage();
-    this.galleryId = this.galleryService.getGalleryId();
-  }
 
 
 }

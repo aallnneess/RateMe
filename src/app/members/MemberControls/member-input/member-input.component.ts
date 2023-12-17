@@ -23,11 +23,16 @@ export class MemberInputComponent {
   // Nur für Textarea
   @Input() textarea = false;
 
-  // Text-Input & Textarea
+  // Nur für tags
+  @Input() tags = false;
+
+  // Text-Input,Textarea und tags
   @Input() name!: string;
 
   // Nur für Slider
   @Input() slider = false;
+
+
 
   error!: string;
 
@@ -69,6 +74,25 @@ export class MemberInputComponent {
       this.error = 'Keine Sonderzeichen.';
     }
 
+  }
+
+  addHash() {
+    const inputValue = this.value.value;
+    const words: string[] = inputValue.split(' ');
+    const hashedWords: string[] = words.map(word => {
+
+      console.log(word);
+
+      if (word === '#' || word === '') return '';
+
+      if (!word.startsWith('#')) {
+        return `#${word}`
+      }
+
+      return word;
+    });
+
+    this.value.setValue(hashedWords.join(' '));
   }
 
 

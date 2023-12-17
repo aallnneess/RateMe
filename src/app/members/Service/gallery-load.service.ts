@@ -13,10 +13,7 @@ export class GalleryLoadService {
 
 
   addBlobImages(blobs: Blob[]) {
-    console.log('addBlobImages');
     this.images.set(blobs);
-    console.log(this.images());
-
     this.addGalleryItems(blobs);
   }
 

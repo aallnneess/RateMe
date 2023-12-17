@@ -1,10 +1,13 @@
-<h2 class="text_bold">{{recipe.recipeName}}</h2>
+<div class="h2-tag-container">
+  <h2 class="text_bold text-truncate">{{recipe.recipeName}}</h2>
+  <span class="tags text-small text-truncate">{{recipe.tags}}</span>
+</div>
+
 
 <div class="text-container">
-    <span class="text-small">Rating: {{recipe.rating}}</span>
-    <span class="text-small">Quelle: {{recipe.source}}</span>
-    <span class="text-small">Tags: {{recipe.tags}}</span>
-    <span class="text-small">Notizen: {{recipe.notes}}</span>
+    <span class="text-small text-truncate">Rating: {{recipe.rating}}</span>
+    <span class="text-small text-truncate">Quelle: {{recipe.source}}</span>
+    <span class="text-small text-truncate">Notizen: {{recipe.notes}}</span>
 </div>
 
 
