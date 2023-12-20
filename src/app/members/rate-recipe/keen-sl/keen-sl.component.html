@@ -1,0 +1,9 @@
+<div class="keen-slider" #sliderRef>
+  @for (item of items; track item) {
+    <div class="keen-slider__slide number-slide1 hm">
+      <div>
+        <img src="{{item.data?.src}}" alt="">
+      </div>
+    </div>
+  }
+</div>

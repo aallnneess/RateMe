@@ -12,6 +12,7 @@ import {ImageGalleryComponent} from './image-cr/image-gallery/image-gallery.comp
 import { GalleryModule} from "ng-gallery";
 import {SpinnerComponent} from "./MemberControls/spinner/spinner.component";
 import { RecipeCardComponent } from './rate-recipe/recipe-card/recipe-card.component';
+import { KeenSLComponent } from './rate-recipe/keen-sl/keen-sl.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { RecipeCardComponent } from './rate-recipe/recipe-card/recipe-card.compo
     MemberInputComponent,
     ImageGalleryComponent,
     SpinnerComponent,
-    RecipeCardComponent
+    RecipeCardComponent,
+    KeenSLComponent
   ],
   exports: [],
   imports: [

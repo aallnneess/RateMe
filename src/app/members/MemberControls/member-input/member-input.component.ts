@@ -81,7 +81,7 @@ export class MemberInputComponent {
     const words: string[] = inputValue.split(' ');
     const hashedWords: string[] = words.map(word => {
 
-      console.log(word);
+      //console.log(word);
 
       if (word === '#' || word === '') return '';
 

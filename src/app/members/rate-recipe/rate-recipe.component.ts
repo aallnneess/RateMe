@@ -52,7 +52,7 @@ export class RateRecipeComponent implements OnInit {
 
     if (this.form.invalid || images.length === 0) return;
 
-    console.log('absenden');
+    //console.log('absenden');
     this.submitButton.nativeElement.disabled = true;
 
     this.fileService.addImage(images).pipe(
@@ -67,8 +67,8 @@ export class RateRecipeComponent implements OnInit {
         rateBook.notes = this.form.get('notes')?.value;
         rateBook.tags = this.form.get('tags')?.value;
 
-        console.log(rateBook);
-        console.dir(rateBook);
+        // console.log(rateBook);
+        // console.dir(rateBook);
 
         return this.databaseService.addBookRate(rateBook);
       })
