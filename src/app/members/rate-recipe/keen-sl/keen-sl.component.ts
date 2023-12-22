@@ -22,7 +22,7 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.slider) this.slider.destroy()
+    if (this.slider) this.slider.destroy();
   }
 
 }
