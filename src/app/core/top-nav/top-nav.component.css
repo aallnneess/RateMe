@@ -1,3 +1,7 @@
+nav {
+  padding: 1rem 0;
+}
+
 ul {
   display: flex;
   list-style-type: none;

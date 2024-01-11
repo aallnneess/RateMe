@@ -1,22 +1,8 @@
-/*ul {*/
-/*  display: flex;*/
-/*  list-style-type: none;*/
-/*  justify-content: space-between;*/
-/*  gap: 10rem;*/
-/*  padding: 0 2rem;*/
+nav {
+  background-color: #113C4D;
+  padding: 1rem 0;
+}
 
-/*  position: relative;*/
-/*}*/
-
-
-/*.popup-menu {*/
-/*  position: absolute;*/
-/*  right: 2rem;*/
-/*  display: none;*/
-/*  cursor: pointer;*/
-/*  font-size: 2rem;*/
-/*  user-select: none;*/
-/*}*/
 
 ul {
   display: flex;
@@ -71,6 +57,7 @@ ul > li:not(:last-child) {
 .popup-menu-show {
   display: block;
   background-color: white;
+  border: 2px solid #113C4D;;
 }
 
 

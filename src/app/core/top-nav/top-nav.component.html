@@ -1,14 +1,27 @@
-<nav>
-    @if (!authService.loggedIn()) {
+<!--<nav>-->
+<!--    @if (!authService.loggedIn()) {-->
+<!--      <ul>-->
+<!--        <li routerLink="/" skipLocationChange="true" class="blue-button">Home</li>-->
+<!--        <li class="blue-button" (click)="autoLogin()">Login</li>-->
+<!--      </ul>-->
+<!--    } @else {-->
+<!--      <app-member-nav></app-member-nav>-->
+<!--    }-->
+<!--</nav>-->
+
+
+
+
+
+  @if (!authService.loggedIn()) {
+    <nav>
       <ul>
         <li routerLink="/" skipLocationChange="true" class="blue-button">Home</li>
         <li class="blue-button" (click)="autoLogin()">Login</li>
       </ul>
-    } @else {
-      <app-member-nav></app-member-nav>
-    }
-</nav>
+    </nav>
 
-
-
+  } @else {
+    <app-member-nav></app-member-nav>
+  }
 

@@ -146,16 +146,38 @@ body {
   user-select: none;
 }
 
+.blue-button-white {
+  color: white;
+  font-size: 2rem;
+  padding: 1rem;
+  border: solid 2px white;
+  border-radius: 1rem;
+  user-select: none;
+}
+
 .blue-button:hover {
   cursor: pointer;
   background-color: #113C4D;
   color: white;
 }
 
+.blue-button-white:hover {
+  cursor: pointer;
+  background-color: white;
+  color: #113C4D;
+  border-color: #113C4D;;
+}
+
 .blue-button:active {
   color: #113C4D;
   border: solid 2px #113C4D;
   background-color: white;
+}
+
+.blue-button-white:active {
+  color: white;
+  border: solid 2px white;
+  background-color: #113C4D;
 }
 
 .text {
