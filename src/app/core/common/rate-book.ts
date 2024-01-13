@@ -1,12 +1,17 @@
 import {BucketResponse} from "./bucket-response";
+import {Note} from "./note";
 
 export class RateBook {
   recipeName!: string;
   source!: string;
   rating!: number;
-  notes!: string;
+  // notes!: string;
   imageBuckets: BucketResponse[] = [];
-
-  // TODO: Tags in die Form integrieren, ist schon in der Database
   tags: string = '';
+
+  // Neu
+  username!: string;
+  userId!: string;
+  notes: Note[] = [];
+
 }

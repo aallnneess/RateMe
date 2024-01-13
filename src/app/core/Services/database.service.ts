@@ -27,20 +27,13 @@ export class DatabaseService {
         recipeName: rateBook.recipeName,
         source: rateBook.source,
         rating: rateBook.rating,
-        notes: rateBook.notes,
+        notes: JSON.stringify(rateBook.notes),
         tags: rateBook.tags,
-        imageBuckets: JSON.stringify(rateBook.imageBuckets)
+        imageBuckets: JSON.stringify(rateBook.imageBuckets),
+        username: rateBook.username,
+        userId: rateBook.userId
       }));
   }
-
-  // getAllBooks() {
-  //   return from(this.databases.listDocuments(
-  //     this.databaseId,
-  //     this.booksCollectionId
-  //   )).pipe(
-  //     finalize(() => console.log('DatabaseService: getAllBooks - finalize'))
-  //   );
-  // }
 
   getAllBooks() {
     return from(this.databases.listDocuments(

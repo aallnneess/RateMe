@@ -7,6 +7,8 @@ import {BucketResponse} from "../../core/common/bucket-response";
 import {RateBook} from "../../core/common/rate-book";
 import {DatabaseService} from "../../core/Services/database.service";
 import {Router} from "@angular/router";
+import {Note} from "../../core/common/note";
+import {AuthService} from "../../core/Services/auth.service";
 
 @Component({
   selector: 'app-rate-recipe',
@@ -14,6 +16,8 @@ import {Router} from "@angular/router";
   styleUrl: './rate-recipe.component.css'
 })
 export class RateRecipeComponent implements OnInit {
+
+  authService = inject(AuthService);
 
   @ViewChild('submitButton') submitButton!: ElementRef<HTMLButtonElement>;
 
@@ -64,8 +68,17 @@ export class RateRecipeComponent implements OnInit {
         rateBook.recipeName = this.form.get('recipeName')?.value;
         rateBook.source = this.form.get('source')?.value;
         rateBook.rating = this.form.get('rating')?.value;
-        rateBook.notes = this.form.get('notes')?.value;
         rateBook.tags = this.form.get('tags')?.value;
+        rateBook.username = this.authService.user()!.name;
+        rateBook.userId = this.authService.user()!.$id;
+
+        // create first note and save it in array
+        rateBook.notes.push(new Note(
+          this.form.get('notes')?.value,
+          this.authService.user()!.name,
+          this.authService.user()!.$id
+        ));
+
 
         // console.log(rateBook);
         // console.dir(rateBook);

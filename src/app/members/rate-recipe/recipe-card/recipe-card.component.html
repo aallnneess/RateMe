@@ -1,13 +1,14 @@
 <div class="h2-tag-container">
   <h2 class="text_bold text-truncate">{{recipe.recipeName}}</h2>
   <span class="tags text-small text-truncate">{{recipe.tags}}</span>
+  <span class="username">{{recipe.username}}</span>
 </div>
 
 
 <div class="text-container">
     <span class="text-small text-truncate">Rating: {{recipe.rating}}</span>
     <span class="text-small text-truncate">Quelle: {{recipe.source}}</span>
-    <span class="text-small text-truncate">Notizen: {{recipe.notes}}</span>
+    <span class="text-small text-truncate color"><i>{{getLastNote()}}</i></span>
 </div>
 
 

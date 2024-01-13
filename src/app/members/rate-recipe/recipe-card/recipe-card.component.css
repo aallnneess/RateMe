@@ -9,6 +9,8 @@
   padding: 1rem;
 
   width: 300px;
+
+  user-select: none;
 }
 
 .text-container {
@@ -28,6 +30,18 @@
   font-size: 1.3rem;
   top: 2rem;
   left: 0;
+}
+
+.username {
+  color: rgba(162, 215, 253, 0.45);
+  position: absolute;
+  font-size: 1.3rem;
+  top: 0;
+  right: 0;
+}
+
+.color {
+  color: rgba(162, 215, 253, 0.45);
 }
 
 

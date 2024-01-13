@@ -10,6 +10,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import { InputComponent } from './core/Controls/input/input.component';
 import { MemberNavComponent } from './core/top-nav/member-nav/member-nav.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientModule
     ],
     providers: [],
   exports: [

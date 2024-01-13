@@ -46,5 +46,7 @@ export class RecipeCardComponent implements OnInit {
   }
 
 
-
+  getLastNote() {
+    return this.recipe.notes[this.recipe.notes.length - 1].message;
+  }
 }
