@@ -54,6 +54,8 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+
+
   /**
    * Handles the touch move event.
    *
@@ -74,7 +76,6 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
   }
 
 
-
   /**
    * Updates the zoom of the image.
    *
@@ -85,6 +86,7 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
     this.zoomImages.get(this.updatedImageIndex)!.nativeElement.style.transform = `scale(${this.scale})`;
     //this.zoomImage.nativeElement.style.transform = `scale(${this.scale})`;
   }
+
 
 
   resetZoom() {
