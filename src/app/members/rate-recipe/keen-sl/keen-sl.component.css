@@ -14,4 +14,6 @@
 
 img {
   height: 300px;
+
+  overflow: visible!important;
 }

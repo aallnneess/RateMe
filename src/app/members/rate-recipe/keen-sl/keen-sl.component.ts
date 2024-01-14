@@ -29,7 +29,6 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
   slider!: KeenSliderInstance;
 
 
-
   ngAfterViewInit() {
     //this.slider = new KeenSlider(this.sliderRef.nativeElement);
 
@@ -47,6 +46,7 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
   // #################################################################################
 
   handleTouchStart(event: TouchEvent) {
+
     if (event.touches.length === 2) {
       const touch1 = event.touches[0];
       const touch2 = event.touches[1];
@@ -61,6 +61,21 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
    *
    * @param {TouchEvent} event - The touch event object.
    */
+  // handleTouchMove(event: TouchEvent) {
+  //
+  //   if (event.touches.length === 2) {
+  //     const touch1 = event.touches[0];
+  //     const touch2 = event.touches[1];
+  //     const currentDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+  //
+  //     if (this.initialDistance) {
+  //       const scaleChange = currentDistance / this.initialDistance;
+  //       this.scale = scaleChange; // Now this respects the initial distance
+  //       this.updateZoom();
+  //     }
+  //   }
+  // }
+
   handleTouchMove(event: TouchEvent) {
     if (event.touches.length === 2) {
       const touch1 = event.touches[0];
@@ -69,8 +84,11 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
 
       if (this.initialDistance) {
         const scaleChange = currentDistance / this.initialDistance;
-        this.scale = scaleChange; // Now this respects the initial distance
-        this.updateZoom();
+        // Aktualisiere das Zoom-Niveau nur, wenn es größer als das aktuelle ist
+        if (scaleChange >= 1) {
+          this.scale = scaleChange;
+          this.updateZoom();
+        }
       }
     }
   }
@@ -94,4 +112,5 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
     this.scale = 1;
     this.updateZoom();
   }
+
 }
