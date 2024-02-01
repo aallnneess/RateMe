@@ -1,3 +1,5 @@
+
+
 <div class="h2-tag-container">
   <h2 class="text_bold text-truncate">{{recipe.recipeName}}</h2>
   <span class="tags text-small text-truncate">{{recipe.tags}}</span>
@@ -8,7 +10,7 @@
 <div class="text-container">
     <span class="text-small text-truncate">Rating: {{recipe.rating}}</span>
     <span class="text-small text-truncate">Quelle: {{recipe.source}}</span>
-    <span class="text-small text-truncate color"><i>{{getLastNote()}}</i></span>
+    <span class="text-small text-truncate color">{{recipe.username}}: <i>{{getLastNote()}}</i></span>
 </div>
 
 
@@ -21,5 +23,5 @@
 <!--&gt;</gallery>-->
 
 <div>
-  <app-keen-sl [items]="items"></app-keen-sl>
+  <app-keen-sl [items]="items" (click)="$event.stopPropagation()"></app-keen-sl>
 </div>

@@ -14,4 +14,7 @@ export class MembersComponent implements OnInit {
     this.dataStore.updateBooks();
   }
 
+  click() {
+    console.log('klick');
+  }
 }

@@ -5,9 +5,11 @@ export class Note {
     this.message = message;
     this.username = username;
     this.userId = userId;
+    this.date = Date.now();
   }
 
   message!: string;
   username!: string;
   userId!: string;
+  date!: number;
 }

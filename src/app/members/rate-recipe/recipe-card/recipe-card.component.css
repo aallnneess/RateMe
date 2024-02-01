@@ -11,6 +11,8 @@
   width: 300px;
 
   user-select: none;
+
+  cursor: pointer;
 }
 
 .text-container {
@@ -44,7 +46,6 @@
   color: rgba(162, 215, 253, 0.45);
 }
 
-
-
-
-
+app-keen-sl {
+  cursor: default;
+}
