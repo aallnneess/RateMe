@@ -1,11 +1,13 @@
 import {BucketResponse} from "./bucket-response";
 import {Note} from "./note";
 
-export class RateBook {
-  recipeName!: string;
-  source!: string;
+export class Rate {
+  $id!: string;
+  $collectionId!: string;
+  $databaseId!: string;
+  $createdAt!: string;
+  title!: string;
   rating!: number;
-  // notes!: string;
   imageBuckets: BucketResponse[] = [];
   tags: string = '';
 
@@ -13,5 +15,8 @@ export class RateBook {
   username!: string;
   userId!: string;
   notes: Note[] = [];
+
+  // Rezepte
+  quelle!: string;
 
 }

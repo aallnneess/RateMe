@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {AppwriteService} from "./appwrite.service";
 import {Databases, ID, Query} from "appwrite";
-import {finalize, from, map} from "rxjs";
-import {RateBook} from "../common/rate-book";
+import {from, map} from "rxjs";
+import {Rate} from "../common/rate";
 
 @Injectable({
   providedIn: 'root'
@@ -18,30 +18,40 @@ export class DatabaseService {
     this.databases = new Databases(this.appwriteService.client);
   }
 
-  addBookRate(rateBook: RateBook) {
+  addRate(rate: Rate) {
     return from(this.databases.createDocument(
       this.databaseId,
       this.booksCollectionId,
       ID.unique(),
       {
-        recipeName: rateBook.recipeName,
-        source: rateBook.source,
-        rating: rateBook.rating,
-        notes: JSON.stringify(rateBook.notes),
-        tags: rateBook.tags,
-        imageBuckets: JSON.stringify(rateBook.imageBuckets),
-        username: rateBook.username,
-        userId: rateBook.userId
+        title: rate.title,
+        rating: rate.rating,
+        notes: JSON.stringify(rate.notes),
+        tags: rate.tags,
+        imageBuckets: JSON.stringify(rate.imageBuckets),
+        username: rate.username,
+        userId: rate.userId,
+        quelle: rate.quelle
       }));
   }
 
-  getAllBooks() {
+  getAllRates() {
     return from(this.databases.listDocuments(
       this.databaseId,
       this.booksCollectionId,
       [Query.orderDesc('')]
     )).pipe(
-      map(response => response.documents as unknown as RateBook[])
+      map(response => response.documents as unknown as Rate[])
+    );
+  }
+
+  getRateById(id: string) {
+    return from(this.databases.getDocument(
+      this.databaseId,
+      this.booksCollectionId,
+      id
+    )).pipe(
+      map(response => response as unknown as Rate)
     );
   }
 
