@@ -1,25 +1,15 @@
 
-
 <div class="h2-tag-container">
-  <h2 class="text_bold text-truncate">{{recipe.title}}</h2>
-  <span class="tags text-small text-truncate">{{recipe.tags}}</span>
-  <span class="username">{{recipe.username}}</span>
+  <h2 class="text_bold text-truncate">{{rate.title}}</h2>
+  <span class="tags text-small text-truncate">{{rate.tags}}</span>
+  <span class="username">{{rate.username}}</span>
 </div>
 
 
 <div class="text-container">
-    <span class="text-small text-truncate">Rating: {{recipe.rating}}</span>
-    <span class="text-small text-truncate color">{{recipe.username}}: <i>{{getLastNote()}}</i></span>
+    <span class="text-small text-truncate">Rating: {{rate.rating}}</span>
+    <span class="text-small text-truncate color">{{rate.username}}: <i>{{getLastNote()}}</i></span>
 </div>
-
-
-
-<!--<gallery-->
-<!--    [id]="random()"-->
-<!--    [items]="items"-->
-<!--    [thumb]="false"-->
-<!--    [autoHeight]="true"-->
-<!--&gt;</gallery>-->
 
 <div>
   <app-keen-sl [items]="items" (click)="$event.stopPropagation()"></app-keen-sl>

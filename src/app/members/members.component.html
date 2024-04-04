@@ -1,6 +1,6 @@
 <section>
   @for (book of dataStore.books | async; track book.title) {
-    <app-rate-card [recipe]="book" (click)="openRecipeDetail(book.$id)"></app-rate-card>
+    <app-rate-card [rate]="book" (click)="openRecipeDetail(book.$id)"></app-rate-card>
   }
 </section>
 

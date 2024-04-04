@@ -9,9 +9,6 @@ export class GalleryLoadService {
   imagesGallery: WritableSignal<GalleryItem[]> = signal([]);
   images: WritableSignal<Blob[]> = signal([]);
 
-  galleryId: WritableSignal<number> = signal(0);
-
-
   addBlobImages(blobs: Blob[]) {
     this.images.set(blobs);
     this.addGalleryItems(blobs);
@@ -32,11 +29,6 @@ export class GalleryLoadService {
     });
 
     this.imagesGallery.set(tmpItems);
-  }
-
-  getGalleryId() {
-    this.galleryId.set(this.galleryId() + 1);
-    return this.galleryId();
   }
 
 }

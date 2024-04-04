@@ -11,30 +11,20 @@ import {GalleryLoadService} from "../Service/gallery-load.service";
 })
 export class RateCardComponent implements OnInit {
 
-  galleryId!: number;
-
   fileService: FileService = inject(FileService);
-  galleryService: GalleryLoadService = inject(GalleryLoadService);
 
-  @Input( {required: true} ) recipe!: Rate;
+  @Input( {required: true} ) rate!: Rate;
 
   items: GalleryItem[] = [];
-  tags = '';
 
   ngOnInit(): void {
     this.loadImage();
-    this.galleryId = this.galleryService.getGalleryId();
   }
-
-  random() {
-    return this.galleryId.toString();
-  }
-
   loadImage() {
 
     //console.log(this.recipe.imageBuckets);
 
-    this.recipe.imageBuckets.forEach(bucketResponse => {
+    this.rate.imageBuckets.forEach(bucketResponse => {
 
       this.items.push(
         new ImageItem({
@@ -47,6 +37,6 @@ export class RateCardComponent implements OnInit {
 
 
   getLastNote() {
-    return this.recipe.notes[this.recipe.notes.length - 1].message;
+    return this.rate.notes[this.rate.notes.length - 1].message;
   }
 }
