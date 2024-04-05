@@ -21,7 +21,7 @@ export class DataStoreService {
 
       response.forEach(book => {
         book.imageBuckets = JSON.parse(book.imageBuckets as unknown as string);
-        book.notes = JSON.parse(book.notes as unknown as string);
+        // book.notes = JSON.parse(book.notes as unknown as string);
       });
 
       this.books.next(response);

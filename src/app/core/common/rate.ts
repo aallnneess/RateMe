@@ -14,9 +14,16 @@ export class Rate {
   // Neu
   username!: string;
   userId!: string;
-  notes: Note[] = [];
+  notesCollectionId!: string;
 
   // Rezepte
   quelle!: string;
 
 }
+
+
+
+
+
+
+

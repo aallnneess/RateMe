@@ -26,7 +26,7 @@ export class DatabaseService {
       {
         title: rate.title,
         rating: rate.rating,
-        notes: JSON.stringify(rate.notes),
+        notesCollectionId: rate.notesCollectionId,
         tags: rate.tags,
         imageBuckets: JSON.stringify(rate.imageBuckets),
         username: rate.username,

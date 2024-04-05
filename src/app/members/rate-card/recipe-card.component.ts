@@ -2,7 +2,6 @@ import {Component, inject, Input, OnInit} from '@angular/core';
 import {Rate} from "../../core/common/rate";
 import {GalleryItem, ImageItem} from "ng-gallery";
 import {FileService} from "../../core/Services/file.service";
-import {GalleryLoadService} from "../Service/gallery-load.service";
 
 @Component({
   selector: 'app-rate-card',
@@ -35,8 +34,4 @@ export class RateCardComponent implements OnInit {
 
   }
 
-
-  getLastNote() {
-    return this.rate.notes[this.rate.notes.length - 1].message;
-  }
 }

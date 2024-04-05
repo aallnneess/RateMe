@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from "../../core/Services/auth.service";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {DatabaseService} from "../../core/Services/database.service";
@@ -9,13 +9,15 @@ import {concatMap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
+import {NodeServerService} from "../../core/Services/node-server.service";
+import {NotesService} from "../Service/notes.service";
 
 @Component({
   selector: 'app-add-rate',
   templateUrl: './add-rate.component.html',
   styleUrl: './add-rate.component.css'
 })
-export class AddRateComponent implements OnInit {
+export class AddRateComponent implements OnInit, OnDestroy {
 
   authService = inject(AuthService);
 
@@ -26,6 +28,8 @@ export class AddRateComponent implements OnInit {
   fileService: FileService = inject(FileService);
   router: Router = inject(Router);
   route = inject(ActivatedRoute);
+  nodeServer: NodeServerService = inject(NodeServerService);
+  noteService = inject(NotesService);
 
   form!: FormGroup;
 
@@ -71,41 +75,47 @@ export class AddRateComponent implements OnInit {
 
   sendData(images: Blob[]) {
 
-    console.log(this.form.value);
-
     if (this.form.invalid || images.length === 0) return;
 
     //console.log('absenden');
     this.submitButton.nativeElement.disabled = true;
 
     this.fileService.addImage(images).pipe(
+
       concatMap(result => {
+        return this.nodeServer.createNotesCollection(this.form.get('title')?.value).pipe(
+          concatMap(collectionResponse => {
 
-        let rate = new Rate();
+            let rate = new Rate();
+            rate.imageBuckets = result as unknown as BucketResponse[];
+            rate.title = this.form.get('title')?.value;
+            rate.rating = this.form.get('rating')?.value;
+            rate.tags = this.form.get('tags')?.value;
+            rate.username = this.authService.user()!.name;
+            rate.userId = this.authService.user()!.$id;
+            rate.notesCollectionId = collectionResponse.$id;
 
-        rate.imageBuckets = result as unknown as BucketResponse[];
+            // Rezept
+            rate.quelle = this.form.get('quelle')?.value;
 
-        rate.title = this.form.get('title')?.value;
-        rate.rating = this.form.get('rating')?.value;
-        rate.tags = this.form.get('tags')?.value;
-        rate.username = this.authService.user()!.name;
-        rate.userId = this.authService.user()!.$id;
-
-        // create first note and save it in array
-        rate.notes.push(new Note(
-          this.form.get('notes')?.value,
-          this.authService.user()!.name,
-          this.authService.user()!.$id
-        ));
-
-        // Rezept
-        rate.quelle = this.form.get('quelle')?.value;
-
-        return this.databaseService.addRate(rate);
+            return this.databaseService.addRate(rate).pipe(
+              concatMap( uploadedRate => {
+                return this.noteService.addNote(rate.notesCollectionId, new Note(
+                  this.form.get('notes')?.value,
+                  rate.username,
+                  rate.userId
+                ))
+              })
+            );
+          })
+        );
       })
     ).subscribe(() => {
-      this.router.navigateByUrl('members', {skipLocationChange: true})
-    }) ;
+      this.router.navigateByUrl('members', {skipLocationChange: true});
+    });
 
+  }
+
+  ngOnDestroy(): void {
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Account, Client, Functions} from "appwrite";
+import {Account, Client, Databases, Functions} from "appwrite";
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,7 @@ export class AppwriteService {
   client = new Client();
   account!: Account;
   functions!: Functions;
+  databases!: Databases;
 
 
   constructor() {
@@ -18,6 +19,7 @@ export class AppwriteService {
 
     this.account = new Account(this.client);
     this.functions = new Functions(this.client);
+    this.databases = new Databases(this.client);
   }
 
 }
