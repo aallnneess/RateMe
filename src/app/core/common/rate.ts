@@ -1,5 +1,4 @@
 import {BucketResponse} from "./bucket-response";
-import {Note} from "./note";
 
 export class Rate {
   $id!: string;
@@ -10,6 +9,7 @@ export class Rate {
   rating!: number;
   imageBuckets: BucketResponse[] = [];
   tags: string = '';
+  rateTopic: string = '';
 
   // Neu
   username!: string;

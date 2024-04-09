@@ -10,7 +10,7 @@ import {MemberInputComponent} from './MemberControls/member-input/member-input.c
 import {ImageGalleryComponent} from './image-cr/image-gallery/image-gallery.component';
 import { GalleryModule} from "ng-gallery";
 import {SpinnerComponent} from "./MemberControls/spinner/spinner.component";
-import { RecipeCardDetailsComponent } from './rate-card-details/recipe-card-details.component';
+import { RateCardDetailsComponent } from './rate-card-details/rate-card-details.component';
 import { AddRateComponent } from './add-rate/add-rate.component';
 import {RateCardComponent} from "./rate-card/recipe-card.component";
 import {KeenSLComponent} from "./add-rate/keen-sl/keen-sl.component";
@@ -24,7 +24,7 @@ import {KeenSLComponent} from "./add-rate/keen-sl/keen-sl.component";
     ImageGalleryComponent,
     SpinnerComponent,
     RateCardComponent,
-    RecipeCardDetailsComponent,
+    RateCardDetailsComponent,
     AddRateComponent,
     KeenSLComponent
   ],

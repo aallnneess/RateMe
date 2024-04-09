@@ -10,25 +10,28 @@ export class DataStoreService {
 
   databaseService: DatabaseService = inject(DatabaseService);
 
-  books = new BehaviorSubject<Rate[]>([]);
+  rates = new BehaviorSubject<Rate[]>([]);
 
   constructor() {}
 
 
 
-  updateBooks() {
+  updateRates() {
     this.databaseService.getAllRates().subscribe(response => {
 
-      response.forEach(book => {
-        book.imageBuckets = JSON.parse(book.imageBuckets as unknown as string);
-        // book.notes = JSON.parse(book.notes as unknown as string);
+      response.forEach(rate => {
+        rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
+        // rate.notes = JSON.parse(rate.notes as unknown as string);
       });
 
-      this.books.next(response);
+      this.rates.next(response);
       });
 
   }
 
+  getRate(id: string) {
+    return this.rates.value.find(rate => rate.$id === id);
+  }
 
 
 

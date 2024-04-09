@@ -1,19 +1,21 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Rate} from "../../core/common/rate";
+import {DataStoreService} from "../Service/data-store.service";
 
 @Component({
   selector: 'app-rate-card-details',
-  templateUrl: './recipe-card-details.component.html',
-  styleUrl: './recipe-card-details.component.css'
+  templateUrl: './rate-card-details.component.html',
+  styleUrl: './rate-card-details.component.css'
 })
-export class RecipeCardDetailsComponent implements OnInit {
+export class RateCardDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
+  dataStore = inject(DataStoreService);
 
-  book!: Rate;
+  rate!: Rate;
 
   ngOnInit(): void {
-    console.log(`Get Id: ${this.route.snapshot.paramMap.get('id')}`);
+    this.rate = this.dataStore.getRate(this.route.snapshot.paramMap.get('id')!)!;
   }
 
   /*

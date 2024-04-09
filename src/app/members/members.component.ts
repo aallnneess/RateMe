@@ -1,6 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {DataStoreService} from "./Service/data-store.service";
-import {Rate} from "../core/common/rate";
 import {Router} from "@angular/router";
 
 @Component({
@@ -10,12 +9,11 @@ import {Router} from "@angular/router";
 })
 export class MembersComponent implements OnInit {
 
-
   dataStore: DataStoreService = inject(DataStoreService);
   router: Router = inject(Router);
 
   ngOnInit(): void {
-    this.dataStore.updateBooks();
+    this.dataStore.updateRates();
   }
 
   click() {

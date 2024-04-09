@@ -87,6 +87,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
           concatMap(collectionResponse => {
 
             let rate = new Rate();
+            rate.rateTopic = this.rateTopic;
             rate.imageBuckets = result as unknown as BucketResponse[];
             rate.title = this.form.get('title')?.value;
             rate.rating = this.form.get('rating')?.value;
@@ -110,9 +111,14 @@ export class AddRateComponent implements OnInit, OnDestroy {
           })
         );
       })
-    ).subscribe(() => {
-      this.router.navigateByUrl('members', {skipLocationChange: true});
-    });
+    ).subscribe({
+      next: () => {
+        this.router.navigateByUrl('members', {skipLocationChange: true});
+      },
+    error: (e) => {
+        // TODO: Errorbehandlung:
+      console.error(e);
+    }});
 
   }
 
