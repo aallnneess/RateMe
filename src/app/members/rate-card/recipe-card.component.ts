@@ -14,7 +14,7 @@ export class RateCardComponent implements OnInit {
 
   @Input( {required: true} ) rate!: Rate;
 
-  items: GalleryItem[] = [];
+  images: GalleryItem[] = [];
 
   ngOnInit(): void {
     this.loadImage();
@@ -25,7 +25,7 @@ export class RateCardComponent implements OnInit {
 
     this.rate.imageBuckets.forEach(bucketResponse => {
 
-      this.items.push(
+      this.images.push(
         new ImageItem({
           src: this.fileService.getFileforView(bucketResponse.bucketId, bucketResponse.$id).toString()
         })

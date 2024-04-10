@@ -9,9 +9,16 @@ export class GalleryLoadService {
   imagesGallery: WritableSignal<GalleryItem[]> = signal([]);
   images: WritableSignal<Blob[]> = signal([]);
 
+  // If user clicks a rate card and open rate details, here will be saved the card-images
+  activeRateImages: WritableSignal<GalleryItem[]> = signal([]);
+
   addBlobImages(blobs: Blob[]) {
     this.images.set(blobs);
     this.addGalleryItems(blobs);
+  }
+
+  addActiveRateImages(images: GalleryItem[]) {
+    this.activeRateImages.set(images);
   }
 
   addGalleryItems(items: Blob[]) {

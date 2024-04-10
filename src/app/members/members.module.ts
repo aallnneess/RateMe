@@ -14,6 +14,7 @@ import { RateCardDetailsComponent } from './rate-card-details/rate-card-details.
 import { AddRateComponent } from './add-rate/add-rate.component';
 import {RateCardComponent} from "./rate-card/recipe-card.component";
 import {KeenSLComponent} from "./add-rate/keen-sl/keen-sl.component";
+import {LightboxDirective} from "ng-gallery/lightbox";
 
 
 @NgModule({
@@ -29,14 +30,15 @@ import {KeenSLComponent} from "./add-rate/keen-sl/keen-sl.component";
     KeenSLComponent
   ],
   exports: [],
-  imports: [
-    CommonModule,
-    MembersRoutingModule,
-    ImageCropperModule,
-    FormsModule,
-    ReactiveFormsModule,
-    GalleryModule
+    imports: [
+        CommonModule,
+        MembersRoutingModule,
+        ImageCropperModule,
+        FormsModule,
+        ReactiveFormsModule,
+        GalleryModule,
+        LightboxDirective
 
-  ]
+    ]
 })
 export class MembersModule { }

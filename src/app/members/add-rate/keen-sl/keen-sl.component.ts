@@ -30,8 +30,6 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
 
 
   ngAfterViewInit() {
-    //this.slider = new KeenSlider(this.sliderRef.nativeElement);
-
     this.slider = new KeenSlider(this.sliderRef.nativeElement, {
       slideChanged: (s) => {
           this.updatedImageIndex = s.track.details.rel;
@@ -54,27 +52,6 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-
-
-  /**
-   * Handles the touch move event.
-   *
-   * @param {TouchEvent} event - The touch event object.
-   */
-  // handleTouchMove(event: TouchEvent) {
-  //
-  //   if (event.touches.length === 2) {
-  //     const touch1 = event.touches[0];
-  //     const touch2 = event.touches[1];
-  //     const currentDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
-  //
-  //     if (this.initialDistance) {
-  //       const scaleChange = currentDistance / this.initialDistance;
-  //       this.scale = scaleChange; // Now this respects the initial distance
-  //       this.updateZoom();
-  //     }
-  //   }
-  // }
 
   handleTouchMove(event: TouchEvent) {
     if (event.touches.length === 2) {

@@ -1,18 +1,7 @@
-import {
-  AfterViewChecked,
-  Component,
-  EventEmitter,
-  inject,
-  OnDestroy,
-  OnInit,
-  Output,
-  signal,
-  ViewChild
-} from '@angular/core';
+import {AfterViewChecked, Component, EventEmitter, inject, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {GalleryComponent, GalleryItem, GalleryState} from "ng-gallery";
 import {GalleryLoadService} from "../../Service/gallery-load.service";
 import {Subject, takeUntil} from "rxjs";
-import {Lightbox} from "ng-gallery/lightbox";
 
 @Component({
   selector: 'app-image-gallery',

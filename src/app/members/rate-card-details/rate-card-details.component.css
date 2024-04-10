@@ -1,0 +1,72 @@
+h2 {
+  text-align: center;
+}
+
+
+.gallery-container {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+.gallery {
+  max-width: 350px;
+  position: relative;
+}
+
+.absolute-gallery {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-width: 720px;
+  margin: auto;
+}
+
+.display-controller {
+  opacity: 0;
+}
+
+.blue-button {
+  font-size: 2rem;
+  padding: 1rem;
+  border: solid 2px white;
+  border-radius: 1rem;
+  user-select: none;
+}
+
+.button1 {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  z-index: 1000;
+
+  font-size: 2rem;
+  padding: 1rem;
+  border: solid 2px white;
+  border-radius: 1rem;
+  user-select: none;
+}
+
+.button2 {
+  position: absolute;
+  right: 0.5rem;
+  z-index: 1000;
+  margin-top: -5rem;
+
+  font-size: 2rem;
+  padding: 1rem;
+  border: solid 2px white;
+  border-radius: 1rem;
+  user-select: none;
+}
+
+.button1:hover,
+.button2:hover{
+  cursor: pointer;
+  background-color: #113C4D;
+  color: white;
+}
+
