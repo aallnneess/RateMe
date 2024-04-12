@@ -19,7 +19,8 @@
                           [labelInputId]="'input1'"
                           [name]="'Titel'"
                           [textFieldType]="'text'"
-                          [value]="getFormControl('title')">
+                          [value]="getFormControl('title')"
+                          [disabled]="!!parentRate">
         </app-member-input>
 
         <app-member-input #input2

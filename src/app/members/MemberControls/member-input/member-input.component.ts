@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from "@angular/forms";
 
 @Component({
@@ -6,7 +6,7 @@ import {FormControl} from "@angular/forms";
   templateUrl: './member-input.component.html',
   styleUrl: './member-input.component.css'
 })
-export class MemberInputComponent {
+export class MemberInputComponent implements OnInit, AfterViewInit {
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   @ViewChild('label') label!: ElementRef<HTMLLabelElement>;
@@ -16,6 +16,7 @@ export class MemberInputComponent {
 
   @Input({ required: true }) value!: FormControl;
   @Input({ required: true }) labelInputId!: string;
+  @Input() disabled: boolean = false;
 
   // Nur für Text-Input
   @Input() textFieldType!: string;
@@ -25,12 +26,17 @@ export class MemberInputComponent {
 
   // Nur für tags
   @Input() tags = false;
+  parentTags!: string;
 
   // Text-Input,Textarea und tags
   @Input() name!: string;
 
   // Nur für Slider
   @Input() slider = false;
+
+  ngOnInit(): void {
+
+  }
 
 
 
@@ -77,7 +83,16 @@ export class MemberInputComponent {
   }
 
   addHash() {
-    const inputValue = this.value.value;
+    let inputValue = this.value.value;
+
+    // user cant delete parent tags
+    if (this.parentTags) {
+      if (inputValue.length < this.parentTags.length) {
+        inputValue = this.parentTags;
+      }
+    }
+
+
     const words: string[] = inputValue.split(' ');
     const hashedWords: string[] = words.map(word => {
 
@@ -95,6 +110,31 @@ export class MemberInputComponent {
     this.value.setValue(hashedWords.join(' '));
   }
 
+  ngAfterViewInit(): void {
+    if (this.input) {
+      if (this.input.nativeElement.value.length > 0) {
+        this.label.nativeElement.classList.toggle('floating-label-small');
+      }
+    }
+
+    if (this.textarea) {
+      if (this.textArea.nativeElement.value.length > 0) {
+        this.label2.nativeElement.classList.toggle('floating-label-small');
+      }
+    }
+
+    // Is there a parent rate, title input must be disabled
+    if (this.disabled) {
+      this.input.nativeElement.disabled = true;
+    }
+
+    // if there a parent rate, user cant delete parent tags
+    if (this.tags) {
+      if (this.value.value) {
+        this.parentTags= this.value.value;
+      }
+    }
+  }
 
 
 }

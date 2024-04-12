@@ -138,16 +138,9 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-.blue-button {
-  font-size: 2rem;
-  padding: 1rem;
-  border: solid 2px white;
-  border-radius: 1rem;
-  user-select: none;
-}
+/*---------- Blue Button ------------------*/
 
-.blue-button-white {
-  color: white;
+.blue-button {
   font-size: 2rem;
   padding: 1rem;
   border: solid 2px white;
@@ -161,6 +154,21 @@ body {
   color: white;
 }
 
+.blue-button:active {
+  color: #113C4D;
+  border: solid 2px #113C4D;
+  background-color: white;
+}
+
+.blue-button-white {
+  color: white;
+  font-size: 2rem;
+  padding: 1rem;
+  border: solid 2px white;
+  border-radius: 1rem;
+  user-select: none;
+}
+
 .blue-button-white:hover {
   cursor: pointer;
   background-color: white;
@@ -168,17 +176,37 @@ body {
   border-color: #113C4D;;
 }
 
-.blue-button:active {
-  color: #113C4D;
-  border: solid 2px #113C4D;
-  background-color: white;
-}
-
 .blue-button-white:active {
   color: white;
   border: solid 2px white;
   background-color: #113C4D;
 }
+
+/*---------- Icon Button ------------------*/
+
+.icon-button {
+  display: flex;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  color: #113C4D;
+}
+
+.icon-button span {
+  font-size: 4rem;
+}
+
+.icon-button:hover {
+  cursor: pointer;
+  color: rgba(17, 60, 77, 0.54);
+}
+
+.icon-button:active {
+  cursor: pointer;
+  color: #113C4D;
+}
+
+/*---------- Text------------------*/
 
 .text {
   font-size: 2rem;

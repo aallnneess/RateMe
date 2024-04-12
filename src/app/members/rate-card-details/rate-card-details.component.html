@@ -3,9 +3,19 @@
   <h3 class="text_tags">{{rate.tags}}</h3>
 </header>
 
-@if (rate.rateTopic === 'recipe') {
-  <app-recipe-view [rate]="rate"></app-recipe-view>
-}
+<div>
+  @if (rate.rateTopic === 'recipe') {
+    <app-recipe-view [rate]="rate"></app-recipe-view>
+  }
+
+  <button class="icon-button add-rate-button" (click)="addChildRate()">
+      <span class="material-symbols-outlined">
+      reviews
+    </span>
+  </button>
+
+</div>
+
 
 <div class="gallery-container">
 

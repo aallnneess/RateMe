@@ -1,5 +1,5 @@
 import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Rate} from "../../core/common/rate";
 import {DataStoreService} from "../Service/data-store.service";
 import {GalleryItem} from "ng-gallery";
@@ -12,6 +12,7 @@ import {GalleryLoadService} from "../Service/gallery-load.service";
 })
 export class RateCardDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
+  router = inject(Router);
   dataStore = inject(DataStoreService);
   galleryLoadService = inject(GalleryLoadService);
 
@@ -33,4 +34,9 @@ export class RateCardDetailsComponent implements OnInit {
 
     console.log(this.galleryDiv.nativeElement.classList);
   }
+
+  addChildRate() {
+    this.router.navigate(['members/addRate', 'recipe', {rate: JSON.stringify(this.rate)}]);
+  }
 }
+
