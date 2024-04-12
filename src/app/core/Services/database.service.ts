@@ -31,7 +31,11 @@ export class DatabaseService {
         imageBuckets: JSON.stringify(rate.imageBuckets),
         username: rate.username,
         userId: rate.userId,
-        quelle: rate.quelle
+        quelle: rate.quelle,
+        rateTopic: rate.rateTopic,
+        childRate: rate.childRate,
+        parentDocumentId: rate.parentDocumentId,
+        ratings: rate.ratings
       }));
   }
 

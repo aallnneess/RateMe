@@ -1,0 +1,102 @@
+:host {
+  padding: 2rem;
+}
+
+h2 {
+  padding-bottom: 2rem;
+}
+
+.user-date-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.username {
+  font-weight: 800;
+}
+
+.date {
+  color: rgba(136, 131, 131, 0.65);
+}
+
+.comment {}
+
+form {
+  margin-top: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/*textarea {*/
+/*  color: white;*/
+/*  font-size: 1.6rem;*/
+/*  background-color: #113C4D;*/
+
+/*  max-width: 70rem;*/
+/*  height: 0;*/
+
+/*  transition: 3s ease-in-out all;*/
+/*}*/
+
+/*.show-textarea {*/
+/*  height: initial;*/
+/*}*/
+
+textarea {
+  color: white;
+  font-size: 1.6rem;
+  background-color: #113C4D;
+
+  max-width: 70rem;
+  max-height: 0; /* Starte mit einer Höhe von 0 */
+  overflow: hidden; /* Verstecke den Inhalt, der über die Höhe hinausgeht */
+  transition: max-height 0.5s ease; /* Füge eine Übergangseffekt für max-height hinzu */
+}
+
+.show-textarea {
+  max-height: 10rem; /* Ändere die maximale Höhe auf einen Wert, der Platz für den Inhalt bietet */
+}
+
+
+.label {
+  font-size: 1.4rem;
+}
+
+.label:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.send-button {
+  margin-top: 0.5rem;
+  padding:0.5rem 1rem;
+  border: solid 2px #113C4D;
+  opacity: 0;
+  z-index: -1000;
+  transition: all 0.3s ease;
+}
+
+.send-button-visible {
+  opacity: 1;
+  z-index: 0;
+}
+
+.send-button:hover {
+  background-color: #113C4D;
+  color: white;
+  cursor: pointer;
+}
+
+.send-button:active {
+  color: #113C4D;
+  border: solid 2px #113C4D;
+  background-color: white;
+}
+
+

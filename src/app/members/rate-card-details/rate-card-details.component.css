@@ -1,10 +1,28 @@
-h2 {
+:host {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+
+  max-width: 100rem;
+  margin: auto;
+}
+
+header {
+  grid-column: 1/-1;
+}
+
+app-note {
+  grid-column: 1/-1;
+}
+
+h2,
+h3 {
   text-align: center;
 }
 
 
 .gallery-container {
-  position: relative;
+  /*position: relative;*/
 
   display: flex;
   justify-content: center;
@@ -22,11 +40,12 @@ h2 {
   left: 0;
   right: 0;
   max-width: 720px;
-  margin: auto;
+  margin: 2rem auto 0;
 }
 
 .display-controller {
   opacity: 0;
+  z-index: -1000;
 }
 
 .blue-button {
@@ -70,3 +89,23 @@ h2 {
   color: white;
 }
 
+.text_h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.text_tags {
+  font-size: 1.4rem;
+  padding-bottom: 1.5rem;
+}
+
+
+@media (max-width: 600px) {
+
+  :host {
+    grid-template-columns: 1fr;
+  }
+
+}

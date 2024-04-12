@@ -1,4 +1,12 @@
-<h2 class="text_bold text-truncate">{{rate.title}}</h2>
+<header>
+  <h2 class="text_h2">{{rate.title}}</h2>
+  <h3 class="text_tags">{{rate.tags}}</h3>
+</header>
+
+@if (rate.rateTopic === 'recipe') {
+  <app-recipe-view [rate]="rate"></app-recipe-view>
+}
+
 <div class="gallery-container">
 
   <div #galleryDiv class="gallery">
@@ -27,11 +35,11 @@
       fullscreen_exit
     </button>
   </div>
-
 </div>
 
 
 
+<app-note [rate]="rate"></app-note>
 
 
 

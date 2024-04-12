@@ -1,0 +1,22 @@
+<h2 class="text_bold">Kommentare</h2>
+
+@for (note of notes; track note.$id) {
+
+  <div class="user-date-container text-small">
+    <span class="username">{{note.username}}</span>
+    <span class="date">{{formatDatetime(note.date)}}</span>
+  </div>
+
+  <div class="comment text-small">
+    <span>{{note.message}}</span>
+  </div>
+}
+
+<form [formGroup]="addForm" (ngSubmit)="sendButton.disabled = true;submitForm();textarea.classList.toggle('show-textarea'); sendButton.classList.toggle('send-button-visible')">
+  <div class="form-group">
+    <label class="label" for="addNote" (click)="textarea.classList.toggle('show-textarea')">Kommentar schreiben</label>
+    <textarea #textarea id="addNote" type="text" class="form-input" formControlName="addNote" rows="6" appScrollToBottomOnFocus></textarea>
+  </div>
+  <button #sendButton type="submit" class="send-button"
+          [ngClass]="textarea.value.length > 2 ? 'send-button-visible' : ''">Senden</button>
+</form>

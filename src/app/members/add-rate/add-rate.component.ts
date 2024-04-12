@@ -45,9 +45,9 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
       case 'recipe': {
         this.form = this.fb.group({
-          title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\s]*$/)]],
-          rating: [0, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\s]*$/)]],
-          notes: ['', [Validators.required, Validators.maxLength(500)]],
+          title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
+          rating: [0, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
+          notes: ['', [Validators.required, Validators.maxLength(2000)]],
           tags: ['', [Validators.required]],
           quelle: ['', [Validators.required]]
         });
@@ -88,6 +88,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
             let rate = new Rate();
             rate.rateTopic = this.rateTopic;
+            console.log(rate.rateTopic);
             rate.imageBuckets = result as unknown as BucketResponse[];
             rate.title = this.form.get('title')?.value;
             rate.rating = this.form.get('rating')?.value;
@@ -100,6 +101,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
             rate.quelle = this.form.get('quelle')?.value;
 
             return this.databaseService.addRate(rate).pipe(
+              // TODO: Rating beim Eltern-Rate ändern. ratings[] wird nur hier gefüllt.
               concatMap( uploadedRate => {
                 return this.noteService.addNote(rate.notesCollectionId, new Note(
                   this.form.get('notes')?.value,

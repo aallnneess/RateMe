@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {AppwriteService} from "../../core/Services/appwrite.service";
-import {ID} from "appwrite";
-import {from} from "rxjs";
+import {ID, Query} from "appwrite";
+import {from, map, tap} from "rxjs";
 import {Note} from "../../core/common/note";
 
 @Injectable({
@@ -20,6 +20,20 @@ export class NotesService {
       ID.unique(),
       note
     ))
+  }
+
+  getNotes(collectionId: string) {
+    return from(this.appwrite.databases.listDocuments(
+      this.notesDatabaseId,
+      collectionId,
+      [
+        Query.orderDesc(''),
+        Query.limit(1000)
+      ]
+    )).pipe(
+      map(response => response.documents as unknown as Note[]),
+      tap(notes => console.log('Get notes length: ' + notes.length))
+    );
   }
 
   constructor() { }

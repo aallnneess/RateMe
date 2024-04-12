@@ -12,4 +12,10 @@ export class Note {
   username!: string;
   userId!: string;
   date!: number;
+
+  $id!: string;
+  $databaseId!: string;
+  $collectionId!: string;
+  $createdAt!: string;
+  $updatedAt!: string;
 }

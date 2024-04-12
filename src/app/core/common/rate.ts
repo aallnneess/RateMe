@@ -10,11 +10,14 @@ export class Rate {
   imageBuckets: BucketResponse[] = [];
   tags: string = '';
   rateTopic: string = '';
-
-  // Neu
   username!: string;
   userId!: string;
   notesCollectionId!: string;
+
+  // Child Rates
+  childRate: boolean = false;
+  parentDocumentId!: string;
+  ratings!: number[];
 
   // Rezepte
   quelle!: string;
