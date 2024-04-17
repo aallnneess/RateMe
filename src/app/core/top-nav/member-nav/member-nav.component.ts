@@ -7,6 +7,8 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 })
 export class MemberNavComponent {
 
+  // TODO: Update Rates Button....
+
   isMobile!: boolean;
 
   constructor() {

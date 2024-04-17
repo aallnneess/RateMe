@@ -15,8 +15,8 @@ export class MembersComponent implements OnInit {
   galleryLoadService = inject(GalleryLoadService);
   router: Router = inject(Router);
 
+
   ngOnInit(): void {
-    // Nur beim ersten start von hier aus die rates füllen.
     if (this.dataStore.rates.value.length === 0) {
       this.dataStore.updateRates().subscribe();
     }

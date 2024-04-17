@@ -41,7 +41,8 @@
            [formControl]="value" (keyup)="checkErrors()"
            (focus)="label.classList.add('floating-label-small')"
            (focusout)="focusOut()"
-           (input)="addHash()">
+           (input)="addHash()"
+            (keydown)="onKeyDown($event)">
 
     <p class="error-text">{{error}}</p>
   </div>

@@ -110,6 +110,12 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
     this.value.setValue(hashedWords.join(' '));
   }
 
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key.startsWith('Arrow')) {
+      event.preventDefault(); // Verhindert die Standardaktion der Pfeiltasten im Inputfeld
+    }
+  }
+
   ngAfterViewInit(): void {
     if (this.input) {
       if (this.input.nativeElement.value.length > 0) {

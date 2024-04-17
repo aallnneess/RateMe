@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {DatabaseService} from "../../core/Services/database.service";
-import {BehaviorSubject, finalize, tap} from "rxjs";
+import {BehaviorSubject, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 
 @Injectable({
@@ -10,7 +10,6 @@ export class DataStoreService {
 
   databaseService: DatabaseService = inject(DatabaseService);
   rates = new BehaviorSubject<Rate[]>([]);
-
 
   constructor() {}
 
@@ -24,10 +23,9 @@ export class DataStoreService {
         });
 
         this.rates.next(response);
-        console.log('set rates...');
+        console.log('Update Rates array');
       })
     );
-
   }
 
 
@@ -36,7 +34,4 @@ export class DataStoreService {
   getRate(id: string) {
     return this.rates.value.find(rate => rate.$id === id);
   }
-
-
-
 }
