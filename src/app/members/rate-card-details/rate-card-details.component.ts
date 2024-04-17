@@ -48,7 +48,7 @@ export class RateCardDetailsComponent implements OnInit {
   }
 
   showAddChildRate() {
-    this.dataBaseService.checkIfUserHasRated(this.authService.user()!.$id,this.rate.$id).subscribe(result => {
+    this.dataBaseService.checkIfUserHasRated(this.authService.user()!.$id,this.rate.notesCollectionId).subscribe(result => {
       if (result.total === 0) {
         this.showAddChildButton = true;
       }

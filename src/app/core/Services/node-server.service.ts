@@ -3,6 +3,7 @@ import {UserInfo} from "../common/user-info";
 import {AppwriteService} from "./appwrite.service";
 import {from, map} from "rxjs";
 import {CollectionResponse} from "../common/collection-response";
+import {ExecutionMethod} from "appwrite";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class NodeServerService {
       id,
       false,
       '/user',
-      'GET'
+      ExecutionMethod.GET
     )).pipe(
       map(result => JSON.parse(result.responseBody) as unknown as UserInfo)
     );
@@ -34,7 +35,7 @@ export class NodeServerService {
       rateTitle,
       false,
       '/newNotesCollection',
-      'GET'
+      ExecutionMethod.GET
     )).pipe(
       map(result => JSON.parse(result.responseBody) as unknown as CollectionResponse)
     )

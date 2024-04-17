@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return from(this.appwrite.account.createEmailSession(
+    return from(this.appwrite.account.createEmailPasswordSession(
       email,
       password
     )).pipe(

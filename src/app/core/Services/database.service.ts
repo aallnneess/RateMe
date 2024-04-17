@@ -137,13 +137,13 @@ export class DatabaseService {
     return obj;
   }
 
-  checkIfUserHasRated(userId: string, documentId: string) {
+  checkIfUserHasRated(userId: string, notesCollectionId: string) {
     return from(this.databases.listDocuments(
       this.databaseId,
       this.booksCollectionId,
       [
         Query.equal('userId',[userId]),
-        Query.equal('$id', documentId)
+        Query.equal('notesCollectionId', notesCollectionId)
       ]
     ))
   }
