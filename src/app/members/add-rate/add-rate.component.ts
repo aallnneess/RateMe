@@ -11,6 +11,7 @@ import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
 import {NodeServerService} from "../../core/Services/node-server.service";
 import {NotesService} from "../Service/notes.service";
+import {DataStoreService} from "../Service/data-store.service";
 
 @Component({
   selector: 'app-add-rate',
@@ -30,6 +31,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   nodeServer: NodeServerService = inject(NodeServerService);
   noteService = inject(NotesService);
+  datastoreService = inject(DataStoreService);
 
   form!: FormGroup;
 
@@ -140,7 +142,12 @@ export class AddRateComponent implements OnInit, OnDestroy {
       })
     ).subscribe({
       next: () => {
-        this.router.navigateByUrl('members', {skipLocationChange: true});
+
+        // Rates müssen vor route wechsel aktualisiert werden
+        this.datastoreService.updateRates().subscribe(() => {
+          this.router.navigateByUrl('members', {skipLocationChange: true});
+        });
+
       },
       error: (e) => {
         // TODO: Errorbehandlung:
@@ -187,7 +194,12 @@ export class AddRateComponent implements OnInit, OnDestroy {
         )
       .subscribe({
       next: () => {
-        this.router.navigateByUrl('members', {skipLocationChange: true});
+
+        // Rates müssen vor route wechsel aktualisiert werden
+        this.datastoreService.updateRates().subscribe(() => {
+          this.router.navigateByUrl('members', {skipLocationChange: true});
+        });
+
       },
       error: (e) => {
         // TODO: Errorbehandlung:

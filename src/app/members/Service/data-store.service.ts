@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {DatabaseService} from "../../core/Services/database.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, finalize, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 
 @Injectable({
@@ -9,26 +9,29 @@ import {Rate} from "../../core/common/rate";
 export class DataStoreService {
 
   databaseService: DatabaseService = inject(DatabaseService);
-
   rates = new BehaviorSubject<Rate[]>([]);
 
 
   constructor() {}
 
-
-
+  // Muss von mehr als einer komponente aufgerufen und aboniert werden können.
+  // Ergebnis soll aber nur hier verarbeitet werden, daher => tap
   updateRates() {
-    this.databaseService.getAllRates().subscribe(response => {
+    return this.databaseService.getAllRates().pipe(
+      tap(response => {
+        response.forEach(rate => {
+          rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
+        });
 
-      response.forEach(rate => {
-        rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
-        // rate.notes = JSON.parse(rate.notes as unknown as string);
-      });
-
-      this.rates.next(response);
-      });
+        this.rates.next(response);
+        console.log('set rates...');
+      })
+    );
 
   }
+
+
+
 
   getRate(id: string) {
     return this.rates.value.find(rate => rate.$id === id);

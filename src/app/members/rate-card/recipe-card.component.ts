@@ -23,6 +23,8 @@ export class RateCardComponent implements OnInit {
 
     if (typeof this.rate.imageBuckets !== "string") {
 
+      console.log('Menge imagebuckets: ' + this.rate.imageBuckets.length);
+
       this.rate.imageBuckets.forEach(bucketResponse => {
 
         this.images.push(
@@ -32,6 +34,8 @@ export class RateCardComponent implements OnInit {
         );
       });
     }
+
+    console.log('bilder menge: ' + this.images.length);
 
   }
 

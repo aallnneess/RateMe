@@ -16,7 +16,10 @@ export class MembersComponent implements OnInit {
   router: Router = inject(Router);
 
   ngOnInit(): void {
-    this.dataStore.updateRates();
+    // Nur beim ersten start von hier aus die rates füllen.
+    if (this.dataStore.rates.value.length === 0) {
+      this.dataStore.updateRates().subscribe();
+    }
   }
 
   openRecipeDetail(id: string, images: GalleryItem[]) {
