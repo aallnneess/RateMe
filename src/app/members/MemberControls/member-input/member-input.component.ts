@@ -87,6 +87,9 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
 
     // user cant delete parent tags
     if (this.parentTags) {
+
+      inputValue = this.parentTags + inputValue.substring(this.parentTags.length);
+
       if (inputValue.length < this.parentTags.length) {
         inputValue = this.parentTags;
       }

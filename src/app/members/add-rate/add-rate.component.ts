@@ -117,7 +117,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
             rate.imageBuckets = result as unknown as BucketResponse[];
             rate.title = this.form.get('title')?.value;
             rate.rating = this.form.get('rating')?.value;
-            rate.tags = this.form.get('tags')?.value;
+            rate.tags = this.form.get('tags')?.value + ' ';
             rate.username = this.authService.user()!.name;
             rate.userId = this.authService.user()!.$id;
             rate.notesCollectionId = collectionResponse.$id;
