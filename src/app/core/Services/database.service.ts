@@ -137,6 +137,17 @@ export class DatabaseService {
     return obj;
   }
 
+  checkIfUserHasRated(userId: string, documentId: string) {
+    return from(this.databases.listDocuments(
+      this.databaseId,
+      this.booksCollectionId,
+      [
+        Query.equal('userId',[userId]),
+        Query.equal('$id', documentId)
+      ]
+    ))
+  }
+
 
 
 

@@ -88,7 +88,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
     }
 
     return false;
-
   }
 
   sendData(images: Blob[]) {

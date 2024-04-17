@@ -8,11 +8,15 @@
     <app-recipe-view [rate]="rate"></app-recipe-view>
   }
 
-  <button class="icon-button add-rate-button" (click)="addChildRate()">
+  @if (showAddChildButton) {
+    <button class="icon-button add-rate-button" (click)="addChildRate()">
       <span class="material-symbols-outlined">
       reviews
     </span>
-  </button>
+    </button>
+  }
+
+
 
 </div>
 
