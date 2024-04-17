@@ -96,6 +96,15 @@ export class AddRateComponent implements OnInit, OnDestroy {
     //console.log('absenden');
     this.submitButton.nativeElement.disabled = true;
 
+    if (this.parentRate) {
+      this.childSend(images);
+    } else {
+      this.normalSend(images);
+    }
+
+  }
+
+  normalSend(images: Blob[]) {
     this.fileService.addImage(images).pipe(
 
       concatMap(result => {
@@ -104,7 +113,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
             let rate = new Rate();
             rate.rateTopic = this.rateTopic;
-            console.log(rate.rateTopic);
             rate.imageBuckets = result as unknown as BucketResponse[];
             rate.title = this.form.get('title')?.value;
             rate.rating = this.form.get('rating')?.value;
@@ -112,6 +120,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
             rate.username = this.authService.user()!.name;
             rate.userId = this.authService.user()!.$id;
             rate.notesCollectionId = collectionResponse.$id;
+            rate.ratings = [rate.rating];
 
             // Rezept
             rate.quelle = this.form.get('quelle')?.value;
@@ -133,11 +142,57 @@ export class AddRateComponent implements OnInit, OnDestroy {
       next: () => {
         this.router.navigateByUrl('members', {skipLocationChange: true});
       },
-    error: (e) => {
+      error: (e) => {
         // TODO: Errorbehandlung:
-      console.error(e);
-    }});
+        console.error(e);
+      }});
+  }
 
+
+  // ################## CHILD #########################
+
+  childSend(images: Blob[]) {
+    this.fileService.addImage(images).pipe(
+
+          concatMap(result => {
+
+            let rate = new Rate();
+            rate.rateTopic = this.rateTopic;
+            rate.imageBuckets = result as unknown as BucketResponse[];
+            rate.title = this.form.get('title')?.value;
+            rate.rating = this.form.get('rating')?.value;
+            rate.tags = this.form.get('tags')?.value;
+            rate.username = this.authService.user()!.name;
+            rate.userId = this.authService.user()!.$id;
+            rate.notesCollectionId = this.parentRate!.notesCollectionId;
+            rate.parentDocumentId = this.parentRate!.$id;
+            rate.childRate = true;
+
+            // Rezept
+            rate.quelle = this.form.get('quelle')?.value;
+
+            return this.databaseService.addRate(rate).pipe(
+              concatMap( () => {
+                return this.noteService.addNote(rate.notesCollectionId, new Note(
+                  this.form.get('notes')?.value,
+                  rate.username,
+                  rate.userId
+                ))
+              }),
+              concatMap(() => {
+                return this.databaseService.updateRating(rate.parentDocumentId,rate);
+              })
+            );
+          })
+        )
+      .subscribe({
+      next: () => {
+        this.router.navigateByUrl('members', {skipLocationChange: true});
+      },
+      error: (e) => {
+        // TODO: Errorbehandlung:
+        console.error(e);
+      }});
   }
 
   ngOnDestroy(): void {

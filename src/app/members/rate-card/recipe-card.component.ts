@@ -21,16 +21,17 @@ export class RateCardComponent implements OnInit {
   }
   loadImage() {
 
-    //console.log(this.recipe.imageBuckets);
+    if (typeof this.rate.imageBuckets !== "string") {
 
-    this.rate.imageBuckets.forEach(bucketResponse => {
+      this.rate.imageBuckets.forEach(bucketResponse => {
 
-      this.images.push(
-        new ImageItem({
-          src: this.fileService.getFileforView(bucketResponse.bucketId, bucketResponse.$id).toString()
-        })
-      );
-    });
+        this.images.push(
+          new ImageItem({
+            src: this.fileService.getFileforView(bucketResponse.bucketId, bucketResponse.$id).toString()
+          })
+        );
+      });
+    }
 
   }
 
