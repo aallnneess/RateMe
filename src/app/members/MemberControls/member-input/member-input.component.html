@@ -26,8 +26,8 @@
            type="range"
            min="0"
            max="10"
-           step="1"
-           value="0">
+           value="0"
+           step="1">
 
     <p class="error-text">{{error}}</p>
   </div>
@@ -42,7 +42,7 @@
            (focus)="label.classList.add('floating-label-small')"
            (focusout)="focusOut()"
            (input)="addHash()"
-            (keydown)="onKeyDown($event)">
+           (keydown)="onKeyDown($event)">
 
     <p class="error-text">{{error}}</p>
   </div>
@@ -62,8 +62,3 @@
 
 
 }
-
-
-
-
-

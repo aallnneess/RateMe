@@ -20,7 +20,7 @@
                           [name]="'Titel'"
                           [textFieldType]="'text'"
                           [value]="getFormControl('title')"
-                          [disabled]="!!parentRate">
+                          [disabled]="!!parentRate || !!editRate">
         </app-member-input>
 
         <app-member-input #input2
@@ -41,8 +41,11 @@
         <app-member-input
           [labelInputId]="'slider1'"
           [slider]="true"
-          [value]="getFormControl('rating')">
+          [value]="getFormControl('rating')"
+        >
         </app-member-input>
+
+
 
         <app-member-input #input4
                           [labelInputId]="'input4'"

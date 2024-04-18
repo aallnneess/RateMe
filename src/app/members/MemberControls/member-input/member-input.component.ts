@@ -35,7 +35,6 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
   @Input() slider = false;
 
   ngOnInit(): void {
-
   }
 
 

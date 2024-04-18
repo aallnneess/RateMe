@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from "../../core/Services/auth.service";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {DatabaseService} from "../../core/Services/database.service";
@@ -18,7 +18,7 @@ import {DataStoreService} from "../Service/data-store.service";
   templateUrl: './add-rate.component.html',
   styleUrl: './add-rate.component.css'
 })
-export class AddRateComponent implements OnInit, OnDestroy {
+export class AddRateComponent implements OnInit, OnDestroy, AfterViewInit {
 
   authService = inject(AuthService);
 
@@ -38,6 +38,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
   rateTopic= '';
 
   parentRate!: Rate|null;
+  editRate!: Rate|null;
 
   constructor(private fb: FormBuilder) {}
 
@@ -46,6 +47,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
    this.rateTopic = this.route.snapshot.paramMap.get('id')!;
    // If its a child rate, this is not null
    this.parentRate = JSON.parse(this.route.snapshot.paramMap.get('rate')!);
+   // If its a edit rate, this is not null
+   this.editRate = JSON.parse(this.route.snapshot.paramMap.get('editRate')!);
 
 
     switch (this.rateTopic) {
@@ -55,10 +58,19 @@ export class AddRateComponent implements OnInit, OnDestroy {
         if (this.parentRate) {
           this.form = this.fb.group({
             title: [this.parentRate.title, [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
-            rating: [0, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
+            rating: [this.parentRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
             notes: ['', [Validators.required, Validators.maxLength(2000)]],
             tags: [this.parentRate.tags, [Validators.required]],
             quelle: ['', [Validators.required]]
+          });
+        } else if (this.editRate) {
+          console.log(this.editRate);
+          this.form = this.fb.group({
+            title: [this.editRate.title, [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
+            rating: [this.editRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
+            notes: ['', [Validators.required, Validators.maxLength(2000)]],
+            tags: [this.editRate.tags, [Validators.required]],
+            quelle: [this.editRate.quelle, [Validators.required]]
           });
         } else {
           this.form = this.fb.group({
@@ -207,5 +219,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+  }
+
+  ngAfterViewInit(): void {
   }
 }

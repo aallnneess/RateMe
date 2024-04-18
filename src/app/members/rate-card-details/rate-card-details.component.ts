@@ -54,5 +54,9 @@ export class RateCardDetailsComponent implements OnInit {
       }
     });
   }
+
+  editRate() {
+    this.router.navigate(['members/addRate', 'recipe', {editRate: JSON.stringify(this.rate)}], {skipLocationChange: true});
+  }
 }
 
