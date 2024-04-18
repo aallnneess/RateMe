@@ -3,6 +3,7 @@ import {DataStoreService} from "./Service/data-store.service";
 import {Router} from "@angular/router";
 import {GalleryLoadService} from "./Service/gallery-load.service";
 import {GalleryItem} from "ng-gallery";
+import {DatabaseService} from "../core/Services/database.service";
 
 @Component({
   selector: 'app-members',
@@ -19,6 +20,8 @@ export class MembersComponent implements OnInit {
   ngOnInit(): void {
     if (this.dataStore.rates.value.length === 0) {
       this.dataStore.updateRates().subscribe();
+    }else {
+      this.dataStore.checkForNewRate();
     }
   }
 

@@ -10,6 +10,7 @@ export class DataStoreService {
 
   databaseService: DatabaseService = inject(DatabaseService);
   rates = new BehaviorSubject<Rate[]>([]);
+  ratesTotal = new BehaviorSubject<number>(0);
 
   constructor() {}
 
@@ -18,17 +19,26 @@ export class DataStoreService {
   updateRates() {
     return this.databaseService.getAllRates().pipe(
       tap(response => {
-        response.forEach(rate => {
+        response.documents.forEach(rate => {
           rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
         });
 
-        this.rates.next(response);
+        this.rates.next(response.documents);
+        this.ratesTotal.next(response.total);
         console.log('Update Rates array');
       })
     );
   }
 
-
+  // TODO: evtl. übertrieben.....
+  checkForNewRate() {
+    return this.databaseService.getAllRates().subscribe(result => {
+      if (result.total !== this.ratesTotal.value) {
+        console.log('New Data for Rates[]');
+        this.rates.next(result.documents);
+      }
+    });
+  }
 
 
   getRate(id: string) {

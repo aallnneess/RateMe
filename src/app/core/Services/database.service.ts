@@ -3,6 +3,7 @@ import {AppwriteService} from "./appwrite.service";
 import {Databases, ID, Query} from "appwrite";
 import {concatMap, from, map, tap} from "rxjs";
 import {Rate} from "../common/rate";
+import {RateContainer} from "../common/rate-container";
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class DatabaseService {
         Query.equal('childRate', false)
       ]
     )).pipe(
-      map(response => response.documents as unknown as Rate[]),
+      map(response => response as unknown as RateContainer),
       tap(rates => console.log(rates))
     );
   }
