@@ -145,4 +145,7 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
   }
 
 
+  getSliderValue() {
+    return this.value.value;
+  }
 }
