@@ -1,11 +1,12 @@
 @if (textarea) {
 
   <div class="input-container">
-    <label #label2 class="floating-label text-small" for="{{labelInputId}}">{{name}} </label>
+    <label #label2 class="floating-label text-small" [ngClass]="disabled ? 'label-disabled' : ''" for="{{labelInputId}}">{{name}} </label>
     <textarea #textArea class="input-box input-config text-small" [id]="labelInputId"
               [formControl]="value" (keyup)="checkErrors()"
               (focus)="label2.classList.add('floating-label-small')"
-              (focusout)="focusOut()">
+              (focusout)="focusOut()"
+    [ngClass]="disabled ? 'textarea-disabled' : ''">
 
   </textarea>
 
@@ -50,12 +51,13 @@
 } @else {
 
   <div class="input-container">
-    <label #label class="floating-label text-small" for="{{labelInputId}}">{{name}} </label>
+    <label #label [ngClass]="disabled ? 'label-disabled' : ''" class="floating-label text-small" for="{{labelInputId}}">{{name}} </label>
     <input #input class="input-box input-config text-small" [id]="labelInputId"
            [type]="textFieldType"
            [formControl]="value" (keyup)="checkErrors()"
            (focus)="label.classList.add('floating-label-small')"
-           (focusout)="focusOut()">
+           (focusout)="focusOut()"
+           [ngClass]="disabled ? 'textarea-disabled' : ''">
 
     <p class="error-text">{{error}}</p>
   </div>

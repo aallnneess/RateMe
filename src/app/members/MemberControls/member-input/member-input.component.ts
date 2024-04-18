@@ -120,20 +120,25 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.input) {
+
       if (this.input.nativeElement.value.length > 0) {
         this.label.nativeElement.classList.toggle('floating-label-small');
+      }
+
+      if (this.disabled) {
+        this.input.nativeElement.disabled = true;
       }
     }
 
     if (this.textarea) {
+
       if (this.textArea.nativeElement.value.length > 0) {
         this.label2.nativeElement.classList.toggle('floating-label-small');
       }
-    }
 
-    // Is there a parent rate, title input must be disabled
-    if (this.disabled) {
-      this.input.nativeElement.disabled = true;
+      if (this.disabled) {
+        this.textArea.nativeElement.disabled = true;
+      }
     }
 
     // if there a parent rate, user cant delete parent tags

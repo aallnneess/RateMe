@@ -48,6 +48,16 @@ textarea {
   margin-left: 1.2rem;
 }
 
+.textarea-disabled {
+  background-color: rgba(128, 128, 128, 0.62);
+  border: rgba(128, 128, 128, 0.62);
+  color: rgb(128, 128, 128);
+}
+
+.label-disabled {
+  color: rgb(128, 128, 128);
+}
+
 @media (max-width: 600px) {
 
   textarea {

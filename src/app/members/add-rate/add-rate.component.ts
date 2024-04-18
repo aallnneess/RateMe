@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from "../../core/Services/auth.service";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {DatabaseService} from "../../core/Services/database.service";
@@ -18,7 +18,7 @@ import {DataStoreService} from "../Service/data-store.service";
   templateUrl: './add-rate.component.html',
   styleUrl: './add-rate.component.css'
 })
-export class AddRateComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AddRateComponent implements OnInit, OnDestroy {
 
   authService = inject(AuthService);
 
@@ -64,7 +64,6 @@ export class AddRateComponent implements OnInit, OnDestroy, AfterViewInit {
             quelle: ['', [Validators.required]]
           });
         } else if (this.editRate) {
-          console.log(this.editRate);
           this.form = this.fb.group({
             title: [this.editRate.title, [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
             rating: [this.editRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
@@ -219,8 +218,5 @@ export class AddRateComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-  }
-
-  ngAfterViewInit(): void {
   }
 }
