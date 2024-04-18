@@ -12,6 +12,7 @@ import {Note} from "../../core/common/note";
 import {NodeServerService} from "../../core/Services/node-server.service";
 import {NotesService} from "../Service/notes.service";
 import {DataStoreService} from "../Service/data-store.service";
+import {StateService, Status} from "../Service/state.service";
 
 @Component({
   selector: 'app-add-rate',
@@ -32,6 +33,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
   nodeServer: NodeServerService = inject(NodeServerService);
   noteService = inject(NotesService);
   datastoreService = inject(DataStoreService);
+  statesService = inject(StateService);
 
   form!: FormGroup;
 
@@ -64,10 +66,11 @@ export class AddRateComponent implements OnInit, OnDestroy {
             quelle: ['', [Validators.required]]
           });
         } else if (this.editRate) {
+          this.statesService.setStatus(Status.Edit);
           this.form = this.fb.group({
             title: [this.editRate.title, [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
             rating: [this.editRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
-            notes: ['', [Validators.required, Validators.maxLength(2000)]],
+            notes: [' ', [Validators.required, Validators.maxLength(2000)]],
             tags: [this.editRate.tags, [Validators.required]],
             quelle: [this.editRate.quelle, [Validators.required]]
           });
@@ -110,6 +113,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
     if (this.parentRate) {
       this.childSend(images);
+    } else if (this.editRate) {
+      this.editSend(images);
     } else {
       this.normalSend(images);
     }
@@ -217,6 +222,71 @@ export class AddRateComponent implements OnInit, OnDestroy {
       }});
   }
 
+  // ################## EDIT #########################
+
+  editSend(images: Blob[]) {
+
+
+    console.log(this.editRate?.imageBuckets);
+    console.log(' ');
+    console.log(images);
+
+    return;
+
+
+
+
+
+
+    this.fileService.addImage(images).pipe(
+
+      concatMap(result => {
+
+        let rate = new Rate();
+        rate.rateTopic = this.rateTopic;
+        rate.imageBuckets = result as unknown as BucketResponse[];
+        rate.title = this.form.get('title')?.value;
+        rate.rating = this.form.get('rating')?.value;
+        rate.tags = this.form.get('tags')?.value;
+        rate.username = this.authService.user()!.name;
+        rate.userId = this.authService.user()!.$id;
+        rate.notesCollectionId = this.parentRate!.notesCollectionId;
+        rate.parentDocumentId = this.parentRate!.$id;
+        rate.childRate = true;
+
+        // Rezept
+        rate.quelle = this.form.get('quelle')?.value;
+
+        return this.databaseService.addRate(rate).pipe(
+          concatMap( () => {
+            return this.noteService.addNote(rate.notesCollectionId, new Note(
+              this.form.get('notes')?.value,
+              rate.username,
+              rate.userId
+            ))
+          }),
+          concatMap(() => {
+            return this.databaseService.updateRating(rate.parentDocumentId,rate);
+          })
+        );
+      })
+    )
+      .subscribe({
+        next: () => {
+
+          // Rates müssen vor route wechsel aktualisiert werden
+          this.datastoreService.updateRates().subscribe(() => {
+            this.router.navigateByUrl('members', {skipLocationChange: true});
+          });
+
+        },
+        error: (e) => {
+          // TODO: Errorbehandlung:
+          console.error(e);
+        }});
+  }
+
   ngOnDestroy(): void {
+    this.statesService.setStatus(Status.Idle);
   }
 }

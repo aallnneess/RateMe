@@ -1,27 +1,18 @@
-import {Component, ElementRef, EventEmitter, inject, Input, Output, signal, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, Input, OnInit, ViewChild} from '@angular/core';
 import {ImageCroppedEvent, LoadedImage} from "ngx-image-cropper";
 import {ImageGalleryComponent} from "./image-gallery/image-gallery.component";
 import {GalleryLoadService} from "../Service/gallery-load.service";
-
-/*
-
--> uploadedImage!: Blob;
-
-setCroppedImage(blob: Blob) {
-  this.uploadedImage = blob;
-}
-
-*/
-
+import {StateService, Status} from "../Service/state.service";
 
 @Component({
   selector: 'app-image-cr',
   templateUrl: './image-cr.component.html',
   styleUrl: './image-cr.component.css'
 })
-export class ImageCrComponent {
+export class ImageCrComponent implements OnInit {
 
   galleryLoadService: GalleryLoadService = inject(GalleryLoadService);
+  statesService = inject(StateService);
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   @ViewChild('gallery') gallery!: ImageGalleryComponent;
@@ -40,6 +31,30 @@ export class ImageCrComponent {
   croppedImage: any = '';
   croppedImageBlob!: Blob | null;
 
+  ngOnInit(): void {
+    if (this.statesService.currentStatus() === Status.Edit) {
+      this.loadEditImages();
+    }
+  }
+
+  async loadEditImages() {
+    const activeImages = this.galleryLoadService.activeRateImages();
+
+    for (let activeImage of activeImages) {
+      if (typeof activeImage.data?.src === 'string') {
+        try {
+          const blop = await this.urlToBlob(activeImage.data.src);
+          this.blobs.push(blop);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    console.log('Alle blobs geladen.');
+    this.galleryLoadService.addBlobImages(this.blobs);
+    this.showCropper = false;
+  }
 
   add() {
     if (this.croppedImageBlob) {
@@ -91,4 +106,13 @@ export class ImageCrComponent {
      // console.log('state: ' + stateId);
      // console.log(this.blobs);
   }
+
+  async urlToBlob(url: string) {
+    const response = await fetch(url);
+    return await response.blob();
+  }
+
+  protected readonly Status = Status;
+
+
 }

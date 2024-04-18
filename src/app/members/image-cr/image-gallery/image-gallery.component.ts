@@ -22,8 +22,6 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
 
   ngOnInit(): void {
     this.items = this.galleryLoadService.imagesGallery();
-    // console.log('Income Array: ');
-    // console.log(this.items);
   }
 
   removeItem() {

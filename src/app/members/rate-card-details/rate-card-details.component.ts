@@ -6,6 +6,7 @@ import {GalleryItem} from "ng-gallery";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {DatabaseService} from "../../core/Services/database.service";
 import {AuthService} from "../../core/Services/auth.service";
+import {StateService, Status} from "../Service/state.service";
 
 @Component({
   selector: 'app-rate-card-details',
