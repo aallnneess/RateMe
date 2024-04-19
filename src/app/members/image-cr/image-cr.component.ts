@@ -3,6 +3,8 @@ import {ImageCroppedEvent, LoadedImage} from "ngx-image-cropper";
 import {ImageGalleryComponent} from "./image-gallery/image-gallery.component";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {StateService, Status} from "../Service/state.service";
+import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-container";
+import {GalleryItem} from "ng-gallery";
 
 @Component({
   selector: 'app-image-cr',
@@ -38,7 +40,8 @@ export class ImageCrComponent implements OnInit {
   }
 
   async loadEditImages() {
-    const activeImages = this.galleryLoadService.activeRateImages();
+    // const activeImages: GalleryItem[] = this.galleryLoadService.activeRateImages();
+    const activeImages: GalleryItem[] = this.galleryLoadService.getAllGalleryItems(this.galleryLoadService.activeRateImages());
 
     for (let activeImage of activeImages) {
       if (typeof activeImage.data?.src === 'string') {

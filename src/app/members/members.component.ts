@@ -3,6 +3,7 @@ import {DataStoreService} from "./Service/data-store.service";
 import {Router} from "@angular/router";
 import {GalleryLoadService} from "./Service/gallery-load.service";
 import {GalleryItem} from "ng-gallery";
+import {BlobGalleryItemContainer} from "../core/common/blob-gallery-item-container";
 
 @Component({
   selector: 'app-members',
@@ -24,7 +25,7 @@ export class MembersComponent implements OnInit {
     }
   }
 
-  openRecipeDetail(id: string, images: GalleryItem[]) {
+  openRecipeDetail(id: string, images: BlobGalleryItemContainer[]) {
     this.router.navigateByUrl(`members/rateRecipe/${id}`, { skipLocationChange: true});
     this.galleryLoadService.addActiveRateImages(images);
   }
