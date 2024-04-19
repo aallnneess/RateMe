@@ -71,4 +71,93 @@ export class GalleryLoadService {
     return await response.blob();
   }
 
+  async searchForNewBlobsInsideBlobGalleryItemContainerArray(
+    blobImages: Blob[],
+    blobGalleryItemContainerArray: BlobGalleryItemContainer[]
+  ) {
+
+    const newImages: Blob[] = [];
+    for (let image of blobImages) {
+
+      let found = false;
+      for (let blobGalleryItemContainer of blobGalleryItemContainerArray) {
+
+        found = await this.compareBlobs(image, blobGalleryItemContainer.blob);
+
+        if (found) {
+          break;
+        }
+      }
+
+      if (!found) {
+        newImages.push(image);
+      }
+
+    }
+    return newImages;
+  }
+
+  async searchForDeletedBlobsInBlobGalleryItemContainerArray(
+    blobImages: Blob[],
+    blobGalleryItemContainerArray: BlobGalleryItemContainer[]
+  ) {
+    const deletedImages: BlobGalleryItemContainer[] = [];
+
+    for (let blobGalleryItemContainer of blobGalleryItemContainerArray) {
+      let found = false;
+
+      for (let image of blobImages) {
+        found = await this.compareBlobs(image, blobGalleryItemContainer.blob);
+
+        if (found) {
+          break;
+        }
+      }
+
+      if (!found) {
+        deletedImages.push(blobGalleryItemContainer);
+      }
+    }
+
+    return deletedImages;
+  }
+
+  // Funktion zum Vergleichen von zwei Blobs
+  compareBlobs(blob1: Blob, blob2: Blob): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      if (blob1.size !== blob2.size) {
+        // Wenn die Größe unterschiedlich ist, sind die Blobs definitiv verschieden
+        resolve(false);
+        return;
+      }
+
+      // Blobs in Arrays von Uint8-Zahlen konvertieren
+      const reader1 = new FileReader();
+      reader1.onload = () => {
+        const array1 = new Uint8Array(reader1.result as ArrayBuffer);
+
+        const reader2 = new FileReader();
+        reader2.onload = () => {
+          const array2 = new Uint8Array(reader2.result as ArrayBuffer);
+
+          // Arrays von Uint8-Zahlen vergleichen
+          for (let i = 0; i < array1.length; i++) {
+            if (array1[i] !== array2[i]) {
+              // Wenn ein Unterschied gefunden wird, sind die Blobs verschieden
+              resolve(false);
+              return;
+            }
+          }
+
+          // Wenn keine Unterschiede gefunden wurden, sind die Blobs gleich
+          resolve(true);
+        };
+        reader2.onerror = reject;
+        reader2.readAsArrayBuffer(blob2);
+      };
+      reader1.onerror = reject;
+      reader1.readAsArrayBuffer(blob1);
+    });
+  }
+
 }

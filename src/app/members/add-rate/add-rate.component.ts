@@ -13,6 +13,7 @@ import {NodeServerService} from "../../core/Services/node-server.service";
 import {NotesService} from "../Service/notes.service";
 import {DataStoreService} from "../Service/data-store.service";
 import {StateService, Status} from "../Service/state.service";
+import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-container";
 
 @Component({
   selector: 'app-add-rate',
@@ -224,24 +225,26 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   // ################## EDIT #########################
 
-  editSend(images: Blob[]) {
+  async editSend(images: Blob[]) {
 
+    const newImages: Blob[] = await this.galleryLoadService.searchForNewBlobsInsideBlobGalleryItemContainerArray(images, this.galleryLoadService.activeRateImages.value);
 
-    console.log(this.editRate?.imageBuckets);
-    console.log(' ');
-    console.log(images);
-    console.log(' ');
-    console.log(this.galleryLoadService.activeRateImages.value);
+    console.log('editSend: Insg. ' + newImages.length + ' neue(s) Bild(er) gefunden');
+
+    const deletedImages: BlobGalleryItemContainer[] = await this.galleryLoadService.searchForDeletedBlobsInBlobGalleryItemContainerArray(images,this.galleryLoadService.activeRateImages.value);
+
+    console.log('editSend: Insg. ' + deletedImages.length + ' gelöschte Bild(er) gefunden');
 
     return;
 
 
-
-
+    // TODO: I'm now comparing activeRateImages.blobs (which were loaded from the clicked Card)
+    // with the blob images =>
+    // if a blob does not exist in activeRateImages.blobs, it is a new image....
+    // NOT a perfect solution....!!!
 
 
     this.fileService.addImage(images).pipe(
-
       concatMap(result => {
 
         let rate = new Rate();
@@ -260,7 +263,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.quelle = this.form.get('quelle')?.value;
 
         return this.databaseService.addRate(rate).pipe(
-          concatMap( () => {
+          concatMap(() => {
             return this.noteService.addNote(rate.notesCollectionId, new Note(
               this.form.get('notes')?.value,
               rate.username,
@@ -268,7 +271,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
             ))
           }),
           concatMap(() => {
-            return this.databaseService.updateRating(rate.parentDocumentId,rate);
+            return this.databaseService.updateRating(rate.parentDocumentId, rate);
           })
         );
       })
@@ -285,10 +288,13 @@ export class AddRateComponent implements OnInit, OnDestroy {
         error: (e) => {
           // TODO: Errorbehandlung:
           console.error(e);
-        }});
+        }
+      });
   }
 
   ngOnDestroy(): void {
     this.statesService.setStatus(Status.Idle);
   }
+
+
 }
