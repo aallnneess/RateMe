@@ -6,14 +6,16 @@ import {GalleryItem, ImageItem} from "ng-gallery";
 })
 export class GalleryLoadService {
 
-  imagesGallery: WritableSignal<GalleryItem[]> = signal([]);
-  images: WritableSignal<Blob[]> = signal([]);
+  // Used by ImageGalleryComponent in Recipe-Card-Details & ImageCrComponent
+  imagesCardGallery: WritableSignal<GalleryItem[]> = signal([]);
+  // Used in AddRateComponent for new or Edit Rates
+  imagesNewOrEdit: WritableSignal<Blob[]> = signal([]);
 
   // If user clicks a rate card and open rate details, here will be saved the card-images
   activeRateImages: WritableSignal<GalleryItem[]> = signal([]);
 
   addBlobImages(blobs: Blob[]) {
-    this.images.set(blobs);
+    this.imagesNewOrEdit.set(blobs);
     this.addGalleryItems(blobs);
   }
 
@@ -35,7 +37,7 @@ export class GalleryLoadService {
       );
     });
 
-    this.imagesGallery.set(tmpItems);
+    this.imagesCardGallery.set(tmpItems);
   }
 
 }

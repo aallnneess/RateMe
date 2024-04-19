@@ -10,7 +10,7 @@
 
 
       <form [formGroup]="form" (ngSubmit)="
-        sendData(galleryLoadService.images());
+        sendData(galleryLoadService.imagesNewOrEdit());
         input1.checkErrors();
         input2.checkErrors();
         input3.checkErrors();

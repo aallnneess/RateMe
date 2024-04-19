@@ -21,7 +21,7 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
   state!: GalleryState;
 
   ngOnInit(): void {
-    this.items = this.galleryLoadService.imagesGallery();
+    this.items = this.galleryLoadService.imagesCardGallery();
   }
 
   removeItem() {
