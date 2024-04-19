@@ -40,8 +40,11 @@ export class ImageCrComponent implements OnInit {
   }
 
   async loadEditImages() {
-    // const activeImages: GalleryItem[] = this.galleryLoadService.activeRateImages();
-    const activeImages: GalleryItem[] = this.galleryLoadService.getAllGalleryItems(this.galleryLoadService.activeRateImages());
+    let activeImages: GalleryItem[] = [];
+
+    this.galleryLoadService.activeRateImages.subscribe(images => {
+      activeImages = this.galleryLoadService.getAllGalleryItemsFromBlobGalleryItemsArray(images);
+    })
 
     for (let activeImage of activeImages) {
       if (typeof activeImage.data?.src === 'string') {

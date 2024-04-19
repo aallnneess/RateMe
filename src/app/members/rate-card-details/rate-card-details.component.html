@@ -29,39 +29,39 @@
 </div>
 
 
-<div class="gallery-container">
+  <div class="gallery-container">
 
-  <div #galleryDiv class="gallery">
-    <gallery
-             [items]="images"
-             [thumb]="false"
-             [autoHeight]="true"
-             [id]="'1'"
-    ></gallery>
+    <div #galleryDiv class="gallery">
+      <gallery
+        [items]="images"
+        [thumb]="false"
+        [autoHeight]="true"
+        [id]="'1'"
+      ></gallery>
 
-    <button class="button1 material-symbols-outlined" (click)="galleryToggle()">
-      fullscreen
-    </button>
+      <button class="button1 material-symbols-outlined" (click)="galleryToggle()">
+        fullscreen
+      </button>
 
+    </div>
+
+    <div #galleryDivAbsolut class="absolute-gallery display-controller">
+      <gallery
+        [items]="images"
+        [thumb]="false"
+        [autoHeight]="true"
+        [id]="'2'"
+      ></gallery>
+
+      <button class="button2 material-symbols-outlined" (click)="galleryToggle()">
+        fullscreen_exit
+      </button>
+    </div>
   </div>
 
-  <div #galleryDivAbsolut class="absolute-gallery display-controller">
-    <gallery
-      [items]="images"
-      [thumb]="false"
-      [autoHeight]="true"
-      [id]="'2'"
-    ></gallery>
 
-    <button class="button2 material-symbols-outlined" (click)="galleryToggle()">
-      fullscreen_exit
-    </button>
-  </div>
-</div>
+
 
 
 
 <app-note [rate]="rate"></app-note>
-
-
-

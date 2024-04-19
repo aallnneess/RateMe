@@ -31,8 +31,8 @@ export class NotesService {
         Query.limit(1000)
       ]
     )).pipe(
-      map(response => response.documents as unknown as Note[]),
-      tap(notes => console.log('Get notes length: ' + notes.length))
+      map(response => response.documents as unknown as Note[])
+      // tap(notes => console.log('Get notes length: ' + notes.length))
     );
   }
 

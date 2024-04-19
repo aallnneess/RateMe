@@ -230,6 +230,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
     console.log(this.editRate?.imageBuckets);
     console.log(' ');
     console.log(images);
+    console.log(' ');
+    console.log(this.galleryLoadService.activeRateImages.value);
 
     return;
 

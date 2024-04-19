@@ -2,7 +2,6 @@ import {Component, inject, OnInit} from '@angular/core';
 import {DataStoreService} from "./Service/data-store.service";
 import {Router} from "@angular/router";
 import {GalleryLoadService} from "./Service/gallery-load.service";
-import {GalleryItem} from "ng-gallery";
 import {BlobGalleryItemContainer} from "../core/common/blob-gallery-item-container";
 
 @Component({

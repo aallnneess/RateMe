@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Rate} from "../../core/common/rate";
 import {DataStoreService} from "../Service/data-store.service";
@@ -6,13 +6,14 @@ import {GalleryItem} from "ng-gallery";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {DatabaseService} from "../../core/Services/database.service";
 import {AuthService} from "../../core/Services/auth.service";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-rate-card-details',
   templateUrl: './rate-card-details.component.html',
   styleUrl: './rate-card-details.component.css'
 })
-export class RateCardDetailsComponent implements OnInit {
+export class RateCardDetailsComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   router = inject(Router);
   dataStore = inject(DataStoreService);
@@ -28,9 +29,17 @@ export class RateCardDetailsComponent implements OnInit {
 
   showAddChildButton = false;
 
+  destroy$: Subject<boolean> = new Subject<boolean>();
+
+
   ngOnInit(): void {
     this.rate = this.dataStore.getRate(this.route.snapshot.paramMap.get('id')!)!;
-    this.images = this.galleryLoadService.getAllGalleryItems(this.galleryLoadService.activeRateImages());
+
+    this.galleryLoadService.activeRateImages.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(images => {
+      this.images = this.galleryLoadService.getAllGalleryItemsFromBlobGalleryItemsArray(images);
+    });
 
     this.showAddChildRate();
   }
@@ -57,6 +66,11 @@ export class RateCardDetailsComponent implements OnInit {
 
   editRate() {
     this.router.navigate(['members/addRate', 'recipe', {editRate: JSON.stringify(this.rate)}], {skipLocationChange: true});
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
 
