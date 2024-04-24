@@ -3,8 +3,8 @@ import {ImageCroppedEvent, LoadedImage} from "ngx-image-cropper";
 import {ImageGalleryComponent} from "./image-gallery/image-gallery.component";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {StateService, Status} from "../Service/state.service";
-import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-container";
-import {GalleryItem} from "ng-gallery";
+import {BlobCustom} from "../../core/common/blob-custom";
+import {GalleryItemCustom} from "../../core/common/gallery-item-custom";
 
 @Component({
   selector: 'app-image-cr',
@@ -40,21 +40,17 @@ export class ImageCrComponent implements OnInit {
   }
 
   async loadEditImages() {
-    let activeImages: GalleryItem[] = [];
 
-    this.galleryLoadService.activeRateImages.subscribe(images => {
-      activeImages = this.galleryLoadService.getAllGalleryItemsFromBlobGalleryItemsArray(images);
-    })
+    for (let blobGalleryItemContainer of this.galleryLoadService.activeRateImages.value) {
 
-    for (let activeImage of activeImages) {
-      if (typeof activeImage.data?.src === 'string') {
-        try {
-          const blop = await this.urlToBlob(activeImage.data.src);
-          this.blobs.push(blop);
-        } catch (e) {
-          console.error(e);
-        }
-      }
+      const blob: BlobCustom = blobGalleryItemContainer.blob as BlobCustom;
+      blob.bucketDocumentId = blobGalleryItemContainer.bucketDocumentId;
+
+      const tmpCustomGalleryItem: GalleryItemCustom = blobGalleryItemContainer.galleryItem as GalleryItemCustom;
+      blob.userId = tmpCustomGalleryItem.userId;
+      blob.username = tmpCustomGalleryItem.userName;
+
+      this.blobs.push(blob);
     }
 
     console.log('Alle blobs geladen.');
@@ -112,13 +108,6 @@ export class ImageCrComponent implements OnInit {
      // console.log('state: ' + stateId);
      // console.log(this.blobs);
   }
-
-  async urlToBlob(url: string) {
-    const response = await fetch(url);
-    return await response.blob();
-  }
-
-  protected readonly Status = Status;
 
 
 }

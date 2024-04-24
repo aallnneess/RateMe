@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {DatabaseService} from "../../core/Services/database.service";
-import {BehaviorSubject, tap} from "rxjs";
+import {BehaviorSubject, finalize, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 
 @Injectable({
@@ -35,7 +35,11 @@ export class DataStoreService {
     return this.databaseService.getAllRates().subscribe(result => {
       if (result.total !== this.ratesTotal.value) {
         console.log('New Data for Rates[]');
-        this.rates.next(result.documents);
+
+        this.updateRates().pipe(
+          finalize(() => console.log('fertig hihi'))
+        ).subscribe();
+
       }
     });
   }

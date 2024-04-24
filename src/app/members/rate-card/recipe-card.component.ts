@@ -3,6 +3,7 @@ import {Rate} from "../../core/common/rate";
 import {GalleryItem, ImageItem} from "ng-gallery";
 import {FileService} from "../../core/Services/file.service";
 import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-container";
+import {GalleryItemCustom} from "../../core/common/gallery-item-custom";
 
 @Component({
   selector: 'app-rate-card',
@@ -26,14 +27,20 @@ export class RateCardComponent implements OnInit {
 
       this.rate.imageBuckets.forEach(bucketResponse => {
 
-        let newImage = new BlobGalleryItemContainer();
-        newImage.bucketDocumentId = bucketResponse.$id;
-        newImage.galleryItem = new ImageItem({
-          src: this.fileService.getFileforView(bucketResponse.bucketId, bucketResponse.$id).toString()
-        });
+        let newBlobGalleryItemContainer = new BlobGalleryItemContainer();
+        newBlobGalleryItemContainer.bucketDocumentId = bucketResponse.$id;
 
-        this.images.push(newImage);
+        const tmpGalleryItemCustom: GalleryItemCustom = new ImageItem({
+             src: this.fileService.getFileforView(bucketResponse.bucketId, bucketResponse.$id).toString()
+           }) as GalleryItemCustom;
 
+        tmpGalleryItemCustom.bucketDocumentId = bucketResponse.$id;
+        tmpGalleryItemCustom.userId = this.getUserId(bucketResponse.name)!;
+        tmpGalleryItemCustom.userName = this.getUserName(bucketResponse.name)!;
+
+        newBlobGalleryItemContainer.galleryItem = tmpGalleryItemCustom;
+
+        this.images.push(newBlobGalleryItemContainer);
       });
     }
 
@@ -45,6 +52,40 @@ export class RateCardComponent implements OnInit {
       images.push(image.galleryItem);
     }
     return images;
+  }
+
+  getUserId(imageName: string) {
+
+    // Finden Sie die Position von "userId-" im String
+    const userIdStartIndex = imageName.indexOf("userId-");
+    if (userIdStartIndex === -1) {
+      console.error("Substring 'userId-' nicht gefunden.");
+      return;
+    }
+
+    // Finden Sie die Position von "-userName-" im String
+    const userNameEndIndex = imageName.indexOf("-userName-", userIdStartIndex);
+    if (userNameEndIndex === -1) {
+      console.error("Substring '-userName-' nicht gefunden.");
+      return;
+    }
+
+    // Extrahieren Sie den Substring zwischen den Positionen von "userId-" und "-userName-"
+    return imageName.substring(userIdStartIndex + "userId-".length, userNameEndIndex);
+
+  }
+
+  getUserName(imageName: string) {
+
+    // Finden Sie die Position von "-userName-" im String
+    const userNameIndex = imageName.indexOf("-userName-");
+    if (userNameIndex === -1) {
+      console.error("Substring '-userName-' nicht gefunden.");
+      return;
+    }
+
+    // Extrahieren Sie den Teil des Strings nach "-userName-"
+    return imageName.substring(userNameIndex + "-userName-".length);
   }
 
 }

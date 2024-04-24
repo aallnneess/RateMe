@@ -14,6 +14,7 @@ import {NotesService} from "../Service/notes.service";
 import {DataStoreService} from "../Service/data-store.service";
 import {StateService, Status} from "../Service/state.service";
 import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-container";
+import {BlobCustom} from "../../core/common/blob-custom";
 
 @Component({
   selector: 'app-add-rate',
@@ -226,6 +227,16 @@ export class AddRateComponent implements OnInit, OnDestroy {
   // ################## EDIT #########################
 
   async editSend(images: Blob[]) {
+
+    const customImages: BlobCustom[] = images as unknown as BlobCustom[];
+
+    console.log(customImages);
+
+
+
+
+
+
 
     const newImages: Blob[] = await this.galleryLoadService.searchForNewBlobsInsideBlobGalleryItemContainerArray(images, this.galleryLoadService.activeRateImages.value);
 
