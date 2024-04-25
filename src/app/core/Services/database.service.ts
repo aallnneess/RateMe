@@ -93,6 +93,19 @@ export class DatabaseService {
     )
   }
 
+  getRatesByParentDocumentId(parentDocumentId: string) {
+    console.log(parentDocumentId);
+    return from(this.databases.listDocuments(
+      this.databaseId,
+      this.booksCollectionId,
+      [
+        Query.equal('parentDocumentId', parentDocumentId),
+      ]
+    )).pipe(
+      map(response => response.documents as unknown as Rate[])
+    )
+  }
+
   addChildRate(parentRateId: string, childRate: Rate) {
     return from(this.databases.getDocument(
       this.databaseId,
@@ -144,6 +157,8 @@ export class DatabaseService {
       })
     )
   }
+
+
 
   filterRateProperties(obj: any): Rate {
     const rate = new Rate(); // Erzeuge ein leeres Rate-Objekt

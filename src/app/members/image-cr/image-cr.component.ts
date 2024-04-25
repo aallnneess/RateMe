@@ -5,6 +5,7 @@ import {GalleryLoadService} from "../Service/gallery-load.service";
 import {StateService, Status} from "../Service/state.service";
 import {BlobCustom} from "../../core/common/blob-custom";
 import {GalleryItemCustom} from "../../core/common/gallery-item-custom";
+import {AuthService} from "../../core/Services/auth.service";
 
 @Component({
   selector: 'app-image-cr',
@@ -13,6 +14,7 @@ import {GalleryItemCustom} from "../../core/common/gallery-item-custom";
 })
 export class ImageCrComponent implements OnInit {
 
+  authService = inject(AuthService);
   galleryLoadService: GalleryLoadService = inject(GalleryLoadService);
   statesService = inject(StateService);
 
@@ -50,7 +52,21 @@ export class ImageCrComponent implements OnInit {
       blob.userId = tmpCustomGalleryItem.userId;
       blob.username = tmpCustomGalleryItem.userName;
 
-      this.blobs.push(blob);
+      switch (this.statesService.currentStatus()) {
+
+        case Status.Idle:
+          this.blobs.push(blob);
+          break;
+
+        case Status.Edit:
+          if (blob.userId === this.authService.user()?.$id) {
+            this.blobs.push(blob);
+          }
+          break;
+
+      }
+
+
     }
 
     //console.log('Alle blobs geladen.');
@@ -103,10 +119,11 @@ export class ImageCrComponent implements OnInit {
   }
 
   removeItem(stateId: number) {
+    console.log(this.blobs);
     this.blobs.splice(stateId,1);
     this.galleryLoadService.addBlobImages(this.blobs);
-     // console.log('state: ' + stateId);
-     // console.log(this.blobs);
+     console.log('state: ' + stateId);
+     console.log(this.blobs);
   }
 
 

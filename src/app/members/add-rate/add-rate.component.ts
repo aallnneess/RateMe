@@ -5,7 +5,7 @@ import {DatabaseService} from "../../core/Services/database.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {concatMap} from "rxjs";
+import {concatMap, map} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
@@ -54,7 +54,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
    // If its a edit rate, this is not null
    this.editRate = JSON.parse(this.route.snapshot.paramMap.get('editRate')!);
 
-   console.log(this.editRate);
+
 
 
     switch (this.rateTopic) {
@@ -229,6 +229,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   editSend(images: Blob[]) {
 
+
+
     const newImages: Blob[] = this.findNewImages(images);
     console.log('Neue Bilder: ' + newImages.length);
 
@@ -243,6 +245,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
         let rate = new Rate();
 
+        console.log(this.editRate);
+
         rate.$id = this.editRate?.$id!;
         rate.rateTopic = this.rateTopic;
         rate.imageBuckets = this.summarizeImages(this.editRate?.imageBuckets ,result as unknown as BucketResponse[], deleteImages);
@@ -254,20 +258,40 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.notesCollectionId = this.editRate?.notesCollectionId!;
         rate.ratings = this.updateRating(this.editRate?.rating!,this.form.get('rating')?.value,this.editRate?.ratings!);
 
+        if (this.editRate && this.editRate.childRate) {
+          rate.childRate = this.editRate?.childRate;
+          rate.parentDocumentId = this.editRate?.parentDocumentId;
+        }
+
+
         // Rezept
         rate.quelle = this.form.get('quelle')?.value;
 
-        return this.databaseService.updateRate(rate);
+        return this.databaseService.updateRate(rate).pipe(
+          concatMap(result => {
+
+            return this.updateParentRate(rate, deleteImages)
+          }),
+          concatMap(rate => {
+            return this.databaseService.updateRate(rate);
+          })
+        );
       }),
       concatMap(result => {
         console.log('delete images');
 
         return this.fileService.removeImage(deleteImages);
       })
-    ).subscribe({complete: () => {
-      console.log('Well Done :-)')
-    }
+    ).subscribe({
+      next: () => {
+        this.router.navigateByUrl('members', {skipLocationChange: true});
+      },
+      error: (e) => {
+        // TODO: Errorbehandlung:
+        console.error(e);
+      }
     });
+
 
 
 
@@ -295,7 +319,30 @@ export class AddRateComponent implements OnInit, OnDestroy {
   findToDeleteImages(images: Blob[]) {
     const tmpImages: BlobGalleryItemContainer[] = [];
     const searchImages: BlobCustom[] = images as BlobCustom[];
-    for (let blobGalleryItemContainer of this.galleryLoadService.activeRateImages.value) {
+
+    const blabla: BucketResponse[] = JSON.parse(this.editRate?.imageBuckets as string);
+    const filteredActiveRateImages: BlobGalleryItemContainer[] = this.galleryLoadService.activeRateImages.value.filter(i => {
+
+      if (blabla.find(image => image.$id === i.bucketDocumentId)) {
+
+        return true;
+      }
+
+      return false;
+
+    });
+
+    console.log('searchIamges ids: ');
+    for (let searchImage of searchImages) {
+      console.log(searchImage.bucketDocumentId);
+    }
+
+    console.log(' ');
+    console.log('activeRateImages ids:');
+
+    for (let blobGalleryItemContainer of filteredActiveRateImages) {
+      console.log(blobGalleryItemContainer.bucketDocumentId);
+
 
       if (!searchImages.find(i => i.bucketDocumentId === blobGalleryItemContainer.bucketDocumentId)) {
         tmpImages.push(blobGalleryItemContainer);
@@ -355,13 +402,13 @@ export class AddRateComponent implements OnInit, OnDestroy {
       return [];
     }
 
-    console.log(' ');
-    console.log('rating before:');
-    console.log(rating);
-    console.log('Old Rating:');
-    console.log(oldRating);
-    console.log('New Rating:')
-    console.log(newRating);
+    // console.log(' ');
+    // console.log('rating before:');
+    // console.log(rating);
+    // console.log('Old Rating:');
+    // console.log(oldRating);
+    // console.log('New Rating:')
+    // console.log(newRating);
 
     // Prüfen, ob das alte Rating vorhanden ist, bevor es entfernt wird
     const oldRatingIndex = rating.indexOf(oldRating);
@@ -373,8 +420,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
       // Das neue Rating hinzufügen und die aktualisierte Liste zurückgeben
       updatedRating.push(newRating);
 
-      console.log('rating after:');
-      console.log(updatedRating);
+      // console.log('rating after:');
+      // console.log(updatedRating);
 
       return updatedRating;
     } else {
@@ -382,6 +429,88 @@ export class AddRateComponent implements OnInit, OnDestroy {
       // Rückgabe der unveränderten Liste, da das alte Rating nicht gefunden wurde
       return rating;
     }
+  }
+
+  updateParentRate(rate: Rate, deleteImages: BlobGalleryItemContainer[]) {
+    rate.$id = this.editRate?.$id!;
+
+    switch (rate.childRate) {
+
+      // #################################### CASE FALSE ######################################################
+
+      case false:
+        console.log('parentRate');
+        let rateImageBuckets: BucketResponse[] = [];
+        if (typeof rate.imageBuckets === "string") {
+          rateImageBuckets = JSON.parse(rate.imageBuckets);
+        }
+
+        console.log(rate);
+        return this.databaseService.getRatesByParentDocumentId(rate.$id).pipe(
+          map(foundRates => {
+
+            for (let foundRate of foundRates) {
+              // const imageBuckets: BucketResponse[] = foundRate.imageBuckets as unknown as BucketResponse[];
+              const imageBuckets: BucketResponse[] = JSON.parse(foundRate.imageBuckets as string);
+
+              for (let imageBucket of imageBuckets) {
+                rateImageBuckets.push(imageBucket);
+              }
+            }
+
+            rate.imageBuckets = rateImageBuckets;
+            return rate;
+          })
+        );
+
+
+      // #################################### CASE TRUE ######################################################
+
+      case true:
+        console.log('childRate');
+
+        console.log('look to parentid: ' + rate.parentDocumentId);
+
+        return this.databaseService.getRateById(rate.parentDocumentId).pipe(
+          map(parentRate => {
+            console.log(parentRate.imageBuckets);
+            const rateImageBuckets: BucketResponse[] = JSON.parse(parentRate.imageBuckets as string);
+            console.log('rateImageBuckets');
+            console.log(rateImageBuckets);
+            console.log(' ');
+            console.log('deleteImages');
+            console.log(deleteImages);
+
+            // delete deleted images
+            for (let rateImageBucket of rateImageBuckets) {
+              if (deleteImages.find(i => i.bucketDocumentId === rateImageBucket.$id)) {
+                rateImageBuckets.splice(rateImageBuckets.indexOf(rateImageBucket),1);
+                console.log('lösche bild');
+              }
+            }
+
+            // add new images
+            // const childRateImageBuckets: BucketResponse[] = rate.imageBuckets as unknown as BucketResponse[];
+            const childRateImageBuckets: BucketResponse[] = JSON.parse(rate.imageBuckets as string);
+            console.log(' ');
+            console.log('childRateImageBuckets');
+            console.log(childRateImageBuckets);
+
+            for (let childRateImageBucket of childRateImageBuckets) {
+              if (!rateImageBuckets.find(i => i.$id === childRateImageBucket.$id)) {
+                rateImageBuckets.push(childRateImageBucket);
+                console.log('füge bild hinzu');
+                console.log(childRateImageBucket);
+              }
+            }
+
+            parentRate.imageBuckets = rateImageBuckets;
+            console.log(parentRate.imageBuckets);
+            return parentRate;
+          })
+        )
+    }
+
   }
 
 
