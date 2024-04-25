@@ -55,7 +55,10 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
 
   haveUserUploadThisImage() {
     if (this.statesService.currentStatus() === Status.Edit) {
-      return this.authService.user()?.$id! === this.items[this.imageIndex]!.data!.args['userId'];
+
+      if (this.items[this.imageIndex].data && this.items[this.imageIndex].data!.args && this.items[this.imageIndex].data!.args['userId']) {
+        return this.authService.user()?.$id! === this.items[this.imageIndex]!.data!.args['userId'];
+      }
     }
 
     return true;
