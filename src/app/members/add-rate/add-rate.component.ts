@@ -114,7 +114,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
     //console.log('absenden');
     this.submitButton.nativeElement.disabled = true;
 
-    if (this.parentRate) {
+    if (this.parentRate && !this.editRate) {
       this.childSend(images);
     } else if (this.editRate) {
       this.editSend(images);
@@ -283,9 +283,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
       if (!this.galleryLoadService.activeRateImages.value.find(i => i.bucketDocumentId === searchImage.bucketDocumentId)) {
         //console.log('Neues Bild');
+
         newImages.push(image);
-      } else {
-        //console.log('Bild nicht neu.');
       }
 
     }

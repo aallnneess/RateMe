@@ -63,6 +63,9 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
   }
 
   indexChange(event: GalleryState) {
-    if (event.currIndex) this.imageIndex = event.currIndex;
+    if (event) {
+      this.imageIndex = event.currIndex!;
+      console.log('set index: ' + this.imageIndex);
+    }
   }
 }
