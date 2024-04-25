@@ -493,7 +493,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
             // const childRateImageBuckets: BucketResponse[] = rate.imageBuckets as unknown as BucketResponse[];
             const childRateImageBuckets: BucketResponse[] = JSON.parse(rate.imageBuckets as string);
             console.log(' ');
-            console.log('childRateImageBucketss');
+            console.log('childRateImageBuckets');
             console.log(childRateImageBuckets);
 
             for (let childRateImageBucket of childRateImageBuckets) {
