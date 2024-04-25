@@ -54,6 +54,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
    // If its a edit rate, this is not null
    this.editRate = JSON.parse(this.route.snapshot.paramMap.get('editRate')!);
 
+   console.log(this.editRate);
+
 
     switch (this.rateTopic) {
 
@@ -99,7 +101,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   changeButtonCssClass() {
     if (this.submitButton) {
-      //console.log('changeButtonCssClass: ' + this.submitButton.nativeElement.disabled);
       return this.submitButton.nativeElement.disabled;
     }
 
@@ -204,7 +205,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
                 ))
               }),
               concatMap(() => {
-                return this.databaseService.updateRating(rate.parentDocumentId,rate);
+                return this.databaseService.addChildRate(rate.parentDocumentId,rate);
               })
             );
           })
@@ -226,82 +227,164 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   // ################## EDIT #########################
 
-  async editSend(images: Blob[]) {
+  editSend(images: Blob[]) {
 
-    const customImages: BlobCustom[] = images as unknown as BlobCustom[];
-
-    console.log(customImages);
-
+    const newImages: Blob[] = this.findNewImages(images);
+    console.log('Neue Bilder: ' + newImages.length);
 
 
+    const deleteImages: BlobGalleryItemContainer[] = this.findToDeleteImages(images);
+    console.log('Bilder zu löschen: ' + deleteImages.length);
 
-
-
-
-    const newImages: Blob[] = await this.galleryLoadService.searchForNewBlobsInsideBlobGalleryItemContainerArray(images, this.galleryLoadService.activeRateImages.value);
-
-    console.log('editSend: Insg. ' + newImages.length + ' neue(s) Bild(er) gefunden');
-
-    const deletedImages: BlobGalleryItemContainer[] = await this.galleryLoadService.searchForDeletedBlobsInBlobGalleryItemContainerArray(images,this.galleryLoadService.activeRateImages.value);
-
-    console.log('editSend: Insg. ' + deletedImages.length + ' gelöschte Bild(er) gefunden');
-
-    return;
-
-
-    // TODO: I'm now comparing activeRateImages.blobs (which were loaded from the clicked Card)
-    // with the blob images =>
-    // if a blob does not exist in activeRateImages.blobs, it is a new image....
-    // NOT a perfect solution....!!!
-
-
-    this.fileService.addImage(images).pipe(
+    this.fileService.addImage(newImages).pipe(
       concatMap(result => {
 
+        console.log('create rate');
+
         let rate = new Rate();
+
+        rate.$id = this.editRate?.$id!;
         rate.rateTopic = this.rateTopic;
-        rate.imageBuckets = result as unknown as BucketResponse[];
+        rate.imageBuckets = this.summarizeImages(this.editRate?.imageBuckets ,result as unknown as BucketResponse[], deleteImages);
         rate.title = this.form.get('title')?.value;
         rate.rating = this.form.get('rating')?.value;
-        rate.tags = this.form.get('tags')?.value;
-        rate.username = this.authService.user()!.name;
-        rate.userId = this.authService.user()!.$id;
-        rate.notesCollectionId = this.parentRate!.notesCollectionId;
-        rate.parentDocumentId = this.parentRate!.$id;
-        rate.childRate = true;
+        rate.tags = this.form.get('tags')?.value + ' ';
+        rate.username = this.editRate?.username!;
+        rate.userId = this.editRate?.userId!;
+        rate.notesCollectionId = this.editRate?.notesCollectionId!;
+        rate.ratings = this.updateRating(this.editRate?.rating!,this.form.get('rating')?.value,this.editRate?.ratings!);
 
         // Rezept
         rate.quelle = this.form.get('quelle')?.value;
 
-        return this.databaseService.addRate(rate).pipe(
-          concatMap(() => {
-            return this.noteService.addNote(rate.notesCollectionId, new Note(
-              this.form.get('notes')?.value,
-              rate.username,
-              rate.userId
-            ))
-          }),
-          concatMap(() => {
-            return this.databaseService.updateRating(rate.parentDocumentId, rate);
-          })
-        );
+        return this.databaseService.updateRate(rate);
+      }),
+      concatMap(result => {
+        console.log('delete images');
+
+        return this.fileService.removeImage(deleteImages);
       })
-    )
-      .subscribe({
-        next: () => {
+    ).subscribe({complete: () => {
+      console.log('Well Done :-)')
+    }
+    });
 
-          // Rates müssen vor route wechsel aktualisiert werden
-          this.datastoreService.updateRates().subscribe(() => {
-            this.router.navigateByUrl('members', {skipLocationChange: true});
-          });
 
-        },
-        error: (e) => {
-          // TODO: Errorbehandlung:
-          console.error(e);
-        }
-      });
+
+    // TODO: Eltern-Rate imagebucks updaten ?
   }
+
+  findNewImages(images: Blob[]) {
+    const newImages: Blob[] = [];
+
+    for (let image of images) {
+      let searchImage = image as BlobCustom;
+      //console.log('search:' + searchImage.bucketDocumentId);
+
+      if (!this.galleryLoadService.activeRateImages.value.find(i => i.bucketDocumentId === searchImage.bucketDocumentId)) {
+        //console.log('Neues Bild');
+        newImages.push(image);
+      } else {
+        //console.log('Bild nicht neu.');
+      }
+
+    }
+
+    return newImages;
+  }
+
+  findToDeleteImages(images: Blob[]) {
+    const tmpImages: BlobGalleryItemContainer[] = [];
+    const searchImages: BlobCustom[] = images as BlobCustom[];
+    for (let blobGalleryItemContainer of this.galleryLoadService.activeRateImages.value) {
+
+      if (!searchImages.find(i => i.bucketDocumentId === blobGalleryItemContainer.bucketDocumentId)) {
+        tmpImages.push(blobGalleryItemContainer);
+      }
+    }
+
+    return tmpImages;
+  }
+
+  summarizeImages(
+    originalImages: BucketResponse[] | string | undefined,
+    newImages: BucketResponse[],
+    toDeleteImages: BlobGalleryItemContainer[]) {
+
+    let updateImages: BucketResponse[] = [];
+    let tmpOriginalImages: BucketResponse[] = [];
+    if (typeof originalImages === "string") {
+      tmpOriginalImages = JSON.parse(originalImages);
+    } else {
+      tmpOriginalImages = originalImages!;
+    }
+
+    // console.log('to delete images:');
+    // console.log(toDeleteImages);
+    // console.log(' ');
+    // console.log('original images:');
+    // console.log(tmpOriginalImages);
+
+
+    // delete images
+    if (toDeleteImages.length === 0) {
+      updateImages = tmpOriginalImages;
+    } else {
+
+      for (let tmpOriginalImage of tmpOriginalImages) {
+        if (!toDeleteImages.find(i => i.bucketDocumentId === tmpOriginalImage.$id)) {
+          updateImages.push(tmpOriginalImage);
+        }
+      }
+    }
+
+    // add new images
+    for (let newImage of newImages) {
+      updateImages.push(newImage);
+    }
+
+    // console.log(' ');
+    // console.log('updated images');
+    // console.log(updateImages);
+    return updateImages;
+  }
+
+  updateRating(oldRating: number, newRating: number, rating: number[]): number[] {
+
+    if (this.editRate?.childRate) {
+      console.error('Child Rates have no global ratings!');
+      return [];
+    }
+
+    console.log(' ');
+    console.log('rating before:');
+    console.log(rating);
+    console.log('Old Rating:');
+    console.log(oldRating);
+    console.log('New Rating:')
+    console.log(newRating);
+
+    // Prüfen, ob das alte Rating vorhanden ist, bevor es entfernt wird
+    const oldRatingIndex = rating.indexOf(oldRating);
+    if (oldRatingIndex !== -1) {
+      // Eine Kopie der Liste erstellen und das alte Rating entfernen
+      const updatedRating = [...rating];
+      updatedRating.splice(oldRatingIndex, 1);
+
+      // Das neue Rating hinzufügen und die aktualisierte Liste zurückgeben
+      updatedRating.push(newRating);
+
+      console.log('rating after:');
+      console.log(updatedRating);
+
+      return updatedRating;
+    } else {
+      console.error('Old rating not found in the list.');
+      // Rückgabe der unveränderten Liste, da das alte Rating nicht gefunden wurde
+      return rating;
+    }
+  }
+
 
   ngOnDestroy(): void {
     this.statesService.setStatus(Status.Idle);

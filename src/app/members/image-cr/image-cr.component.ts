@@ -53,7 +53,7 @@ export class ImageCrComponent implements OnInit {
       this.blobs.push(blob);
     }
 
-    console.log('Alle blobs geladen.');
+    //console.log('Alle blobs geladen.');
     this.galleryLoadService.addBlobImages(this.blobs);
     this.showCropper = false;
   }

@@ -3,6 +3,7 @@ import {AppwriteService} from "./appwrite.service";
 import {ID, Models, Storage} from "appwrite";
 import {catchError, forkJoin, from, Observable, of} from "rxjs";
 import {AuthService} from "./auth.service";
+import {BlobGalleryItemContainer} from "../common/blob-gallery-item-container";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class FileService {
 
   addImage(images: Blob[]) {
 
+    if (images.length === 0) {
+      return of([]); // Rückgabe eines Observables mit einem leeren Array
+    }
+
     const fileName = 'userId-' + this.authService.user()?.$id + '-userName-' + this.authService.user()?.name;
 
     const observables: Observable<Models.File | string>[] = images.map(image => {
@@ -33,13 +38,32 @@ export class FileService {
         catchError(error => of(`Failed to create file: ${error}`))
       );
 
-    })
+    });
 
     return forkJoin(observables);
   }
 
   getFileforView(bucketId: string, fileId: string) {
     return this.storage.getFileView(bucketId, fileId);
+  }
+
+  removeImage(blobGalleryItemContainers: BlobGalleryItemContainer[]) {
+
+    if (blobGalleryItemContainers.length === 0) {
+      return of([]);
+    }
+
+    const observables = blobGalleryItemContainers.map(blobGItem => {
+
+      return from(this.storage.deleteFile(
+        this.imagesBucket,
+        blobGItem.bucketDocumentId
+      )).pipe(
+        catchError(error => of(`Failed to delete file: ${error}`))
+      )
+    });
+
+    return forkJoin(observables);
   }
 
 }

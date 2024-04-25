@@ -65,6 +65,13 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   }
 
   editRate() {
+    //TODO: Natürlich muss die eigene Rate geladen werden !!! Per datenbank schauen....
+
+    if (this.rate.userId !== this.authService.user()!.$id) {
+      console.error('WE DONT SUPPORT EDIT CHILD RATES AT THE MOMENT !!');
+      return;
+    }
+
     this.router.navigate(['members/addRate', 'recipe', {editRate: JSON.stringify(this.rate)}], {skipLocationChange: true});
   }
 

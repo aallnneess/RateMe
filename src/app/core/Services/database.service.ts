@@ -27,7 +27,19 @@ export class DatabaseService {
       this.databaseId,
       this.booksCollectionId,
       ID.unique(),
-      this.filterRateProperties(rate)));
+      rate
+    ));
+  }
+
+  updateRate(rate: Rate) {
+    rate.imageBuckets = JSON.stringify(rate.imageBuckets);
+
+    return from(this.databases.updateDocument(
+      this.databaseId,
+      this.booksCollectionId,
+      rate.$id,
+      this.filterRateProperties(rate)
+    ))
   }
 
   getAllRates() {
@@ -56,7 +68,7 @@ export class DatabaseService {
     );
   }
 
-  updateRating(parentRateId: string, childRate: Rate) {
+  addChildRate(parentRateId: string, childRate: Rate) {
     return from(this.databases.getDocument(
       this.databaseId,
       this.booksCollectionId,
@@ -66,15 +78,6 @@ export class DatabaseService {
         let rate = response as unknown as Rate;
         rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
         rate.ratings.push(childRate.rating);
-        rate.rating = 0;
-
-        for (let i = 0; i < rate.ratings.length; i++) {
-          // console.log('updateRating: ' + rate.ratings[i]);
-          rate.rating += rate.ratings[i];
-        }
-
-        rate.rating = rate.rating / rate.ratings.length;
-        // console.log('Ergebnis: ' + rate.rating);
 
         // add new tags
         let newTags = childRate.tags.replace(rate.tags, '');
@@ -82,7 +85,6 @@ export class DatabaseService {
         // console.log('New Tags: ' + newTags);
         rate.tags = rate.tags + newTags;
         // console.log('final tags: ' + rate.tags);
-
 
 
         //add new image buckets
