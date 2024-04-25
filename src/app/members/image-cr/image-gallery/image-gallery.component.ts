@@ -27,7 +27,27 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
   imageIndex = 0;
 
   ngOnInit(): void {
-    this.items = this.galleryLoadService.imagesCardGallery();
+
+    switch (this.statesService.currentStatus()) {
+
+      case Status.Idle:
+        this.items = this.galleryLoadService.imagesCardGallery();
+        break;
+
+      case Status.Edit:
+        this.items = this.galleryLoadService.imagesCardGallery().filter(i => {
+          if (i.data?.args['userId'] === this.authService.user()?.$id) {
+            console.log('userid: ' + this.authService.user()?.$id);
+            console.log('i-userid: ' + i.data?.args['userId']);
+
+            return true;
+          }
+          return false;
+        });
+        break;
+
+    }
+
     console.log('Gallery Loaded');
     console.log(this.items);
   }
