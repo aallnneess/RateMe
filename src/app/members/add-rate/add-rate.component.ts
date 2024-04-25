@@ -320,7 +320,14 @@ export class AddRateComponent implements OnInit, OnDestroy {
     const tmpImages: BlobGalleryItemContainer[] = [];
     const searchImages: BlobCustom[] = images as BlobCustom[];
 
-    const blabla: BucketResponse[] = JSON.parse(this.editRate?.imageBuckets as string);
+    let blabla: BucketResponse[] = [];
+
+    if (typeof this.editRate?.imageBuckets === 'string') {
+      blabla = JSON.parse(this.editRate?.imageBuckets as string);
+    }else {
+      blabla = this.editRate?.imageBuckets as BucketResponse[];
+    }
+
     const filteredActiveRateImages: BlobGalleryItemContainer[] = this.galleryLoadService.activeRateImages.value.filter(i => {
 
       if (blabla.find(image => image.$id === i.bucketDocumentId)) {
