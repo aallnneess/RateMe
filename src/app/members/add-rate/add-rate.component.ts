@@ -485,7 +485,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
             for (let rateImageBucket of rateImageBuckets) {
               if (deleteImages.find(i => i.bucketDocumentId === rateImageBucket.$id)) {
                 rateImageBuckets.splice(rateImageBuckets.indexOf(rateImageBucket),1);
-                console.log('lösche bild ....');
+                console.log('lösche bild');
               }
             }
 
