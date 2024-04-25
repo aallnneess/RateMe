@@ -68,6 +68,31 @@ export class DatabaseService {
     );
   }
 
+  // We need the "parent/original" Rate Id and the userId
+  // Then we search if theres a child rate with parentDocumentId & userId
+  getRateByUserIdAndParentDocumentId(userId: string, rateId: string) {
+    return from(this.databases.listDocuments(
+      this.databaseId,
+      this.booksCollectionId,
+      [
+        Query.equal('parentDocumentId', rateId),
+        Query.equal('userId', userId)
+      ]
+    )).pipe(
+      map(response => {
+        if (response.documents.length === 1) {
+          return response.documents[0] as unknown as Rate
+        }else if (response.documents.length > 1) {
+          console.error('Zu viele Rates gefunden, es kann eig. nur eine geben!');
+          return response.documents[0] as unknown as Rate;
+        }else {
+          console.error('Keine Rate gefunden !');
+          return null;
+        }
+      })
+    )
+  }
+
   addChildRate(parentRateId: string, childRate: Rate) {
     return from(this.databases.getDocument(
       this.databaseId,

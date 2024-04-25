@@ -33,7 +33,6 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
   }
 
   removeItem() {
-    //console.log('remove with state: ' + this.state.currIndex);
     this.remove.emit(this.state.currIndex!);
     this.gallery.remove(this.state.currIndex!);
   }
@@ -44,7 +43,6 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
     ).subscribe(state => {
       if (this.state !== state) {
         this.state = state;
-        //console.log(this.state);
       }
     });
   }

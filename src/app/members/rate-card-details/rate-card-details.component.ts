@@ -68,11 +68,20 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
     //TODO: Natürlich muss die eigene Rate geladen werden !!! Per datenbank schauen....
 
     if (this.rate.userId !== this.authService.user()!.$id) {
-      console.error('WE DONT SUPPORT EDIT CHILD RATES AT THE MOMENT !!');
-      return;
-    }
+      // console.error('WE DONT SUPPORT EDIT CHILD RATES AT THE MOMENT !!');
 
-    this.router.navigate(['members/addRate', 'recipe', {editRate: JSON.stringify(this.rate)}], {skipLocationChange: true});
+      this.dataBaseService.getRateByUserIdAndParentDocumentId(
+        this.authService.user()!.$id,
+        this.rate.$id
+      ).subscribe(result => {
+        if (result) {
+          this.router.navigate(['members/addRate', 'recipe', {editRate: JSON.stringify(result)}], {skipLocationChange: true});
+        }
+      });
+
+    } else {
+      this.router.navigate(['members/addRate', 'recipe', {editRate: JSON.stringify(this.rate)}], {skipLocationChange: true});
+    }
   }
 
   ngOnDestroy(): void {
