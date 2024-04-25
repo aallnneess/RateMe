@@ -1,9 +1,14 @@
-<gallery
+<gallery #gallery
   [items]="items"
   [thumb]="false"
   [autoHeight]="true"
+  (indexChange)="indexChange($event)"
 ></gallery>
 
-<button class="material-symbols-outlined" (click)="removeItem()">
-delete
-</button>
+@if (haveUserUploadThisImage()) {
+  <button class="material-symbols-outlined" (click)="removeItem()">
+    delete
+  </button>
+}
+
+

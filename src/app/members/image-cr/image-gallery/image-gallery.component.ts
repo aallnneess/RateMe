@@ -2,6 +2,8 @@ import {AfterViewChecked, Component, EventEmitter, inject, OnDestroy, OnInit, Ou
 import {GalleryComponent, GalleryItem, GalleryState} from "ng-gallery";
 import {GalleryLoadService} from "../../Service/gallery-load.service";
 import {Subject, takeUntil} from "rxjs";
+import {AuthService} from "../../../core/Services/auth.service";
+import {StateService, Status} from "../../Service/state.service";
 
 @Component({
   selector: 'app-image-gallery',
@@ -16,12 +18,18 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
   private destroy$ = new Subject();
 
   galleryLoadService: GalleryLoadService = inject(GalleryLoadService);
+  authService: AuthService = inject(AuthService);
+  statesService = inject(StateService);
 
   items: GalleryItem[] = [];
   state!: GalleryState;
 
+  imageIndex = 0;
+
   ngOnInit(): void {
     this.items = this.galleryLoadService.imagesCardGallery();
+    console.log('Gallery Loaded');
+    console.log(this.items);
   }
 
   removeItem() {
@@ -43,5 +51,17 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
 
   ngOnDestroy(): void {
     this.destroy$.next('');
+  }
+
+  haveUserUploadThisImage() {
+    if (this.statesService.currentStatus() === Status.Edit) {
+      return this.authService.user()?.$id! === this.items[this.imageIndex]!.data!.args['userId'];
+    }
+
+    return true;
+  }
+
+  indexChange(event: GalleryState) {
+    if (event.currIndex) this.imageIndex = event.currIndex;
   }
 }
