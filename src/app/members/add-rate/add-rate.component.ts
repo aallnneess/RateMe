@@ -5,7 +5,7 @@ import {DatabaseService} from "../../core/Services/database.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {concatMap, map} from "rxjs";
+import {concatMap, delay, map} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
@@ -128,10 +128,11 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   normalSend(images: Blob[]) {
     this.fileService.addImage(images).pipe(
-
       concatMap(result => {
         return this.nodeServer.createNotesCollection(this.form.get('title')?.value).pipe(
           concatMap(collectionResponse => {
+
+            console.log(collectionResponse.$id);
 
             let rate = new Rate();
             rate.rateTopic = this.rateTopic;

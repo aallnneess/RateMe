@@ -36,7 +36,7 @@ export class ImageCrComponent implements OnInit {
   croppedImageBlob!: Blob | null;
 
   ngOnInit(): void {
-    // TODO: Neu
+    // clean imagesNewOrEdit array
     this.galleryLoadService.imagesNewOrEdit.set([]);
 
     if (this.statesService.currentStatus() === Status.Edit) {
