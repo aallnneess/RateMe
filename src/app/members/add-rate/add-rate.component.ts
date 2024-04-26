@@ -15,6 +15,7 @@ import {DataStoreService} from "../Service/data-store.service";
 import {StateService, Status} from "../Service/state.service";
 import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-container";
 import {BlobCustom} from "../../core/common/blob-custom";
+import {PopupService} from "../../core/Services/popup.service";
 
 @Component({
   selector: 'app-add-rate',
@@ -36,6 +37,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
   noteService = inject(NotesService);
   datastoreService = inject(DataStoreService);
   statesService = inject(StateService);
+  popupService = inject(PopupService);
 
   form!: FormGroup;
 
@@ -170,6 +172,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
+        this.popupService.setErrorMessage(e);
       }});
   }
 
@@ -222,6 +225,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
+        this.popupService.setErrorMessage(e);
       }});
   }
 
@@ -289,13 +293,10 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
+        this.popupService.setErrorMessage(e);
       }
     });
 
-
-
-
-    // TODO: Eltern-Rate imagebucks updaten ?
   }
 
   findNewImages(images: Blob[]) {

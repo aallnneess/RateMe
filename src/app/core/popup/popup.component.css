@@ -1,0 +1,41 @@
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  Z-index: 100;
+
+  position: absolute;
+  background-color: rgba(128, 128, 128, 0.7);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: all ease-in-out 0.4s;
+}
+
+.show-section {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+
+  background-color: white;
+  color: #113C4D;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.button {
+  box-shadow: 0 5px 5px rgba(17, 60, 77, 0.56);
+}
