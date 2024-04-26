@@ -17,12 +17,20 @@
         input4.checkErrors();
 ">
 
+<!--        <app-member-input #input1-->
+<!--                          [labelInputId]="'input1'"-->
+<!--                          [name]="'Titel'"-->
+<!--                          [textFieldType]="'text'"-->
+<!--                          [value]="getFormControl('title')"-->
+<!--                          [disabled]="!!parentRate || !!editRate">-->
+<!--        </app-member-input>-->
+
         <app-member-input #input1
                           [labelInputId]="'input1'"
                           [name]="'Titel'"
                           [textFieldType]="'text'"
                           [value]="getFormControl('title')"
-                          [disabled]="!!parentRate || !!editRate">
+                          [disabled]="editRate?.childRate!">
         </app-member-input>
 
 
