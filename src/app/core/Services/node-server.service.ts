@@ -1,7 +1,20 @@
 import {inject, Injectable} from '@angular/core';
 import {UserInfo} from "../common/user-info";
 import {AppwriteService} from "./appwrite.service";
-import {from, map, mergeMap, of, retry, throwError} from "rxjs";
+import {
+  concat,
+  defer, delay, finalize,
+  forkJoin,
+  from,
+  ignoreElements,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  retry,
+  tap,
+  throwError
+} from "rxjs";
 import {CollectionResponse} from "../common/collection-response";
 import {ExecutionMethod} from "appwrite";
 
@@ -28,28 +41,6 @@ export class NodeServerService {
 
   }
 
-  // createNotesCollection(rateTitle: string) {
-  //
-  //   return from(this.appwriteService.functions.createExecution(
-  //     '65c3cd5f3c2d915cfc15',
-  //     rateTitle,
-  //     false,
-  //     '/newNotesCollection',
-  //     ExecutionMethod.GET
-  //   )).pipe(
-  //     map(result => {
-  //       if (result.responseBody) {
-  //         return JSON.parse(result.responseBody) as unknown as CollectionResponse;
-  //       } else {
-  //         throw new Error('Empty Response Body: ' + result.responseBody);
-  //       }
-  //     })
-  //   )
-  // }
-
-
-  // TODO: createNotesCollection neu geschrieben mit retry
-
   createNotesCollection(rateTitle: string) {
 
     return from(this.appwriteService.functions.createExecution(
@@ -59,10 +50,73 @@ export class NodeServerService {
       '/newNotesCollection',
       ExecutionMethod.GET
     )).pipe(
-      mergeMap(result => result.responseBody.length > 1 ? of(JSON.parse(result.responseBody) as unknown as CollectionResponse) : throwError(() => 'Error while creating notes')),
-      retry(10)
+      map(result => {
+        if (result.responseBody) {
+          return JSON.parse(result.responseBody) as unknown as CollectionResponse;
+        } else {
+          throw new Error('Empty Response Body: ' + result.responseBody);
+        }
+      })
     )
   }
+
+
+  // TODO: createNotesCollection neu geschrieben mit retry. If prüft möglicherweise das falsche....
+  // createNotesCollection(rateTitle: string) {
+  //   let retryCount = 0;
+  //   return defer(() => {
+  //     return from(this.appwriteService.functions.createExecution(
+  //       '65c3cd5f3c2d915cfc15',
+  //       rateTitle,
+  //       false,
+  //       '/newNotesCollection',
+  //       ExecutionMethod.GET
+  //     )).pipe(
+  //       tap(() => retryCount++),
+  //       mergeMap(response => {
+  //         if (!response.responseBody || response.responseBody.length < 1) {
+  //           return throwError(() => {
+  //             return 'createNotesCollection error. ' + retryCount + ' mal Versucht';
+  //           });
+  //         }
+  //         return of(JSON.parse(response.responseBody) as unknown as CollectionResponse);
+  //       })
+  //     );
+  //   }).pipe(
+  //     retry({ count: 10, delay: 1000 })
+  //   );
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
