@@ -9,8 +9,9 @@ import {Rate} from "../../core/common/rate";
 export class DataStoreService {
 
   databaseService: DatabaseService = inject(DatabaseService);
-  rates = new BehaviorSubject<Rate[]>([]);
-  ratesTotal = new BehaviorSubject<number>(0);
+  private rates$ = new BehaviorSubject<Rate[]>([]);
+  ratesOb$ = this.rates$.asObservable();
+  private ratesTotal$ = new BehaviorSubject<number>(0);
 
   constructor() {}
 
@@ -23,17 +24,21 @@ export class DataStoreService {
           rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
         });
 
-        this.rates.next(response.documents);
-        this.ratesTotal.next(response.total);
+        this.rates$.next(response.documents);
+        this.ratesTotal$.next(response.total);
         console.log('Update Rates array');
       })
     );
   }
 
+  getRatesValue() {
+    return this.rates$.value;
+  }
+
   // TODO: evtl. übertrieben.....
   checkForNewRate() {
     return this.databaseService.getAllRates().subscribe(result => {
-      if (result.total !== this.ratesTotal.value) {
+      if (result.total !== this.ratesTotal$.value) {
         console.log('New Data for Rates[]');
 
         this.updateRates().pipe(
@@ -46,6 +51,6 @@ export class DataStoreService {
 
 
   getRate(id: string) {
-    return this.rates.value.find(rate => rate.$id === id);
+    return this.rates$.value.find(rate => rate.$id === id);
   }
 }

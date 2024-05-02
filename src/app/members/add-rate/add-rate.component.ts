@@ -5,7 +5,7 @@ import {DatabaseService} from "../../core/Services/database.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {concatMap, delay, map} from "rxjs";
+import {concatMap, map} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
@@ -128,38 +128,34 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   normalSend(images: Blob[]) {
     this.fileService.addImage(images).pipe(
-      concatMap(result => {
-        return this.nodeServer.createNotesCollection(this.form.get('title')?.value).pipe(
-          concatMap(collectionResponse => {
+      concatMap(bucketResponses => {
 
-            console.log(collectionResponse.$id);
+        let rate = new Rate();
+        rate.rateTopic = this.rateTopic;
+        rate.imageBuckets = bucketResponses as unknown as BucketResponse[];
+        rate.title = this.form.get('title')?.value;
+        rate.rating = this.form.get('rating')?.value;
+        rate.tags = this.form.get('tags')?.value + ' ';
+        rate.username = this.authService.user()!.name;
+        rate.userId = this.authService.user()!.$id;
+        rate.ratings = [rate.rating];
 
-            let rate = new Rate();
-            rate.rateTopic = this.rateTopic;
-            rate.imageBuckets = result as unknown as BucketResponse[];
-            rate.title = this.form.get('title')?.value;
-            rate.rating = this.form.get('rating')?.value;
-            rate.tags = this.form.get('tags')?.value + ' ';
-            rate.username = this.authService.user()!.name;
-            rate.userId = this.authService.user()!.$id;
-            rate.notesCollectionId = collectionResponse.$id;
-            rate.ratings = [rate.rating];
+        // Rezept
+        rate.quelle = this.form.get('quelle')?.value;
 
-            // Rezept
-            rate.quelle = this.form.get('quelle')?.value;
-
-            return this.databaseService.addRate(rate).pipe(
-              // TODO: Rating beim Eltern-Rate ändern. ratings[] wird nur hier gefüllt.
-              concatMap( uploadedRate => {
-                return this.noteService.addNote(rate.notesCollectionId, new Note(
-                  this.form.get('notes')?.value,
-                  rate.username,
-                  rate.userId
-                ))
-              })
-            );
+        return this.databaseService.addRate(rate).pipe(
+          concatMap(rateResult => {
+            return this.nodeServer.createNotesCollection(
+              this.form.get('title')?.value,
+              rateResult.$id,
+              rateResult.$databaseId,
+              rateResult.$collectionId,
+              this.form.get('notes')?.value,
+              rate.username,
+              rate.userId,
+              Date.now())
           })
-        );
+        )
       })
     ).subscribe({
       next: () => {
@@ -174,9 +170,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
         // TODO: Errorbehandlung:
         console.error(e);
         this.popupService.setErrorMessage(e);
-      }});
+      }})
   }
-
 
   // ################## CHILD #########################
 

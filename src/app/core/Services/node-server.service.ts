@@ -1,21 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {UserInfo} from "../common/user-info";
 import {AppwriteService} from "./appwrite.service";
-import {
-  concat,
-  defer, delay, finalize,
-  forkJoin,
-  from,
-  ignoreElements,
-  map,
-  mergeMap,
-  Observable,
-  of,
-  retry,
-  tap,
-  throwError
-} from "rxjs";
-import {CollectionResponse} from "../common/collection-response";
+import {from, map} from "rxjs";
 import {ExecutionMethod} from "appwrite";
 
 @Injectable({
@@ -41,51 +27,38 @@ export class NodeServerService {
 
   }
 
-  createNotesCollection(rateTitle: string) {
+  createNotesCollection(
+    rateTitle: string,
+    rateId: string,
+    rateDatabaseId: string,
+    rateCollectionId: string,
+    message: string,
+    username: string,
+    userId: string,
+    date: number
+    ) {
+
+    const data = {
+      title: rateTitle,
+      rateId: rateId,
+      rateDatabaseId: rateDatabaseId,
+      rateCollectionId: rateCollectionId,
+      message,
+      username,
+      userId,
+      date
+    };
 
     return from(this.appwriteService.functions.createExecution(
       '65c3cd5f3c2d915cfc15',
-      rateTitle,
-      false,
+      JSON.stringify(data),
+      true,
       '/newNotesCollection',
       ExecutionMethod.GET
-    )).pipe(
-      map(result => {
-        if (result.responseBody) {
-          return JSON.parse(result.responseBody) as unknown as CollectionResponse;
-        } else {
-          throw new Error('Empty Response Body: ' + result.responseBody);
-        }
-      })
-    )
+    ))
   }
 
 
-  // TODO: createNotesCollection neu geschrieben mit retry. If prüft möglicherweise das falsche....
-  // createNotesCollection(rateTitle: string) {
-  //   let retryCount = 0;
-  //   return defer(() => {
-  //     return from(this.appwriteService.functions.createExecution(
-  //       '65c3cd5f3c2d915cfc15',
-  //       rateTitle,
-  //       false,
-  //       '/newNotesCollection',
-  //       ExecutionMethod.GET
-  //     )).pipe(
-  //       tap(() => retryCount++),
-  //       mergeMap(response => {
-  //         if (!response.responseBody || response.responseBody.length < 1) {
-  //           return throwError(() => {
-  //             return 'createNotesCollection error. ' + retryCount + ' mal Versucht';
-  //           });
-  //         }
-  //         return of(JSON.parse(response.responseBody) as unknown as CollectionResponse);
-  //       })
-  //     );
-  //   }).pipe(
-  //     retry({ count: 10, delay: 1000 })
-  //   );
-  // }
 
 
 

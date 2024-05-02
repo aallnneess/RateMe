@@ -14,13 +14,15 @@
       reviews
     </span>
     </button>
-  } @else {
+  } @else if (authService.user()?.$id) {
     <button class="icon-button add-rate-button" (click)="editRate()">
       <span class="material-symbols-outlined">
       edit
     </span>
     </button>
   }
+
+
 
 
 

@@ -16,12 +16,15 @@ export class MembersComponent implements OnInit {
   router: Router = inject(Router);
 
 
+  // Todo: Updated nicht vollständig,nur wenn  carsd gelöscht/hinzugefügt wurden, aber keine details !
   ngOnInit(): void {
-    if (this.dataStore.rates.value.length === 0) {
+    console.log('members init');
+    if (this.dataStore.getRatesValue().length === 0) {
       this.dataStore.updateRates().subscribe();
     }else {
       this.dataStore.checkForNewRate();
     }
+
   }
 
   openRecipeDetail(id: string, images: BlobGalleryItemContainer[]) {
