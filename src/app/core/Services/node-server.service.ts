@@ -58,6 +58,31 @@ export class NodeServerService {
     ))
   }
 
+  async getFunctionStatus(executionId: string) {
+    let status: string = '';
+    let attempts = 10;
+    const retryDelay = 1000;
+
+    while (status !== 'completed' && attempts > 0) {
+      console.log('getFunctionStatus start while...');
+      attempts--;
+
+      let response = await this.appwriteService.functions.getExecution('65c3cd5f3c2d915cfc15',executionId);
+      status = response.status;
+
+      if (status !== 'completed') {
+        await this.delay(retryDelay); // Wartezeit zwischen den Versuchen
+      }
+    }
+
+    console.log('getFunctionStatus return: ' + status);
+    return status;
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 
 
 

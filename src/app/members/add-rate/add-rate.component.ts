@@ -5,7 +5,7 @@ import {DatabaseService} from "../../core/Services/database.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {concatMap, map} from "rxjs";
+import {concatMap, map, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
@@ -45,6 +45,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   parentRate!: Rate|null;
   editRate!: Rate|null;
+
+  currentFunctionExecutionId = '';
 
   constructor(private fb: FormBuilder) {}
 
@@ -153,17 +155,23 @@ export class AddRateComponent implements OnInit, OnDestroy {
               this.form.get('notes')?.value,
               rate.username,
               rate.userId,
-              Date.now())
+              Date.now()).pipe(
+                tap(functionResponse => {
+                  this.currentFunctionExecutionId = functionResponse.$id;
+                }),
+            )
           })
         )
       })
     ).subscribe({
       next: () => {
-
-        // Rates müssen vor route wechsel aktualisiert werden
-        this.datastoreService.updateRates().subscribe(() => {
+        this.nodeServer.getFunctionStatus(this.currentFunctionExecutionId).then(status => {
+          console.log('status: ' + status);
+          this.currentFunctionExecutionId = '';
           this.router.navigateByUrl('members', {skipLocationChange: true});
         });
+
+
 
       },
       error: (e) => {
@@ -212,7 +220,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
       .subscribe({
       next: () => {
 
-        // Rates müssen vor route wechsel aktualisiert werden
+        //Rates müssen vor route wechsel aktualisiert werden
         this.datastoreService.updateRates().subscribe(() => {
           this.router.navigateByUrl('members', {skipLocationChange: true});
         });
@@ -284,7 +292,11 @@ export class AddRateComponent implements OnInit, OnDestroy {
       })
     ).subscribe({
       next: () => {
-        this.router.navigateByUrl('members', {skipLocationChange: true});
+
+        this.datastoreService.updateRates().subscribe(() => {
+          this.router.navigateByUrl('members', {skipLocationChange: true});
+        });
+
       },
       error: (e) => {
         // TODO: Errorbehandlung:

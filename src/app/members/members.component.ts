@@ -18,7 +18,7 @@ export class MembersComponent implements OnInit {
 
   // Todo: Updated nicht vollständig,nur wenn  carsd gelöscht/hinzugefügt wurden, aber keine details !
   ngOnInit(): void {
-    console.log('members init');
+
     if (this.dataStore.getRatesValue().length === 0) {
       this.dataStore.updateRates().subscribe();
     }else {
