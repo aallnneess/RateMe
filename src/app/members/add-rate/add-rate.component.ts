@@ -16,6 +16,7 @@ import {StateService, Status} from "../Service/state.service";
 import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-container";
 import {BlobCustom} from "../../core/common/blob-custom";
 import {PopupService} from "../../core/Services/popup.service";
+import {RecipeTopic} from "./topics/RecipeTopic";
 
 @Component({
   selector: 'app-add-rate',
@@ -59,38 +60,11 @@ export class AddRateComponent implements OnInit, OnDestroy {
    this.editRate = JSON.parse(this.route.snapshot.paramMap.get('editRate')!);
 
 
-
-
     switch (this.rateTopic) {
 
       case 'recipe': {
-
-        if (this.parentRate) {
-          this.form = this.fb.group({
-            title: [this.parentRate.title, [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
-            rating: [this.parentRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
-            notes: ['', [Validators.required, Validators.maxLength(2000)]],
-            tags: [this.parentRate.tags, [Validators.required]],
-            quelle: ['', [Validators.required]]
-          });
-        } else if (this.editRate) {
-          this.statesService.setStatus(Status.Edit);
-          this.form = this.fb.group({
-            title: [this.editRate.title, [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
-            rating: [this.editRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
-            notes: [' ', [Validators.required, Validators.maxLength(2000)]],
-            tags: [this.editRate.tags, [Validators.required]],
-            quelle: [this.editRate.quelle, [Validators.required]]
-          });
-        } else {
-          this.form = this.fb.group({
-            title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
-            rating: [0, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
-            notes: ['', [Validators.required, Validators.maxLength(2000)]],
-            tags: ['', [Validators.required]],
-            quelle: ['', [Validators.required]]
-          });
-        }
+        const recipe = new RecipeTopic(this.statesService, this.rateTopic,this.parentRate,this.editRate);
+        this.form = recipe.generateForm(this.fb,this.form);
       } break;
 
       case '': {}
