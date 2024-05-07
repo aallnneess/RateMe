@@ -6,87 +6,25 @@
 
   <div class="form-container">
 
-    @if (rateTopic === 'recipe') {
+<!--############################### EDIT #############################-->
+<!--                                  ↓                               -->
 
+    @switch (rateTopic) {
 
-      <form [formGroup]="form" (ngSubmit)="
-        sendData(galleryLoadService.imagesNewOrEdit());
-        input1.checkErrors();
-        input2.checkErrors();
-        input3.checkErrors();
-        input4.checkErrors();
-">
-
-<!--        <app-member-input #input1-->
-<!--                          [labelInputId]="'input1'"-->
-<!--                          [name]="'Titel'"-->
-<!--                          [textFieldType]="'text'"-->
-<!--                          [value]="getFormControl('title')"-->
-<!--                          [disabled]="!!parentRate || !!editRate">-->
-<!--        </app-member-input>-->
-
-        <app-member-input #input1
-                          [labelInputId]="'input1'"
-                          [name]="'Titel'"
-                          [textFieldType]="'text'"
-                          [value]="getFormControl('title')"
-                          [disabled]="editRate?.childRate!">
-        </app-member-input>
-
-
-          <app-member-input #input2
-                            [labelInputId]="'input2'"
-                            [name]="'Quelle'"
-                            [textFieldType]="'text'"
-                            [value]="getFormControl('quelle')">
-          </app-member-input>
-
-
-
-
-        <app-member-input #input3
-                          [labelInputId]="'textarea1'"
-                          [textarea]="true"
-                          [name]="'Notizen'"
-                          [textFieldType]="'text'"
-                          [value]="getFormControl('notes')"
-                          [disabled]="editRate !== null">
-        </app-member-input>
-
-        <app-member-input
-          [labelInputId]="'slider1'"
-          [slider]="true"
-          [value]="getFormControl('rating')"
+      @case ('recipe') {
+        <app-recipe-topic-view
+          [editRate]="editRate"
+          [form]="form"
+          (sendDataToParent)="sendData($event)"
+          (submitButtonForParent)="submitButton = $event"
         >
-        </app-member-input>
+        </app-recipe-topic-view>
+      }
 
-
-
-        <app-member-input #input4
-                          [labelInputId]="'input4'"
-                          [tags]="true"
-                          [name]="'tags'"
-                          [textFieldType]="'text'"
-                          [value]="getFormControl('tags')">
-        </app-member-input>
-
-
-
-        <button #submitButton [ngClass]="{'add-pointer-events-none' : changeButtonCssClass()}" type="submit" class="blue-button">
-
-          @if (submitButton.disabled) {
-            <app-member-spinner [height]="26" [width]="26"></app-member-spinner>
-          } @else {
-            Abschicken
-          }
-
-        </button>
-
-      </form>
     }
 
-
-
+<!--                                  ↑                               -->
+<!--############################### EDIT #############################-->
 
   </div>
 

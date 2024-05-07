@@ -1,10 +1,10 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../../core/Services/auth.service";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {DatabaseService} from "../../core/Services/database.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {concatMap, map, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
@@ -27,7 +27,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   authService = inject(AuthService);
 
-  @ViewChild('submitButton') submitButton!: ElementRef<HTMLButtonElement>;
+  submitButton!: ElementRef<HTMLButtonElement>;
 
   galleryLoadService: GalleryLoadService = inject(GalleryLoadService);
   databaseService: DatabaseService = inject(DatabaseService);
@@ -60,6 +60,16 @@ export class AddRateComponent implements OnInit, OnDestroy {
    this.editRate = JSON.parse(this.route.snapshot.paramMap.get('editRate')!);
 
 
+   // ####################################################################################
+   // ####################################################################################
+   // ####################################################################################
+   // ####################################################################################
+   // ####################################################################################
+   // ####################################################################################
+   // ####################################################################################
+   //                       Edit               ↓
+
+
     switch (this.rateTopic) {
 
       case 'recipe': {
@@ -71,22 +81,22 @@ export class AddRateComponent implements OnInit, OnDestroy {
     }
 
 
-  }
 
-  getFormControl(name: string) {
-    return this.form.get(name) as FormControl;
-  }
+    //                      Edit               ↑
+    // ####################################################################################
+    // ####################################################################################
+    // ####################################################################################
+    // ####################################################################################
+    // ####################################################################################
+    // ####################################################################################
+    // ####################################################################################
 
-  changeButtonCssClass() {
-    if (this.submitButton) {
-      return this.submitButton.nativeElement.disabled;
-    }
 
-    return false;
   }
 
   sendData(images: Blob[]) {
 
+    console.log(this.form.valid);
     if (this.form.invalid || images.length === 0) return;
 
     //console.log('absenden');

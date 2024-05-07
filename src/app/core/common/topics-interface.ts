@@ -1,6 +1,6 @@
 import {Rate} from "./rate";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {StateService, Status} from "../../members/Service/state.service";
+import {StateService} from "../../members/Service/state.service";
 
 export interface TopicsInterface {
   rateTopic: string;

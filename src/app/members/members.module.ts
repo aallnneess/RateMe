@@ -15,9 +15,10 @@ import { AddRateComponent } from './add-rate/add-rate.component';
 import {RateCardComponent} from "./rate-card/recipe-card.component";
 import {KeenSLComponent} from "./add-rate/keen-sl/keen-sl.component";
 import {LightboxDirective} from "ng-gallery/lightbox";
-import { RecipeViewComponent } from './rate-card-details/recipe-view/recipe-view.component';
 import { NoteComponent } from './rate-card-details/note/note.component';
 import { ScrollToBottomOnFocusDirective } from './directives/scroll-to-bottom-on-focus.directive';
+import { RecipeTopicViewComponent } from './add-rate/topics/recipe-topic-view/recipe-topic-view.component';
+import {RecipeViewComponent} from "./rate-card-details/recipe-view/recipe-view.component";
 
 
 @NgModule({
@@ -31,9 +32,10 @@ import { ScrollToBottomOnFocusDirective } from './directives/scroll-to-bottom-on
     RateCardDetailsComponent,
     AddRateComponent,
     KeenSLComponent,
-    RecipeViewComponent,
     NoteComponent,
-    ScrollToBottomOnFocusDirective
+    ScrollToBottomOnFocusDirective,
+    RecipeTopicViewComponent,
+    RecipeViewComponent
   ],
   exports: [],
     imports: [

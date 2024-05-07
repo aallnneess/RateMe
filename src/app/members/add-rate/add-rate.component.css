@@ -15,27 +15,6 @@ h2 {
   width: 50%;
 }
 
-form {
-  margin-top: 4.4rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-button {
-  display: flex;
-  justify-content: center;
-}
-
-.add-pointer-events-none {
-  pointer-events: none;
-}
-
-.add-pointer-events-none:hover {
-  background-color: white;
-}
-
 @media (max-width: 1000px) {
 
   .form-container {
@@ -48,14 +27,6 @@ button {
 
   section {
     grid-template-columns: 1fr;
-  }
-
-  form {
-    margin-top: 1rem;
-    /*
-    align-items: center;
-
-     */
   }
 
   .form-container {
