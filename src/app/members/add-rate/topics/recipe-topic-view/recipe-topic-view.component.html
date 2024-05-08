@@ -11,7 +11,7 @@
                     [name]="'Titel'"
                     [textFieldType]="'text'"
                     [value]="getFormControl('title')"
-                    [disabled]="editRate?.childRate!">
+                    [disabled]="editRate === null">
   </app-member-input>
 
 
@@ -19,7 +19,8 @@
                     [labelInputId]="'input2'"
                     [name]="'Quelle'"
                     [textFieldType]="'text'"
-                    [value]="getFormControl('quelle')">
+                    [value]="getFormControl('quelle')"
+                    [disabled]="editRate === null">
   </app-member-input>
 
 

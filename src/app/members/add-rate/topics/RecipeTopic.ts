@@ -26,7 +26,7 @@ export class RecipeTopic implements TopicsInterface {
         rating: [this.parentRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
         notes: ['', [Validators.required, Validators.maxLength(2000)]],
         tags: [this.parentRate.tags, [Validators.required]],
-        quelle: ['', [Validators.required]]
+        quelle: [this.parentRate.quelle, [Validators.required]]
       });
     } else if (this.editRate) {
 

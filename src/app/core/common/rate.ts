@@ -16,8 +16,12 @@ export class Rate {
   parentDocumentId: string = '';
   ratings: number[] = [];
 
-  // Rezepte
-  quelle: string = ''
+  // Recipes
+  quelle: string = '';
+
+  // Products
+  manufacturer: string = '';
+  boughtAt: string = '';
 
 }
 
