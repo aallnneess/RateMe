@@ -17,6 +17,7 @@ import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-cont
 import {BlobCustom} from "../../core/common/blob-custom";
 import {PopupService} from "../../core/Services/popup.service";
 import {RecipeTopic} from "./topics/RecipeTopic";
+import {ProductTopic} from "./topics/ProductTopic";
 
 @Component({
   selector: 'app-add-rate',
@@ -77,7 +78,12 @@ export class AddRateComponent implements OnInit, OnDestroy {
         this.form = recipe.generateForm(this.fb,this.form);
       } break;
 
-      case '': {}
+      case 'product': {
+        const product = new ProductTopic(this.statesService, this.rateTopic,this.parentRate,this.editRate);
+        this.form = product.generateForm(this.fb,this.form);
+      } break;
+
+      case '': {} break;
     }
 
 
@@ -116,6 +122,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
     this.fileService.addImage(images).pipe(
       concatMap(bucketResponses => {
 
+        // ###################### EDIT ##############################################################
+
         let rate = new Rate();
         rate.rateTopic = this.rateTopic;
         rate.imageBuckets = bucketResponses as unknown as BucketResponse[];
@@ -124,10 +132,16 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.tags = this.form.get('tags')?.value + ' ';
         rate.username = this.authService.user()!.name;
         rate.userId = this.authService.user()!.$id;
-        rate.ratings = [rate.rating];
+        rate.globalRating = rate.rating;
 
-        // Rezept
+        // Recipe
         rate.quelle = this.form.get('quelle')?.value;
+
+        // Product
+        rate.manufacturer = this.form.get('manufacturer')?.value;
+        rate.boughtAt = this.form.get('boughtAt')?.value;
+
+
 
         return this.databaseService.addRate(rate).pipe(
           concatMap(rateResult => {
@@ -172,6 +186,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
           concatMap(result => {
 
+            // ###################### EDIT ##############################################################
+
             let rate = new Rate();
             rate.rateTopic = this.rateTopic;
             rate.imageBuckets = result as unknown as BucketResponse[];
@@ -184,8 +200,12 @@ export class AddRateComponent implements OnInit, OnDestroy {
             rate.parentDocumentId = this.parentRate!.$id;
             rate.childRate = true;
 
-            // Rezept
+            // Recipe
             rate.quelle = this.form.get('quelle')?.value;
+
+            // Product
+            rate.manufacturer = this.form.get('manufacturer')?.value;
+            rate.boughtAt = this.form.get('boughtAt')?.value;
 
             return this.databaseService.addRate(rate).pipe(
               concatMap( () => {
@@ -194,10 +214,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
                   rate.username,
                   rate.userId
                 ))
-              }),
-              concatMap(() => {
-                return this.databaseService.addChildRate(rate.parentDocumentId,rate);
-              })
+              }) // TODO: UpdateGlobalRate !!!
             );
           })
         )
@@ -239,6 +256,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
         console.log(this.editRate);
 
+        // ###################### EDIT ##############################################################
+
         rate.$id = this.editRate?.$id!;
         rate.rateTopic = this.rateTopic;
         rate.imageBuckets = this.summarizeImages(this.editRate?.imageBuckets ,result as unknown as BucketResponse[], deleteImages);
@@ -248,16 +267,18 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.username = this.editRate?.username!;
         rate.userId = this.editRate?.userId!;
         rate.notesCollectionId = this.editRate?.notesCollectionId!;
-        rate.ratings = this.updateRating(this.editRate?.rating!,this.form.get('rating')?.value,this.editRate?.ratings!);
 
         if (this.editRate && this.editRate.childRate) {
           rate.childRate = this.editRate?.childRate;
           rate.parentDocumentId = this.editRate?.parentDocumentId;
         }
 
-
         // Rezept
         rate.quelle = this.form.get('quelle')?.value;
+
+        // Product
+        rate.manufacturer = this.form.get('manufacturer')?.value;
+        rate.boughtAt = this.form.get('boughtAt')?.value;
 
         return this.databaseService.updateRate(rate).pipe(
           concatMap(result => {
@@ -266,7 +287,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
           }),
           concatMap(rate => {
             return this.databaseService.updateRate(rate);
-          })
+          }) // TODO: Update GlobalRate
         );
       }),
       concatMap(result => {
@@ -395,42 +416,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
     return updateImages;
   }
 
-  updateRating(oldRating: number, newRating: number, rating: number[]): number[] {
-
-    if (this.editRate?.childRate) {
-      console.error('Child Rates have no global ratings!');
-      return [];
-    }
-
-    // console.log(' ');
-    // console.log('rating before:');
-    // console.log(rating);
-    // console.log('Old Rating:');
-    // console.log(oldRating);
-    // console.log('New Rating:')
-    // console.log(newRating);
-
-    // Prüfen, ob das alte Rating vorhanden ist, bevor es entfernt wird
-    const oldRatingIndex = rating.indexOf(oldRating);
-    if (oldRatingIndex !== -1) {
-      // Eine Kopie der Liste erstellen und das alte Rating entfernen
-      const updatedRating = [...rating];
-      updatedRating.splice(oldRatingIndex, 1);
-
-      // Das neue Rating hinzufügen und die aktualisierte Liste zurückgeben
-      updatedRating.push(newRating);
-
-      // console.log('rating after:');
-      // console.log(updatedRating);
-
-      return updatedRating;
-    } else {
-      console.error('Old rating not found in the list.');
-      // Rückgabe der unveränderten Liste, da das alte Rating nicht gefunden wurde
-      return rating;
-    }
-  }
-
   updateParentRate(rate: Rate, deleteImages: BlobGalleryItemContainer[]) {
     rate.$id = this.editRate?.$id!;
 
@@ -473,13 +458,13 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
         return this.databaseService.getRateById(rate.parentDocumentId).pipe(
           map(parentRate => {
-            console.log(parentRate.imageBuckets);
+            // console.log(parentRate.imageBuckets);
             const rateImageBuckets: BucketResponse[] = JSON.parse(parentRate.imageBuckets as string);
-            console.log('rateImageBuckets');
-            console.log(rateImageBuckets);
-            console.log(' ');
-            console.log('deleteImages');
-            console.log(deleteImages);
+            // console.log('rateImageBuckets');
+            // console.log(rateImageBuckets);
+            // console.log(' ');
+            // console.log('deleteImages');
+            // console.log(deleteImages);
 
             // delete deleted images
             for (let rateImageBucket of rateImageBuckets) {

@@ -1,9 +1,9 @@
+import {TopicsInterface} from "../../../core/common/topics-interface";
+import {StateService, Status} from "../../Service/state.service";
 import {Rate} from "../../../core/common/rate";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {StateService, Status} from "../../Service/state.service";
-import {TopicsInterface} from "../../../core/common/topics-interface";
 
-export class RecipeTopic implements TopicsInterface {
+export class ProductTopic implements TopicsInterface {
 
   statesService!: StateService;
 
@@ -25,7 +25,8 @@ export class RecipeTopic implements TopicsInterface {
         rating: [this.parentRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
         notes: ['', [Validators.required, Validators.maxLength(2000)]],
         tags: [this.parentRate.tags, [Validators.required]],
-        quelle: [this.parentRate.quelle, [Validators.required]]
+        manufacturer: [this.parentRate.manufacturer, [Validators.required, Validators.minLength(2)]],
+        boughtAt: [this.parentRate.boughtAt, [Validators.required, Validators.minLength(2)]]
       });
     } else if (this.editRate) {
 
@@ -35,7 +36,8 @@ export class RecipeTopic implements TopicsInterface {
         rating: [this.editRate.rating, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
         notes: [' ', [Validators.required, Validators.maxLength(2000)]],
         tags: [this.editRate.tags, [Validators.required]],
-        quelle: [this.editRate.quelle, [Validators.required]]
+        manufacturer: [this.editRate.manufacturer, [Validators.required, Validators.minLength(2)]],
+        boughtAt: [this.editRate.boughtAt, [Validators.required, Validators.minLength(2)]]
       });
     } else {
       form = fb.group({
@@ -43,12 +45,14 @@ export class RecipeTopic implements TopicsInterface {
         rating: [0, [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\sÄäÖöÜü]*$/)]],
         notes: ['', [Validators.required, Validators.maxLength(2000)]],
         tags: ['', [Validators.required]],
-        quelle: ['', [Validators.required]]
+        manufacturer: ['', [Validators.required, Validators.minLength(2)]],
+        boughtAt: ['', [Validators.required, Validators.minLength(2)]]
       });
     }
 
     return form;
   }
+
 
 
 }

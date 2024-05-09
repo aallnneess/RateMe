@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {AppwriteService} from "./appwrite.service";
 import {Databases, ID, Query} from "appwrite";
-import {concatMap, from, map, tap} from "rxjs";
+import {from, map, tap} from "rxjs";
 import {Rate} from "../common/rate";
 import {RateContainer} from "../common/rate-container";
 
@@ -47,7 +47,7 @@ export class DatabaseService {
       this.databaseId,
       this.booksCollectionId,
       [
-        Query.orderDesc(''),
+        Query.orderDesc('globalRating'),
         Query.equal('childRate', false)
       ]
     )).pipe(
@@ -55,8 +55,6 @@ export class DatabaseService {
       tap(rates => console.log(rates))
     );
   }
-
-
 
   getRateById(id: string) {
     return from(this.databases.getDocument(
@@ -105,59 +103,6 @@ export class DatabaseService {
       map(response => response.documents as unknown as Rate[])
     )
   }
-
-  addChildRate(parentRateId: string, childRate: Rate) {
-    return from(this.databases.getDocument(
-      this.databaseId,
-      this.booksCollectionId,
-      parentRateId
-    )).pipe(
-      map(response => {
-        let rate = response as unknown as Rate;
-        rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
-        rate.ratings.push(childRate.rating);
-
-        // add new tags
-        let newTags = childRate.tags.replace(rate.tags, '');
-        // console.log('Old tags: ' + rate.tags);
-        // console.log('New Tags: ' + newTags);
-        rate.tags = rate.tags + newTags;
-        // console.log('final tags: ' + rate.tags);
-
-
-        //add new image buckets
-        if (typeof childRate.imageBuckets === "string") {
-          childRate.imageBuckets = JSON.parse(childRate.imageBuckets);
-        }
-
-        if (typeof rate.imageBuckets !== "string" && typeof childRate.imageBuckets !== 'string') {
-
-          for (let i = 0; i < childRate.imageBuckets.length; i++) {
-            if (!rate.imageBuckets.includes(childRate.imageBuckets[i])) {
-              console.log('Füge 1 Bild aus dem Childrate dem Parentrate hinzu...');
-              rate.imageBuckets.push(childRate.imageBuckets[i]);
-            }
-          }
-        } else {
-          console.error('rate oder childrate is string!!');
-        }
-
-        return rate;
-      }),
-      concatMap(rate => {
-
-        rate.imageBuckets = JSON.stringify(rate.imageBuckets);
-
-        return from(this.databases.updateDocument(
-          this.databaseId,
-          this.booksCollectionId,
-          parentRateId,
-          this.filterRateProperties(rate)
-        ));
-      })
-    )
-  }
-
 
 
   filterRateProperties(obj: any): Rate {

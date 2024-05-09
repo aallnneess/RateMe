@@ -19,6 +19,8 @@ import { NoteComponent } from './rate-card-details/note/note.component';
 import { ScrollToBottomOnFocusDirective } from './directives/scroll-to-bottom-on-focus.directive';
 import { RecipeTopicViewComponent } from './add-rate/topics/recipe-topic-view/recipe-topic-view.component';
 import {RecipeViewComponent} from "./rate-card-details/recipe-view/recipe-view.component";
+import { ProductTopicViewComponent } from './add-rate/topics/product-topic-view/product-topic-view.component';
+import { ProductViewComponent } from './rate-card-details/product-view/product-view.component';
 
 
 @NgModule({
@@ -35,7 +37,9 @@ import {RecipeViewComponent} from "./rate-card-details/recipe-view/recipe-view.c
     NoteComponent,
     ScrollToBottomOnFocusDirective,
     RecipeTopicViewComponent,
-    RecipeViewComponent
+    RecipeViewComponent,
+    ProductTopicViewComponent,
+    ProductViewComponent
   ],
   exports: [],
     imports: [

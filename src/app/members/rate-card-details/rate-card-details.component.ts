@@ -53,7 +53,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   }
 
   addChildRate() {
-    this.router.navigate(['members/addRate', 'recipe', {rate: JSON.stringify(this.rate)}], {skipLocationChange: true});
+    this.router.navigate(['members/addRate', this.rate.rateTopic, {rate: JSON.stringify(this.rate)}], {skipLocationChange: true});
   }
 
   showAddChildRate() {
@@ -75,12 +75,12 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
         this.rate.$id
       ).subscribe(result => {
         if (result) {
-          this.router.navigate(['members/addRate', 'recipe', {editRate: JSON.stringify(result)}], {skipLocationChange: true});
+          this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(result)}], {skipLocationChange: true});
         }
       });
 
     } else {
-      this.router.navigate(['members/addRate', 'recipe', {editRate: JSON.stringify(this.rate)}], {skipLocationChange: true});
+      this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(this.rate)}], {skipLocationChange: true});
     }
   }
 

@@ -1,14 +1,14 @@
-import {Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild} from '@angular/core';
 import {GalleryLoadService} from "../../../Service/gallery-load.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {Rate} from "../../../../core/common/rate";
 
 @Component({
-  selector: 'app-recipe-topic-view',
-  templateUrl: './recipe-topic-view.component.html',
-  styleUrl: './recipe-topic-view.component.css'
+  selector: 'app-product-topic-view',
+  templateUrl: './product-topic-view.component.html',
+  styleUrl: './product-topic-view.component.css'
 })
-export class RecipeTopicViewComponent implements OnInit {
+export class ProductTopicViewComponent {
 
   galleryLoadService: GalleryLoadService = inject(GalleryLoadService);
 

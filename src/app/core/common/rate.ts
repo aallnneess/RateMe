@@ -14,7 +14,7 @@ export class Rate {
   // Child Rates
   childRate: boolean = false;
   parentDocumentId: string = '';
-  ratings: number[] = [];
+  globalRating: number = 0;
 
   // Recipes
   quelle: string = '';
@@ -22,7 +22,6 @@ export class Rate {
   // Products
   manufacturer: string = '';
   boughtAt: string = '';
-
 }
 
 

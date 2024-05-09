@@ -13,12 +13,24 @@
 
       @case ('recipe') {
         <app-recipe-topic-view
+          [parentRate]="parentRate"
           [editRate]="editRate"
           [form]="form"
           (sendDataToParent)="sendData($event)"
           (submitButtonForParent)="submitButton = $event"
         >
         </app-recipe-topic-view>
+      }
+
+      @case ('product') {
+        <app-product-topic-view
+          [parentRate]="parentRate"
+          [editRate]="editRate"
+          [form]="form"
+          (sendDataToParent)="sendData($event)"
+          (submitButtonForParent)="submitButton = $event"
+        >
+        </app-product-topic-view>
       }
 
     }

@@ -4,9 +4,22 @@
 </header>
 
 <div>
-  @if (rate.rateTopic === 'recipe') {
-    <app-recipe-view [rate]="rate"></app-recipe-view>
+<!--  ###########################################################################################-->
+<!--  ###########################################################################################-->
+
+  @switch (rate.rateTopic) {
+
+    @case ('recipe') {
+      <app-recipe-view [rate]="rate"></app-recipe-view>
+    }
+    @case ('product') {
+      <app-product-view [rate]="rate"></app-product-view>
+    }
+
   }
+
+  <!--  ###########################################################################################-->
+  <!--  ###########################################################################################-->
 
   @if (showAddChildButton) {
     <button class="icon-button add-rate-button" (click)="addChildRate()">
@@ -21,12 +34,6 @@
     </span>
     </button>
   }
-
-
-
-
-
-
 
 </div>
 

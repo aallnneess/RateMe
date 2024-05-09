@@ -88,13 +88,4 @@ export class RateCardComponent implements OnInit {
     return imageName.substring(userNameIndex + "-userName-".length);
   }
 
-  calculateRating() {
-    let ratings = 0;
-
-    for (let rating of this.rate.ratings) {
-      ratings += rating;
-    }
-
-    return ratings / this.rate.ratings.length;
-  }
 }
