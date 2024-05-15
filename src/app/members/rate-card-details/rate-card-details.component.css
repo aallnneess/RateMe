@@ -31,12 +31,15 @@ h3 {
   display: flex;
   justify-content: center;
   justify-items: center;
+
+  /*changed :*/
+  max-height: 350px;
+  overflow: hidden;
 }
 
 .gallery {
   width: 350px;
-  height: 350px;
-
+  height: 100%;
   position: relative;
 }
 

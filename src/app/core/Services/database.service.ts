@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {AppwriteService} from "./appwrite.service";
 import {Databases, ID, Query} from "appwrite";
-import {from, map, tap} from "rxjs";
+import {concatMap, finalize, from, map, of, tap} from "rxjs";
 import {Rate} from "../common/rate";
 import {RateContainer} from "../common/rate-container";
 
@@ -134,6 +134,63 @@ export class DatabaseService {
         Query.equal('notesCollectionId', notesCollectionId)
       ]
     ))
+  }
+
+  updateGlobalRating(parentDocumentId: string) {
+    console.log(' XXX ');
+    const ratings: Rate[] = [];
+    let globalRating: number = 0;
+
+    return from(this.databases.getDocument(
+      this.databaseId,
+      this.booksCollectionId,
+      parentDocumentId
+    )).pipe(
+      map(response => response as unknown as Rate),
+      tap(parentRate => {
+        console.log('Get Parentrate...');
+        ratings.push(parentRate);
+        console.log('Size of ratings Array after adding Parentrate: ' + ratings.length);
+      }),
+      concatMap(() => {
+        return from(this.databases.listDocuments(
+          this.databaseId,
+          this.booksCollectionId,
+          [
+            Query.equal('parentDocumentId', parentDocumentId)
+          ]
+        )).pipe(
+          map(response => response.documents as unknown as Rate[]),
+          tap(rates => {
+            console.log('Get ' + rates.length + ' Child Rates.');
+            ratings.push(...rates);
+            console.log('Size of ratings Array after adding childs: ' + ratings.length);
+
+            for (let rating of ratings) {
+              console.log('Add '+ rating.rating + ' to globalRating');
+              globalRating += rating.rating;
+            }
+
+            globalRating = globalRating / ratings.length;
+            console.log('Globalrating: ' + globalRating);
+          })
+        )
+      }),
+      concatMap(() => {
+
+        console.log(globalRating);
+        return from(this.databases.updateDocument(
+          this.databaseId,
+          this.booksCollectionId,
+          parentDocumentId,
+          {globalRating: globalRating}
+        ))
+      }),
+      finalize(() => {
+        console.log('successfully updated');
+        console.log(' XXX ');
+      })
+    );
   }
 
 

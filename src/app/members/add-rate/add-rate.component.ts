@@ -214,7 +214,16 @@ export class AddRateComponent implements OnInit, OnDestroy {
                   rate.username,
                   rate.userId
                 ))
-              }) // TODO: UpdateGlobalRate !!!
+              }),
+              concatMap(() => {
+                if (rate.childRate) {
+                  console.log('Childrate');
+                  return this.databaseService.updateGlobalRating(rate.parentDocumentId);
+                } else {
+                  console.log('ParentRate');
+                  return this.databaseService.updateGlobalRating(rate.$id);
+                }
+              })
             );
           })
         )
@@ -237,7 +246,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
   // ################## EDIT #########################
 
   editSend(images: Blob[]) {
-
 
 
     const newImages: Blob[] = this.findNewImages(images);
@@ -287,7 +295,17 @@ export class AddRateComponent implements OnInit, OnDestroy {
           }),
           concatMap(rate => {
             return this.databaseService.updateRate(rate);
-          }) // TODO: Update GlobalRate
+          }),
+          concatMap(() => {
+            if (rate.childRate) {
+              console.log('Childrate');
+              return this.databaseService.updateGlobalRating(rate.parentDocumentId);
+            } else {
+              console.log('ParentRate');
+              console.log(this.editRate?.$id);
+              return this.databaseService.updateGlobalRating(this.editRate?.$id!);
+            }
+          })
         );
       }),
       concatMap(result => {

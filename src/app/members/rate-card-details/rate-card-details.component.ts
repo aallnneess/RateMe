@@ -65,10 +65,8 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   }
 
   editRate() {
-    //TODO: Natürlich muss die eigene Rate geladen werden !!! Per datenbank schauen....
 
     if (this.rate.userId !== this.authService.user()!.$id) {
-      // console.error('WE DONT SUPPORT EDIT CHILD RATES AT THE MOMENT !!');
 
       this.dataBaseService.getRateByUserIdAndParentDocumentId(
         this.authService.user()!.$id,
