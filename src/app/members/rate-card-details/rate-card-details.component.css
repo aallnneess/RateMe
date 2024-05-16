@@ -120,10 +120,14 @@ h3 {
 
 }
 
-@media (max-width: 600px) {
+@media (max-width: 740px) {
 
   :host {
     grid-template-columns: 1fr;
+  }
+
+  .button1 {
+    visibility: hidden;
   }
 
 }

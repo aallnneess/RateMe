@@ -87,5 +87,6 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }
+
 }
 
