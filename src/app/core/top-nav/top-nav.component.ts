@@ -24,20 +24,14 @@ export class TopNavComponent {
           // If true, navigates to the root URL and then back to '/members'
           // This ensures that route guards are re-evaluated
           this.router.navigateByUrl('/').then(() => {
-            this.router.navigateByUrl('members', {
-              skipLocationChange: true
-            });
+            this.router.navigateByUrl('members');
           })
           return;
         }
         // If the current URL is not '/members', navigates directly to 'members'
-        this.router.navigateByUrl('members', {
-          skipLocationChange: true
-        });
+        this.router.navigateByUrl('members');
       },
-      error: () => this.router.navigateByUrl('login', {
-        skipLocationChange: true
-      })
+      error: () => this.router.navigateByUrl('login')
     })
 
   }

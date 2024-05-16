@@ -7,6 +7,8 @@ import {GalleryLoadService} from "../Service/gallery-load.service";
 import {DatabaseService} from "../../core/Services/database.service";
 import {AuthService} from "../../core/Services/auth.service";
 import {Subject, takeUntil} from "rxjs";
+import {Location} from "@angular/common";
+
 
 @Component({
   selector: 'app-rate-card-details',
@@ -53,7 +55,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   }
 
   addChildRate() {
-    this.router.navigate(['members/addRate', this.rate.rateTopic, {rate: JSON.stringify(this.rate)}], {skipLocationChange: true});
+    this.router.navigate(['members/addRate', this.rate.rateTopic, {rate: JSON.stringify(this.rate)}]);
   }
 
   showAddChildRate() {
@@ -73,12 +75,12 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
         this.rate.$id
       ).subscribe(result => {
         if (result) {
-          this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(result)}], {skipLocationChange: true});
+          this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(result)}]);
         }
       });
 
     } else {
-      this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(this.rate)}], {skipLocationChange: true});
+      this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(this.rate)}]);
     }
   }
 

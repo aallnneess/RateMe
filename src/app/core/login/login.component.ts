@@ -49,9 +49,7 @@ export class LoginComponent implements OnInit {
     ).subscribe({
       complete: () => {
         this.cleanForm();
-        this.router.navigateByUrl('members', {
-          skipLocationChange: true
-        });
+        this.router.navigateByUrl('members');
       },
       error: err => {
         this.createErrorMessages(err);

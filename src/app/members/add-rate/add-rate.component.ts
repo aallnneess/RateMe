@@ -166,7 +166,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
         this.nodeServer.getFunctionStatus(this.currentFunctionExecutionId).then(status => {
           console.log('status: ' + status);
           this.currentFunctionExecutionId = '';
-          this.router.navigateByUrl('members', {skipLocationChange: true});
+          this.router.navigateByUrl('members');
         });
 
 
@@ -232,7 +232,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
         //Rates müssen vor route wechsel aktualisiert werden
         this.datastoreService.updateRates().subscribe(() => {
-          this.router.navigateByUrl('members', {skipLocationChange: true});
+          this.router.navigateByUrl('members');
         });
 
       },
@@ -317,7 +317,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
       next: () => {
 
         this.datastoreService.updateRates().subscribe(() => {
-          this.router.navigateByUrl('members', {skipLocationChange: true});
+          this.router.navigateByUrl('members');
         });
 
       },

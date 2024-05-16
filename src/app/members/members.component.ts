@@ -1,22 +1,34 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DataStoreService} from "./Service/data-store.service";
 import {Router} from "@angular/router";
 import {GalleryLoadService} from "./Service/gallery-load.service";
 import {BlobGalleryItemContainer} from "../core/common/blob-gallery-item-container";
+import {ViewportScroller} from "@angular/common";
+import {StateService} from "./Service/state.service";
+import {Subscription} from "rxjs";
+import {Rate} from "../core/common/rate";
 
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
   styleUrl: './members.component.css'
 })
-export class MembersComponent implements OnInit {
+export class MembersComponent implements OnInit, OnDestroy {
+
+  @ViewChild('membersSection') membersSection!: ElementRef<HTMLElement>;
 
   dataStore: DataStoreService = inject(DataStoreService);
   galleryLoadService = inject(GalleryLoadService);
   router: Router = inject(Router);
 
+  viewportScroller = inject(ViewportScroller);
+  stateService = inject(StateService);
 
-  // Todo: Updated nicht vollständig,nur wenn  carsd gelöscht/hinzugefügt wurden, aber keine details !
+  destroyObs!: Subscription;
+
+  rates: Rate[] = [];
+
+  // Todo: Updated nicht vollständig,nur wenn cards gelöscht/hinzugefügt wurden, aber keine details !
   ngOnInit(): void {
 
     if (this.dataStore.getRatesValue().length === 0) {
@@ -25,10 +37,37 @@ export class MembersComponent implements OnInit {
       this.dataStore.checkForNewRate();
     }
 
+    this.manageScrollTo();
   }
 
+  manageScrollTo() {
+    this.destroyObs = this.dataStore.ratesOb$.subscribe(() => {
+
+      setTimeout(() => {
+        console.log('Scroll');
+        this.viewportScroller.scrollToPosition(this.stateService.membersScrollYPosition());
+
+        if (this.membersSection.nativeElement.classList.contains('show-grid')) {
+
+        } else {
+          this.membersSection.nativeElement.classList.toggle('show-grid');
+        }
+
+      },1);
+
+    });
+  }
+
+
   openRecipeDetail(id: string, images: BlobGalleryItemContainer[]) {
-    this.router.navigateByUrl(`members/rateRecipe/${id}`, { skipLocationChange: true});
+    this.router.navigateByUrl(`members/rateRecipe/${id}`);
     this.galleryLoadService.addActiveRateImages(images);
   }
+
+  ngOnDestroy(): void {
+    this.stateService.membersScrollYPosition.set(this.viewportScroller.getScrollPosition());
+    this.destroyObs.unsubscribe();
+  }
+
+
 }

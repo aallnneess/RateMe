@@ -12,6 +12,8 @@ export class StateService {
 
   currentStatus: WritableSignal<Status> = signal(Status.Idle);
 
+  membersScrollYPosition: WritableSignal<[number,number]> = signal([0,0]);
+
   setStatus(status: Status) {
 
     if (this.currentStatus() !== status) {

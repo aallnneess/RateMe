@@ -9,6 +9,7 @@ import {Rate} from "../../core/common/rate";
 export class DataStoreService {
 
   databaseService: DatabaseService = inject(DatabaseService);
+
   private rates$ = new BehaviorSubject<Rate[]>([]);
   ratesOb$ = this.rates$.asObservable();
   private ratesTotal$ = new BehaviorSubject<number>(0);
