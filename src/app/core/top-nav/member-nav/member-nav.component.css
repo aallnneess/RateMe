@@ -31,6 +31,8 @@ li {
   font-size: 2rem;
   user-select: none;
   -webkit-user-select: none; /* Safari Vendor Präfix */
+
+  z-index: 10;
 }
 
 /* Zusätzliche Überprüfung auf ältere Safari-Versionen */
