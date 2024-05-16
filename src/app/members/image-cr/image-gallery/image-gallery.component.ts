@@ -30,8 +30,8 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
 
     this.items = this.galleryLoadService.imagesCardGallery();
 
-    console.log('Gallery Loaded');
-    console.log(this.items);
+    // console.log('Gallery Loaded');
+    // console.log(this.items);
   }
 
   removeItem() {

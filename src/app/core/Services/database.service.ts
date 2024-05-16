@@ -137,7 +137,7 @@ export class DatabaseService {
   }
 
   updateGlobalRating(parentDocumentId: string) {
-    console.log(' XXX ');
+    //console.log(' XXX ');
     const ratings: Rate[] = [];
     let globalRating: number = 0;
 
@@ -148,9 +148,9 @@ export class DatabaseService {
     )).pipe(
       map(response => response as unknown as Rate),
       tap(parentRate => {
-        console.log('Get Parentrate...');
+        //console.log('Get Parentrate...');
         ratings.push(parentRate);
-        console.log('Size of ratings Array after adding Parentrate: ' + ratings.length);
+        //console.log('Size of ratings Array after adding Parentrate: ' + ratings.length);
       }),
       concatMap(() => {
         return from(this.databases.listDocuments(
@@ -162,23 +162,23 @@ export class DatabaseService {
         )).pipe(
           map(response => response.documents as unknown as Rate[]),
           tap(rates => {
-            console.log('Get ' + rates.length + ' Child Rates.');
+            //console.log('Get ' + rates.length + ' Child Rates.');
             ratings.push(...rates);
-            console.log('Size of ratings Array after adding childs: ' + ratings.length);
+            //console.log('Size of ratings Array after adding childs: ' + ratings.length);
 
             for (let rating of ratings) {
-              console.log('Add '+ rating.rating + ' to globalRating');
+              //console.log('Add '+ rating.rating + ' to globalRating');
               globalRating += rating.rating;
             }
 
             globalRating = globalRating / ratings.length;
-            console.log('Globalrating: ' + globalRating);
+            //console.log('Globalrating: ' + globalRating);
           })
         )
       }),
       concatMap(() => {
 
-        console.log(globalRating);
+        //console.log(globalRating);
         return from(this.databases.updateDocument(
           this.databaseId,
           this.booksCollectionId,
@@ -187,8 +187,8 @@ export class DatabaseService {
         ))
       }),
       finalize(() => {
-        console.log('successfully updated');
-        console.log(' XXX ');
+        console.log('global rating successfully updated to ' + globalRating);
+        //console.log(' XXX ');
       })
     );
   }

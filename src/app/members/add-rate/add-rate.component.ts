@@ -5,7 +5,7 @@ import {DatabaseService} from "../../core/Services/database.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {concatMap, map, tap} from "rxjs";
+import {concatMap, map, Subscription, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
@@ -50,15 +50,24 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   currentFunctionExecutionId = '';
 
+  lastEditOrParentSub!: Subscription;
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
 
-   this.rateTopic = this.route.snapshot.paramMap.get('id')!;
-   // If its a child rate, this is not null
-   this.parentRate = JSON.parse(this.route.snapshot.paramMap.get('rate')!);
-   // If its a edit rate, this is not null
-   this.editRate = JSON.parse(this.route.snapshot.paramMap.get('editRate')!);
+    this.rateTopic = this.route.snapshot.paramMap.get('id')!;
+
+    this.lastEditOrParentSub = this.datastoreService.lastEditOrParentRate$.subscribe(rate => {
+      if (rate?.parent) {
+        this.parentRate = rate.rate;
+      } else if (rate?.edit) {
+        this.editRate = rate.rate;
+      } else if (rate === null) {
+        //console.error('Rate is null !');
+      }
+
+    });
 
 
    // ####################################################################################
@@ -102,7 +111,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   sendData(images: Blob[]) {
 
-    console.log(this.form.valid);
+    console.log('Send Data Form Valid ? ' + this.form.valid);
     if (this.form.invalid || images.length === 0) return;
 
     //console.log('absenden');
@@ -186,6 +195,9 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
           concatMap(result => {
 
+            // console.log('child send images:');
+            // console.log(result);
+
             // ###################### EDIT ##############################################################
 
             let rate = new Rate();
@@ -217,12 +229,32 @@ export class AddRateComponent implements OnInit, OnDestroy {
               }),
               concatMap(() => {
                 if (rate.childRate) {
-                  console.log('Childrate');
                   return this.databaseService.updateGlobalRating(rate.parentDocumentId);
                 } else {
-                  console.log('ParentRate');
                   return this.databaseService.updateGlobalRating(rate.$id);
                 }
+              }),
+              concatMap(() => {
+                // get parent rate to update image bucket
+                return this.databaseService.getRateById(rate.parentDocumentId);
+              }),
+              concatMap(parentRate => {
+
+                if (typeof parentRate.imageBuckets === 'string') {
+                  parentRate.imageBuckets = JSON.parse(parentRate.imageBuckets);
+                }
+
+                if (typeof rate.imageBuckets === 'string') {
+                  rate.imageBuckets = JSON.parse(rate.imageBuckets);
+                }
+
+                if (typeof parentRate.imageBuckets !== 'string') {
+                  for (let imageBucket of rate.imageBuckets) {
+                    parentRate.imageBuckets.push(imageBucket as BucketResponse);
+                  }
+                }
+                // update parentRate imagebuckets
+                return this.databaseService.updateRate(parentRate);
               })
             );
           })
@@ -519,6 +551,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.statesService.setStatus(Status.Idle);
+    this.lastEditOrParentSub.unsubscribe();
+    this.datastoreService.setEditOrParentRateToNull();
   }
 
 

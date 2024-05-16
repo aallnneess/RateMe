@@ -54,7 +54,8 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   }
 
   addChildRate() {
-    this.router.navigate(['members/addRate', this.rate.rateTopic, {rate: JSON.stringify(this.rate)}]);
+    this.router.navigate(['members/addRate', this.rate.rateTopic]);
+    this.dataStore.setParentRate(this.rate);
   }
 
   showAddChildRate() {
@@ -74,12 +75,14 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
         this.rate.$id
       ).subscribe(result => {
         if (result) {
-          this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(result)}]);
+          this.router.navigate(['members/addRate', this.rate.rateTopic]);
+          this.dataStore.setEditRate(result);
         }
       });
 
     } else {
-      this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(this.rate)}]);
+      this.router.navigate(['members/addRate', this.rate.rateTopic]);
+      this.dataStore.setEditRate(this.rate);
     }
   }
 

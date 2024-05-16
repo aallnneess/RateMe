@@ -25,7 +25,6 @@ export class StateService {
       if (event instanceof NavigationEnd) {
 
         const url = event.url.length > 20 ? event.url.substring(0,40) : event.url;
-        console.log(url);
         this.browserHistory.push(url);
       }
     });
