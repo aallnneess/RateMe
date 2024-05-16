@@ -23,10 +23,6 @@ export class ProductTopicViewComponent {
 
   @Output() sendDataToParent = new EventEmitter<Blob[]>();
 
-  ngOnInit(): void {
-    console.log(this.editRate);
-  }
-
   getFormControl(name: string) {
     return this.form.get(name) as FormControl;
   }

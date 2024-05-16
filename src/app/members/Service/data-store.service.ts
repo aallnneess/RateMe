@@ -42,9 +42,7 @@ export class DataStoreService {
       if (result.total !== this.ratesTotal$.value) {
         console.log('New Data for Rates[]');
 
-        this.updateRates().pipe(
-          finalize(() => console.log('fertig hihi'))
-        ).subscribe();
+        this.updateRates().subscribe();
 
       }
     });

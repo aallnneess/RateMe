@@ -9,8 +9,8 @@
           add
         </li>
         <div #popupMenu class="popup-menu">
-          <li [routerLink]="['members/addRate', 'recipe']" class="popup-menu-li">Rezept</li>
-          <li [routerLink]="['members/addRate', 'product']" class="popup-menu-li">Produkt</li>
+          <li (click)="reloadComponent(['members/addRate', 'recipe'])" class="popup-menu-li">Rezept</li>
+          <li (click)="reloadComponent(['members/addRate', 'product'])" class="popup-menu-li">Produkt</li>
         </div>
       </div>
     </ul>
@@ -25,8 +25,8 @@
           add
         </li>
         <div #popupMenu class="popup-menu">
-          <li [routerLink]="['members/addRate', 'recipe']"  class="popup-menu-li">Rezept</li>
-          <li [routerLink]="['members/addRate', 'product']" class="popup-menu-li">Produkt</li>
+          <li (click)="reloadComponent(['members/addRate', 'recipe'])"  class="popup-menu-li">Rezept</li>
+          <li (click)="reloadComponent(['members/addRate', 'product'])" class="popup-menu-li">Produkt</li>
         </div>
       </div>
 

@@ -43,8 +43,12 @@ export class MembersComponent implements OnInit, OnDestroy {
   manageScrollTo() {
     this.destroyObs = this.dataStore.ratesOb$.subscribe(() => {
 
+      // After adding new rates set scroll position to 0,0
+      if (this.stateService.getPreviousUrl()?.includes('addRate') && !this.stateService.getPreviousUrl()?.includes('editRate')) {
+        this.stateService.membersScrollYPosition.set([0,0]);
+      }
+
       setTimeout(() => {
-        console.log('Scroll');
         this.viewportScroller.scrollToPosition(this.stateService.membersScrollYPosition());
 
         if (this.membersSection.nativeElement.classList.contains('show-grid')) {

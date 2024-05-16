@@ -1,4 +1,5 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, ViewChild} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-member-nav',
@@ -11,6 +12,8 @@ export class MemberNavComponent {
 
   isMobile!: boolean;
 
+  router = inject(Router);
+
   constructor() {
     this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   }
@@ -19,6 +22,12 @@ export class MemberNavComponent {
 
   togglePopupMenu() {
     this.popupMenu.nativeElement.classList.toggle('popup-menu-show');
+  }
+
+  reloadComponent(route: string[]) {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(route);
+    });
   }
 
 }

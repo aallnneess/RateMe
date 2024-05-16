@@ -7,7 +7,6 @@ import {GalleryLoadService} from "../Service/gallery-load.service";
 import {DatabaseService} from "../../core/Services/database.service";
 import {AuthService} from "../../core/Services/auth.service";
 import {Subject, takeUntil} from "rxjs";
-import {Location} from "@angular/common";
 
 
 @Component({

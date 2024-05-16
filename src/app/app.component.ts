@@ -7,6 +7,9 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
 
+  // TODO: this.router.navigate(['members/addRate', this.rate.rateTopic, {editRate: JSON.stringify(this.rate)}]);
+  // Rate-card-details......auf service umbauen ! String zu lang
+
   // TODO: Tags lassen sich nicht editieren
   // TODO: Fullscreen Button
   // Todo: Sortierfunktion
