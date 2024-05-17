@@ -63,8 +63,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
         this.parentRate = rate.rate;
       } else if (rate?.edit) {
         this.editRate = rate.rate;
-      } else if (rate === null) {
-        //console.error('Rate is null !');
       }
 
     });

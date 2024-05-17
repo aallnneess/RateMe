@@ -27,6 +27,7 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
   // Nur für tags
   @Input() tags = false;
   parentTags!: string;
+  @Input() tagsCanBeEdited = false;
 
   // Text-Input,Textarea und tags
   @Input() name!: string;
@@ -85,7 +86,7 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
     let inputValue = this.value.value;
 
     // user cant delete parent tags
-    if (this.parentTags) {
+    if (this.parentTags && !this.tagsCanBeEdited) {
 
       inputValue = this.parentTags + inputValue.substring(this.parentTags.length);
 
@@ -113,7 +114,7 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
   }
 
   onKeyDown(event: KeyboardEvent) {
-    if (event.key.startsWith('Arrow')) {
+    if (!this.tagsCanBeEdited && event.key.startsWith('Arrow')) {
       event.preventDefault(); // Verhindert die Standardaktion der Pfeiltasten im Inputfeld
     }
   }
