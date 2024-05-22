@@ -21,36 +21,40 @@ import { RecipeTopicViewComponent } from './add-rate/topics/recipe-topic-view/re
 import {RecipeViewComponent} from "./rate-card-details/recipe-view/recipe-view.component";
 import { ProductTopicViewComponent } from './add-rate/topics/product-topic-view/product-topic-view.component';
 import { ProductViewComponent } from './rate-card-details/product-view/product-view.component';
+import {MemberNavComponent} from "./member-nav/member-nav.component";
+import { StartComponent } from './start/start.component';
 
 
 @NgModule({
-  declarations: [
-    MembersComponent,
-    ImageCrComponent,
-    MemberInputComponent,
-    ImageGalleryComponent,
-    SpinnerComponent,
-    RateCardComponent,
-    RateCardDetailsComponent,
-    AddRateComponent,
-    KeenSLComponent,
-    NoteComponent,
-    ScrollToBottomOnFocusDirective,
-    RecipeTopicViewComponent,
-    RecipeViewComponent,
-    ProductTopicViewComponent,
-    ProductViewComponent
-  ],
+    declarations: [
+        MembersComponent,
+        ImageCrComponent,
+        MemberInputComponent,
+        ImageGalleryComponent,
+        SpinnerComponent,
+        RateCardComponent,
+        RateCardDetailsComponent,
+        AddRateComponent,
+        KeenSLComponent,
+        NoteComponent,
+        ScrollToBottomOnFocusDirective,
+        RecipeTopicViewComponent,
+        RecipeViewComponent,
+        ProductTopicViewComponent,
+        ProductViewComponent,
+        MemberNavComponent,
+        StartComponent
+    ],
   exports: [],
-    imports: [
-        CommonModule,
-        MembersRoutingModule,
-        ImageCropperModule,
-        FormsModule,
-        ReactiveFormsModule,
-        GalleryModule,
-        LightboxDirective
+  imports: [
+    CommonModule,
+    MembersRoutingModule,
+    ImageCropperModule,
+    FormsModule,
+    ReactiveFormsModule,
+    GalleryModule,
+    LightboxDirective
 
-    ]
+  ]
 })
 export class MembersModule { }

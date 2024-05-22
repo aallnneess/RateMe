@@ -1,0 +1,50 @@
+<nav>
+  @if (isMobile) {
+    <ul>
+      <li routerLink="cards" class="blue-button-white">Home</li>
+
+      <div class="left-menu-container">
+        <li class="blue-button-white material-symbols-outlined" routerLink="bbb">Settings</li>
+
+        <div (click)="togglePopupMenu()">
+          <li class="blue-button-white material-symbols-outlined">
+            add
+          </li>
+          <div #popupMenu class="popup-menu">
+            <li (click)="reloadComponent(['addRate', 'recipe'])" class="popup-menu-li">Rezept</li>
+            <li (click)="reloadComponent(['addRate', 'product'])" class="popup-menu-li">Produkt</li>
+          </div>
+        </div>
+      </div>
+
+
+    </ul>
+  } @else {
+
+    <ul>
+      <li routerLink="cards" class="blue-button-white">Home</li>
+
+      <div class="left-menu-container">
+        <li class="blue-button-white material-symbols-outlined">Settings</li>
+
+        <div (mouseleave)="popupMenu.classList.remove('popup-menu-show')">
+          <li class="blue-button-white material-symbols-outlined"
+              (mouseenter)="popupMenu.classList.add('popup-menu-show')">
+            add
+          </li>
+          <div #popupMenu class="popup-menu">
+            <li (click)="reloadComponent(['addRate', 'recipe'])"  class="popup-menu-li">Rezept</li>
+            <li (click)="reloadComponent(['addRate', 'product'])" class="popup-menu-li">Produkt</li>
+          </div>
+        </div>
+      </div>
+
+    </ul>
+
+  }
+</nav>
+
+
+
+
+

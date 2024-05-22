@@ -1,5 +1,5 @@
 import {Component, ElementRef, inject, ViewChild} from '@angular/core';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-member-nav',
@@ -13,8 +13,10 @@ export class MemberNavComponent {
   isMobile!: boolean;
 
   router = inject(Router);
+  route = inject(ActivatedRoute);
 
   constructor() {
+    // TODO: isMobile reagiert nicht responsive
     this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   }
 
@@ -24,9 +26,11 @@ export class MemberNavComponent {
     this.popupMenu.nativeElement.classList.toggle('popup-menu-show');
   }
 
-  reloadComponent(route: string[]) {
+  reloadComponent(routeIn: string[]) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(route);
+
+     this.router.navigate(routeIn, {relativeTo: this.route});
+
     });
   }
 

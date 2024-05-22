@@ -8,7 +8,6 @@ import { TopNavComponent } from './core/top-nav/top-nav.component';
 import { LoginComponent } from './core/login/login.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { InputComponent } from './core/Controls/input/input.component';
-import { MemberNavComponent } from './core/top-nav/member-nav/member-nav.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {HttpClientModule} from "@angular/common/http";
 import { PopupComponent } from './core/popup/popup.component';
@@ -20,7 +19,6 @@ import { PopupComponent } from './core/popup/popup.component';
         TopNavComponent,
         LoginComponent,
         InputComponent,
-        MemberNavComponent,
         PopupComponent
     ],
     imports: [
@@ -32,7 +30,8 @@ import { PopupComponent } from './core/popup/popup.component';
     ],
     providers: [],
   exports: [
-    InputComponent
+    InputComponent,
+    PopupComponent
   ],
     bootstrap: [AppComponent]
 })
