@@ -136,10 +136,12 @@ export class DatabaseService {
     ))
   }
 
-  updateGlobalRating(parentDocumentId: string) {
+  updateParentsGlobalAttributes(parentDocumentId: string) {
     //console.log(' XXX ');
     const ratings: Rate[] = [];
     let globalRating: number = 0;
+    let tagsGlobal = '';
+    let boughtAtGlobal = '';
 
     return from(this.databases.getDocument(
       this.databaseId,
@@ -166,13 +168,28 @@ export class DatabaseService {
             ratings.push(...rates);
             //console.log('Size of ratings Array after adding childs: ' + ratings.length);
 
+            // GlobalRating calculation #######################################################
+
             for (let rating of ratings) {
-              //console.log('Add '+ rating.rating + ' to globalRating');
               globalRating += rating.rating;
             }
 
             globalRating = globalRating / ratings.length;
-            //console.log('Globalrating: ' + globalRating);
+
+            // tagsGlobal concats #######################################################
+
+            for (let rating of ratings) {
+              tagsGlobal += rating.tags;
+            }
+
+            // boughtAtGlobal concats #######################################################
+
+            for (let rating of ratings) {
+              boughtAtGlobal += rating.boughtAt + ' ';
+            }
+
+
+
           })
         )
       }),
@@ -183,7 +200,11 @@ export class DatabaseService {
           this.databaseId,
           this.booksCollectionId,
           parentDocumentId,
-          {globalRating: globalRating}
+          {
+            globalRating: globalRating,
+            tagsGlobal: tagsGlobal,
+            boughtAtGlobal: boughtAtGlobal,
+          }
         ))
       }),
       finalize(() => {

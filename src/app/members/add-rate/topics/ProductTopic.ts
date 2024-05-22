@@ -26,7 +26,7 @@ export class ProductTopic implements TopicsInterface {
         notes: ['', [Validators.required, Validators.maxLength(2000)]],
         tags: [this.parentRate.tags, [Validators.required]],
         manufacturer: [this.parentRate.manufacturer, [Validators.required, Validators.minLength(2)]],
-        boughtAt: [this.parentRate.boughtAt, [Validators.required, Validators.minLength(2)]]
+        boughtAt: ['', [Validators.required, Validators.minLength(2)]]
       });
     } else if (this.editRate) {
 

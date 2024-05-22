@@ -42,7 +42,7 @@ export class AuthService {
       password
     )).pipe(
       tap(response => {
-        this.setSession(response);
+        this.loggedIn.set(response);
       }),
       catchError(err => {
         return throwError(() => {
@@ -61,5 +61,14 @@ export class AuthService {
         this.user.set(user);
       });
     }
+  }
+
+  setUser() {
+    return from(this.nodeServer.getUserWithId(this.loggedIn()?.userId!)).pipe(
+      tap(user => {
+        this.user.set(user);
+      })
+    );
+
   }
 }

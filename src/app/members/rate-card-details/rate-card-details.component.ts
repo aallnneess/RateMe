@@ -29,6 +29,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   images: GalleryItem[] = [];
 
   showAddChildButton = false;
+  showAddChildButtonChecked = false;
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -63,6 +64,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
       if (result.total === 0) {
         this.showAddChildButton = true;
       }
+      this.showAddChildButtonChecked = true;
     });
   }
 

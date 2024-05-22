@@ -137,6 +137,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.title = this.form.get('title')?.value;
         rate.rating = this.form.get('rating')?.value;
         rate.tags = this.form.get('tags')?.value + ' ';
+        rate.tagsGlobal = rate.tags;
         rate.username = this.authService.user()!.name;
         rate.userId = this.authService.user()!.$id;
         rate.globalRating = rate.rating;
@@ -147,7 +148,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
         // Product
         rate.manufacturer = this.form.get('manufacturer')?.value;
         rate.boughtAt = this.form.get('boughtAt')?.value;
-
+        rate.boughtAtGlobal = rate.boughtAt;
 
 
         return this.databaseService.addRate(rate).pipe(
@@ -203,7 +204,10 @@ export class AddRateComponent implements OnInit, OnDestroy {
             rate.imageBuckets = result as unknown as BucketResponse[];
             rate.title = this.form.get('title')?.value;
             rate.rating = this.form.get('rating')?.value;
-            rate.tags = this.form.get('tags')?.value;
+
+            // rate.tags = this.form.get('tags')?.value;
+            rate.tags = this.removeParentTags(this.form.get('tags')?.value, this.parentRate?.tags!);
+
             rate.username = this.authService.user()!.name;
             rate.userId = this.authService.user()!.$id;
             rate.notesCollectionId = this.parentRate!.notesCollectionId;
@@ -227,9 +231,9 @@ export class AddRateComponent implements OnInit, OnDestroy {
               }),
               concatMap(() => {
                 if (rate.childRate) {
-                  return this.databaseService.updateGlobalRating(rate.parentDocumentId);
+                  return this.databaseService.updateParentsGlobalAttributes(rate.parentDocumentId);
                 } else {
-                  return this.databaseService.updateGlobalRating(rate.$id);
+                  return this.databaseService.updateParentsGlobalAttributes(rate.$id);
                 }
               }),
               concatMap(() => {
@@ -251,7 +255,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
                     parentRate.imageBuckets.push(imageBucket as BucketResponse);
                   }
                 }
-                // update parentRate imagebuckets
+
+                // update parentRate
                 return this.databaseService.updateRate(parentRate);
               })
             );
@@ -329,11 +334,11 @@ export class AddRateComponent implements OnInit, OnDestroy {
           concatMap(() => {
             if (rate.childRate) {
               console.log('Childrate');
-              return this.databaseService.updateGlobalRating(rate.parentDocumentId);
+              return this.databaseService.updateParentsGlobalAttributes(rate.parentDocumentId);
             } else {
               console.log('ParentRate');
               console.log(this.editRate?.$id);
-              return this.databaseService.updateGlobalRating(this.editRate?.$id!);
+              return this.databaseService.updateParentsGlobalAttributes(this.editRate?.$id!);
             }
           })
         );
@@ -553,5 +558,17 @@ export class AddRateComponent implements OnInit, OnDestroy {
     this.datastoreService.setEditOrParentRateToNull();
   }
 
+
+  private removeParentTags(formTags: string, parentTags: string): string {
+    // Zerlege formTags und parentTags in Arrays
+    const formTagsArray = formTags.split(' ').map(tag => tag.trim());
+    const parentTagsArray = parentTags.split(' ').map(tag => tag.trim());
+
+    // Filtere formTagsArray, um parentTags zu entfernen
+    const filteredTagsArray = formTagsArray.filter(tag => !parentTagsArray.includes(tag));
+
+    // Füge die bereinigten Tags wieder zu einem String zusammen
+    return filteredTagsArray.join(' ');
+  }
 
 }

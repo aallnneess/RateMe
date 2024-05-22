@@ -1,6 +1,6 @@
 <header>
   <h2 class="text_h2">{{rate.title}}</h2>
-  <h3 class="text_tags">{{rate.tags}}</h3>
+  <h3 class="text_tags">{{rate.tagsGlobal}}</h3>
 </header>
 
 <div>
@@ -27,7 +27,7 @@
       reviews
     </span>
     </button>
-  } @else if (authService.user()?.$id) {
+  } @else if (authService.user()?.$id && showAddChildButtonChecked) {
     <button class="icon-button add-rate-button" (click)="editRate()">
       <span class="material-symbols-outlined">
       edit

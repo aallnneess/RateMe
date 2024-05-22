@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../Services/auth.service";
 import {InputComponent} from "../Controls/input/input.component";
 import {Router} from "@angular/router";
+import {concatMap} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   @ViewChild('mailInput') mailInput!: InputComponent;
   @ViewChild('passwordInput') passwordInput!: InputComponent;
+  @ViewChild('loginButton') loginButton!: ElementRef<HTMLButtonElement>;
 
   loginForm!: FormGroup;
   fb: FormBuilder = inject(FormBuilder);
@@ -36,16 +38,22 @@ export class LoginComponent implements OnInit {
 
 
   login() {
-    console.log(this.loginForm.status);
+    console.log('Login: ' + this.loginForm.status);
     if (this.loginForm.invalid) {
       this.mailInput.checkErrors();
       this.passwordInput.checkErrors();
       return;
     }
 
+    this.loginButton.nativeElement.disabled = true;
+
+
     this.authService.login(
       this.loginForm.get('email')?.value,
       this.loginForm.get('password')?.value
+    ).pipe(
+      concatMap(() => this.authService.setUser()
+      )
     ).subscribe({
       complete: () => {
         this.cleanForm();

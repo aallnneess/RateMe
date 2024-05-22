@@ -38,6 +38,20 @@ form {
   height: 64px;
 }
 
+button:disabled {
+  cursor: default;
+  background-color: #433f3f;
+  color: #251e1e;
+}
+
+.blue-button:disabled:hover {
+  color: #251e1e;
+}
+
+.blue-button:disabled:active {
+  border: solid 2px white;
+
+}
 
 @media screen and (max-width: 600px) {
 

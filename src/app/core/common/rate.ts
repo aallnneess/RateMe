@@ -6,6 +6,7 @@ export class Rate {
   rating: number = 0;
   imageBuckets: BucketResponse[] | string = [];
   tags: string = '';
+  tagsGlobal: string = '';
   rateTopic: string = '';
   username: string = '';
   userId: string = '';
@@ -22,6 +23,7 @@ export class Rate {
   // Products
   manufacturer: string = '';
   boughtAt: string = '';
+  boughtAtGlobal: string = '';
 }
 
 
