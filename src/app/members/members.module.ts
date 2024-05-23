@@ -23,6 +23,7 @@ import { ProductTopicViewComponent } from './add-rate/topics/product-topic-view/
 import { ProductViewComponent } from './rate-card-details/product-view/product-view.component';
 import {MemberNavComponent} from "./member-nav/member-nav.component";
 import { StartComponent } from './start/start.component';
+import { FilterPopupComponent } from './filter-popup/filter-popup.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { StartComponent } from './start/start.component';
         ProductTopicViewComponent,
         ProductViewComponent,
         MemberNavComponent,
-        StartComponent
+        StartComponent,
+        FilterPopupComponent
     ],
   exports: [],
   imports: [

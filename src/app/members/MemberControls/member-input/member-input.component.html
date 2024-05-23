@@ -54,7 +54,7 @@
     <label #label [ngClass]="disabled ? 'label-disabled' : ''" class="floating-label text-small" for="{{labelInputId}}">{{name}} </label>
     <input #input class="input-box input-config text-small" [id]="labelInputId"
            [type]="textFieldType"
-           [formControl]="value" (keyup)="checkErrors()"
+           [formControl]="value" (keyup)="checkErrors(); textChange.emit(input.value)"
            (focus)="label.classList.add('floating-label-small')"
            (focusout)="focusOut()"
            [ngClass]="disabled ? 'textarea-disabled' : ''">

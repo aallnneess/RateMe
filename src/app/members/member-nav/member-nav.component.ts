@@ -1,5 +1,7 @@
 import {Component, ElementRef, inject, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {PopupService} from "../../core/Services/popup.service";
+import {FilterService} from "../Service/filter.service";
 
 @Component({
   selector: 'app-member-nav',
@@ -14,6 +16,7 @@ export class MemberNavComponent {
 
   router = inject(Router);
   route = inject(ActivatedRoute);
+  filterService = inject(FilterService);
 
   constructor() {
     // TODO: isMobile reagiert nicht responsive

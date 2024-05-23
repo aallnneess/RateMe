@@ -1,0 +1,26 @@
+<section #section (click)="section.classList.toggle('show-section')">
+
+  <div class="popup-content" (click)="$event.stopPropagation()">
+    <p class="text_bold">Filter</p>
+
+    <div class="text-small">
+
+      <form [formGroup]="form" (ngSubmit)="submitForm()">
+        <app-member-input #searchInput
+                          [labelInputId]="'input1'"
+                          [name]="'Suche...'"
+                          [textFieldType]="'text'"
+                          [value]="getFormControl('search')"
+                          (textChange)="search($event)">
+        </app-member-input>
+      </form>
+
+
+    </div>
+
+    <button class="blue-button button" (click)="section.classList.toggle('show-section')">Ok</button>
+  </div>
+
+</section>
+
+

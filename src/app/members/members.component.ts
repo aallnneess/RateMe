@@ -30,13 +30,6 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   // Todo: Updated nicht vollständig,nur wenn cards gelöscht/hinzugefügt wurden, aber keine details !
   ngOnInit(): void {
-
-    if (this.dataStore.getRatesValue().length === 0) {
-      this.dataStore.updateRates().subscribe();
-    }else {
-      this.dataStore.checkForNewRate();
-    }
-
     this.manageScrollTo();
   }
 

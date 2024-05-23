@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  input,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {FormControl} from "@angular/forms";
 
 @Component({
@@ -20,6 +30,7 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
 
   // Nur für Text-Input
   @Input() textFieldType!: string;
+  @Output() textChange = new EventEmitter<string>();
 
   // Nur für Textarea
   @Input() textarea = false;
@@ -147,6 +158,13 @@ export class MemberInputComponent implements OnInit, AfterViewInit {
       if (this.value.value) {
         this.parentTags= this.value.value;
       }
+    }
+  }
+
+  setFocus() {
+   if (this.input) {
+      this.input.nativeElement.focus();
+      console.log('Set focus');
     }
   }
 

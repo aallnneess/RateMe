@@ -56,6 +56,25 @@ export class DatabaseService {
     );
   }
 
+  getAllRatesWithQuery(query: string) {
+    return from(this.databases.listDocuments(
+      this.databaseId,
+      this.booksCollectionId,
+      [
+        Query.orderDesc('globalRating'),
+        Query.equal('childRate', false),
+        Query.or([
+          Query.contains('title', query),
+          Query.contains('tagsGlobal', query),
+          Query.contains('boughtAtGlobal', query)
+        ])
+      ]
+    )).pipe(
+      map(response => response as unknown as RateContainer),
+      tap(rates => console.log(rates))
+    );
+  }
+
   getRateById(id: string) {
     return from(this.databases.getDocument(
       this.databaseId,

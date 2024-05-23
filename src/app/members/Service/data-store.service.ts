@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {DatabaseService} from "../../core/Services/database.service";
 import {BehaviorSubject, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
+import {FilterService} from "./filter.service";
 
 export type ParentOrEdit = {
   rate: Rate;
@@ -15,6 +16,7 @@ export type ParentOrEdit = {
 export class DataStoreService {
 
   databaseService: DatabaseService = inject(DatabaseService);
+  filterService: FilterService = inject(FilterService);
 
   private rates$ = new BehaviorSubject<Rate[]>([]);
   ratesOb$ = this.rates$.asObservable();
@@ -22,12 +24,25 @@ export class DataStoreService {
   private parentOrEditRate$ = new BehaviorSubject<ParentOrEdit | null>(null);
   lastEditOrParentRate$  = this.parentOrEditRate$.asObservable();
 
-  constructor() {}
+
+  constructor() {
+    this.filterService.searchOb$.subscribe(search => {
+      this.databaseService.getAllRatesWithQuery(search).subscribe(response => {
+        response.documents.forEach(rate => {
+          rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
+        });
+
+        this.rates$.next(response.documents);
+        this.ratesTotal$.next(response.total);
+        console.log('Update Rates array');
+      });
+    });
+  }
 
   // Muss von mehr als einer komponente aufgerufen und aboniert werden können.
   // Ergebnis soll aber nur hier verarbeitet werden, daher => tap
   updateRates() {
-    return this.databaseService.getAllRates().pipe(
+    return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch()).pipe(
       tap(response => {
         response.documents.forEach(rate => {
           rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
@@ -39,23 +54,6 @@ export class DataStoreService {
       })
     );
   }
-
-  getRatesValue() {
-    return this.rates$.value;
-  }
-
-  // TODO: evtl. übertrieben.....
-  checkForNewRate() {
-    return this.databaseService.getAllRates().subscribe(result => {
-      if (result.total !== this.ratesTotal$.value) {
-        console.log('New Data for Rates[]');
-
-        this.updateRates().subscribe();
-
-      }
-    });
-  }
-
 
   getRate(id: string) {
     return this.rates$.value.find(rate => rate.$id === id);
