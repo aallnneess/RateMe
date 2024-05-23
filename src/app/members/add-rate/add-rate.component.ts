@@ -370,10 +370,10 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
     for (let image of images) {
       let searchImage = image as BlobCustom;
-      //console.log('search:' + searchImage.bucketDocumentId);
+      console.log('search:' + searchImage.bucketDocumentId);
 
       if (!this.galleryLoadService.activeRateImages.value.find(i => i.bucketDocumentId === searchImage.bucketDocumentId)) {
-        //console.log('Neues Bild');
+        console.log('Neues Bild');
 
         newImages.push(image);
       }
@@ -383,7 +383,50 @@ export class AddRateComponent implements OnInit, OnDestroy {
     return newImages;
   }
 
-  findToDeleteImages(images: Blob[]) {
+  // findToDeleteImages(images: Blob[]) {
+  //   const tmpImages: BlobGalleryItemContainer[] = [];
+  //   const searchImages: BlobCustom[] = images as BlobCustom[];
+  //
+  //   let blabla: BucketResponse[] = [];
+  //
+  //   if (typeof this.editRate?.imageBuckets === 'string') {
+  //     blabla = JSON.parse(this.editRate?.imageBuckets as string);
+  //   }else {
+  //     blabla = this.editRate?.imageBuckets as BucketResponse[];
+  //   }
+  //
+  //   const filteredActiveRateImages: BlobGalleryItemContainer[] = this.galleryLoadService.activeRateImages.value.filter(i => {
+  //
+  //     if (blabla.find(image => image.$id === i.bucketDocumentId)) {
+  //
+  //       return true;
+  //     }
+  //
+  //     return false;
+  //
+  //   });
+  //
+  //   console.log('searchIamges ids: ');
+  //   for (let searchImage of searchImages) {
+  //     console.log(searchImage.bucketDocumentId);
+  //   }
+  //
+  //   console.log(' ');
+  //   console.log('activeRateImages ids:');
+  //
+  //   for (let blobGalleryItemContainer of filteredActiveRateImages) {
+  //     console.log(blobGalleryItemContainer.bucketDocumentId);
+  //
+  //
+  //     if (!searchImages.find(i => i.bucketDocumentId === blobGalleryItemContainer.bucketDocumentId)) {
+  //       tmpImages.push(blobGalleryItemContainer);
+  //     }
+  //   }
+  //
+  //   return tmpImages;
+  // }
+
+  findToDeleteImages(images: Blob[]): BlobGalleryItemContainer[] {
     const tmpImages: BlobGalleryItemContainer[] = [];
     const searchImages: BlobCustom[] = images as BlobCustom[];
 
@@ -391,83 +434,117 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
     if (typeof this.editRate?.imageBuckets === 'string') {
       blabla = JSON.parse(this.editRate?.imageBuckets as string);
-    }else {
+    } else {
       blabla = this.editRate?.imageBuckets as BucketResponse[];
     }
 
     const filteredActiveRateImages: BlobGalleryItemContainer[] = this.galleryLoadService.activeRateImages.value.filter(i => {
-
-      if (blabla.find(image => image.$id === i.bucketDocumentId)) {
-
-        return true;
-      }
-
-      return false;
-
+      return blabla.some(image => image.$id === i.bucketDocumentId);
     });
 
-    console.log('searchIamges ids: ');
-    for (let searchImage of searchImages) {
+    console.log('searchIamges ids:');
+    searchImages.forEach(searchImage => {
       console.log(searchImage.bucketDocumentId);
-    }
+    });
 
     console.log(' ');
     console.log('activeRateImages ids:');
-
-    for (let blobGalleryItemContainer of filteredActiveRateImages) {
+    filteredActiveRateImages.forEach(blobGalleryItemContainer => {
       console.log(blobGalleryItemContainer.bucketDocumentId);
 
-
-      if (!searchImages.find(i => i.bucketDocumentId === blobGalleryItemContainer.bucketDocumentId)) {
+      if (!searchImages.some(i => i.bucketDocumentId === blobGalleryItemContainer.bucketDocumentId)) {
         tmpImages.push(blobGalleryItemContainer);
       }
-    }
+    });
 
     return tmpImages;
   }
 
+
+  // summarizeImages(
+  //   originalImages: BucketResponse[] | string | undefined,
+  //   newImages: BucketResponse[],
+  //   toDeleteImages: BlobGalleryItemContainer[]) {
+  //
+  //   let updateImages: BucketResponse[] = [];
+  //   let tmpOriginalImages: BucketResponse[] = [];
+  //   if (typeof originalImages === "string") {
+  //     tmpOriginalImages = JSON.parse(originalImages);
+  //   } else {
+  //     tmpOriginalImages = originalImages!;
+  //   }
+  //
+  //    console.log('to delete images:');
+  //    console.log(toDeleteImages);
+  //    console.log(' ');
+  //    console.log('original images:');
+  //    console.log(tmpOriginalImages);
+  //
+  //
+  //   // delete images
+  //   if (toDeleteImages.length === 0) {
+  //     updateImages = tmpOriginalImages;
+  //   } else {
+  //
+  //     for (let tmpOriginalImage of tmpOriginalImages) {
+  //       if (!toDeleteImages.find(i => i.bucketDocumentId === tmpOriginalImage.$id)) {
+  //         updateImages.push(tmpOriginalImage);
+  //       }
+  //     }
+  //   }
+  //
+  //   // add new images
+  //   for (let newImage of newImages) {
+  //     updateImages.push(newImage);
+  //   }
+  //
+  //    console.log(' ');
+  //    console.log('updated images');
+  //    console.log(updateImages);
+  //   return updateImages;
+  // }
+
   summarizeImages(
     originalImages: BucketResponse[] | string | undefined,
     newImages: BucketResponse[],
-    toDeleteImages: BlobGalleryItemContainer[]) {
-
+    toDeleteImages: BlobGalleryItemContainer[]
+  ): BucketResponse[] {
     let updateImages: BucketResponse[] = [];
     let tmpOriginalImages: BucketResponse[] = [];
-    if (typeof originalImages === "string") {
+
+    if (typeof originalImages === 'string') {
       tmpOriginalImages = JSON.parse(originalImages);
-    } else {
-      tmpOriginalImages = originalImages!;
+    } else if (originalImages) {
+      tmpOriginalImages = originalImages;
     }
 
-    // console.log('to delete images:');
-    // console.log(toDeleteImages);
-    // console.log(' ');
-    // console.log('original images:');
-    // console.log(tmpOriginalImages);
-
+    console.log('to delete images:');
+    console.log(toDeleteImages);
+    console.log(' ');
+    console.log('original images:');
+    console.log(tmpOriginalImages);
 
     // delete images
     if (toDeleteImages.length === 0) {
       updateImages = tmpOriginalImages;
     } else {
-
       for (let tmpOriginalImage of tmpOriginalImages) {
-        if (!toDeleteImages.find(i => i.bucketDocumentId === tmpOriginalImage.$id)) {
+        if (!toDeleteImages.some(i => i.bucketDocumentId === tmpOriginalImage.$id)) {
           updateImages.push(tmpOriginalImage);
         }
       }
     }
 
     // add new images
-    for (let newImage of newImages) {
-      updateImages.push(newImage);
-    }
+    updateImages = updateImages.concat(newImages);
 
-    // console.log(' ');
-    // console.log('updated images');
-    // console.log(updateImages);
+    console.log(' ');
+    console.log('updated images');
+    console.log(updateImages);
+
     return updateImages;
   }
+
 
   updateParentRate(rate: Rate, deleteImages: BlobGalleryItemContainer[]) {
     rate.$id = this.editRate?.$id!;

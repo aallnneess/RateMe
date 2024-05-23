@@ -72,19 +72,28 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
 
     if (this.rate.userId !== this.authService.user()!.$id) {
 
+      // We need everytime the latest image
       this.dataBaseService.getRateByUserIdAndParentDocumentId(
         this.authService.user()!.$id,
         this.rate.$id
       ).subscribe(result => {
         if (result) {
-          this.router.navigate(['members/addRate', this.rate.rateTopic]);
           this.dataStore.setEditRate(result);
+          this.router.navigate(['members/addRate', this.rate.rateTopic]);
         }
       });
 
     } else {
-      this.router.navigate(['members/addRate', this.rate.rateTopic]);
-      this.dataStore.setEditRate(this.rate);
+
+      // We need everytime the latest image
+      this.dataBaseService.getRateById(this.rate.$id).subscribe(result => {
+        this.dataStore.setEditRate(this.rate);
+        this.router.navigate(['members/addRate', this.rate.rateTopic]);
+      });
+
+
+      // this.router.navigate(['members/addRate', this.rate.rateTopic]);
+      // this.dataStore.setEditRate(this.rate);
     }
   }
 

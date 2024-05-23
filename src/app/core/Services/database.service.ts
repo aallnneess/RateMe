@@ -76,6 +76,7 @@ export class DatabaseService {
   }
 
   getRateById(id: string) {
+    console.log('getRateById');
     return from(this.databases.getDocument(
       this.databaseId,
       this.booksCollectionId,
@@ -88,6 +89,7 @@ export class DatabaseService {
   // We need the "parent/original" Rate Id and the userId
   // Then we search if theres a child rate with parentDocumentId & userId
   getRateByUserIdAndParentDocumentId(userId: string, rateId: string) {
+    console.log('getRateByUserIdAndParentDocumentId');
     return from(this.databases.listDocuments(
       this.databaseId,
       this.booksCollectionId,
