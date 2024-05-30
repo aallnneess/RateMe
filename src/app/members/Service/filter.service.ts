@@ -51,5 +51,13 @@ export class FilterService {
     console.log(this.checkedProduct$.value);
   }
 
+  getCheckedRecipe() {
+    return this.checkedRecipe$.value;
+  }
+
+  getCheckedProduct(){
+    return this.checkedProduct$.value;
+  }
+
 
 }

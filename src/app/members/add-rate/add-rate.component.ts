@@ -1,7 +1,6 @@
 import {Component, ElementRef, inject, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../../core/Services/auth.service";
 import {GalleryLoadService} from "../Service/gallery-load.service";
-import {DatabaseService} from "../../core/Services/database.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
@@ -18,6 +17,7 @@ import {BlobCustom} from "../../core/common/blob-custom";
 import {PopupService} from "../../core/Services/popup.service";
 import {RecipeTopic} from "./topics/RecipeTopic";
 import {ProductTopic} from "./topics/ProductTopic";
+import {DatabaseService} from "../Service/database.service";
 
 @Component({
   selector: 'app-add-rate',

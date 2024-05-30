@@ -1,9 +1,11 @@
 import {inject, Injectable} from '@angular/core';
-import {AppwriteService} from "./appwrite.service";
 import {Databases, ID, Query} from "appwrite";
 import {concatMap, finalize, from, map, of, tap} from "rxjs";
-import {Rate} from "../common/rate";
-import {RateContainer} from "../common/rate-container";
+import {AppwriteService} from "../../core/Services/appwrite.service";
+import {Rate} from "../../core/common/rate";
+import {RateContainer} from "../../core/common/rate-container";
+import {FilterService} from "./filter.service";
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,8 @@ export class DatabaseService {
   appwriteService: AppwriteService = inject(AppwriteService);
   databases!: Databases;
   databaseId = '657334ccc654783e43fe';
+
+  filterService = inject(FilterService);
 
   booksCollectionId = '6573366c695cfcbc957a';
   constructor() {
@@ -67,6 +71,10 @@ export class DatabaseService {
           Query.contains('title', query),
           Query.contains('tagsGlobal', query),
           Query.contains('boughtAtGlobal', query)
+        ]),
+        Query.or([
+          Query.equal('rateTopic', this.filterService.getCheckedRecipe() ? 'recipe' : ''),
+          Query.equal('rateTopic', this.filterService.getCheckedProduct() ? 'product' : '')
         ])
       ]
     )).pipe(

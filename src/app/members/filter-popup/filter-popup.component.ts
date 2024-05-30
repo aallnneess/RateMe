@@ -71,5 +71,7 @@ export class FilterPopupComponent implements OnInit, OnDestroy, AfterViewInit{
       case 'produkt': this.filterService.setCheckedProduct(checked); break;
     }
 
+    this.filterService.setSearch(this.form.get('search')?.value);
+
   }
 }

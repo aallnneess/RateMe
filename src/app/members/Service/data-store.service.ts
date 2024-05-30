@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
-import {DatabaseService} from "../../core/Services/database.service";
 import {BehaviorSubject, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {FilterService} from "./filter.service";
+import {DatabaseService} from "./database.service";
 
 export type ParentOrEdit = {
   rate: Rate;
