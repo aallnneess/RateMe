@@ -41,3 +41,7 @@ section {
 .button {
   box-shadow: 0 5px 5px rgba(17, 60, 77, 0.56);
 }
+
+.select-container {
+  margin-top: 2rem;
+}

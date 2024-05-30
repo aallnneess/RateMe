@@ -12,6 +12,11 @@ export class FilterService {
   private search$ = new BehaviorSubject<string>('');
   searchOb$ = this.search$.asObservable();
 
+  private checkedRecipe$ = new BehaviorSubject<boolean>(true);
+  checkedRecipeObservable = this.checkedRecipe$.asObservable();
+  private checkedProduct$ = new BehaviorSubject<boolean>(true);
+  checkedProductObservable = this.checkedProduct$.asObservable();
+
 
   constructor() { }
 
@@ -35,4 +40,16 @@ export class FilterService {
   setSearchToNull() {
     this.search$.next('');
   }
+
+  setCheckedRecipe(checkedRecipe: boolean) {
+    this.checkedRecipe$.next(checkedRecipe);
+    console.log(this.checkedRecipe$.value);
+  }
+
+  setCheckedProduct(checkedProduct: boolean) {
+    this.checkedProduct$.next(checkedProduct);
+    console.log(this.checkedProduct$.value);
+  }
+
+
 }

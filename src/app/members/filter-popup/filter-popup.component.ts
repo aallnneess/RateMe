@@ -23,7 +23,10 @@ export class FilterPopupComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      search: new FormControl(this.filterService.getSearch()),
+      // search: new FormControl(this.filterService.getSearch()),
+      search: [this.filterService.getSearch()],
+      rezept: [true],
+      produkt: [true]
     });
   }
 
@@ -59,4 +62,14 @@ export class FilterPopupComponent implements OnInit, OnDestroy, AfterViewInit{
     this.filterService.setSearch(search);
   }
 
+  updateCheckbox(formName: string, checked: boolean) {
+    this.form.get(formName)?.setValue(checked);
+
+    switch (formName) {
+
+      case 'rezept': this.filterService.setCheckedRecipe(checked); break;
+      case 'produkt': this.filterService.setCheckedProduct(checked); break;
+    }
+
+  }
 }

@@ -13,6 +13,21 @@
                           [value]="getFormControl('search')"
                           (textChange)="search($event)">
         </app-member-input>
+
+        <div class="select-container">
+          <label>
+            <input [checked]="form.get('rezept')?.value" #rezeptCheckbox type="checkbox" formArrayName="rezept" (change)="updateCheckbox('rezept', rezeptCheckbox.checked)">
+            Rezept
+          </label>
+
+          <label>
+            <input [checked]="form.get('produkt')?.value" #produktCheckbox type="checkbox" formArrayName="produkt" (change)="updateCheckbox('produkt', produktCheckbox.checked)">
+            Produkt
+          </label>
+        </div>
+
+
+
       </form>
 
 
