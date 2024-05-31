@@ -5,6 +5,7 @@ export class Rate {
   title: string = '';
   rating: number = 0;
   imageBuckets: BucketResponse[] | string = [];
+  imageBucketsGlobal: BucketResponse[] | string = [];
   tags: string = '';
   tagsGlobal: string = '';
   rateTopic: string = '';

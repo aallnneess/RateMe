@@ -87,7 +87,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
 
       // We need everytime the latest image
       this.dataBaseService.getRateById(this.rate.$id).subscribe(result => {
-        this.dataStore.setEditRate(this.rate);
+        this.dataStore.setEditRate(result);
         this.router.navigate(['members/addRate', this.rate.rateTopic]);
       });
 

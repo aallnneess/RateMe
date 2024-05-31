@@ -63,6 +63,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
         this.parentRate = rate.rate;
       } else if (rate?.edit) {
         this.editRate = rate.rate;
+        console.log(this.editRate);
       }
 
     });
@@ -134,6 +135,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
         let rate = new Rate();
         rate.rateTopic = this.rateTopic;
         rate.imageBuckets = bucketResponses as unknown as BucketResponse[];
+        rate.imageBucketsGlobal = bucketResponses as unknown as BucketResponse[];
         rate.title = this.form.get('title')?.value;
         rate.rating = this.form.get('rating')?.value;
         rate.tags = this.form.get('tags')?.value + ' ';
@@ -243,25 +245,10 @@ export class AddRateComponent implements OnInit, OnDestroy {
                 // get parent rate to update image bucket
                 return this.databaseService.getRateById(rate.parentDocumentId);
               }),
-              concatMap(parentRate => {
+              concatMap(result => {
 
-                if (typeof parentRate.imageBuckets === 'string') {
-                  parentRate.imageBuckets = JSON.parse(parentRate.imageBuckets);
-                }
-
-                if (typeof rate.imageBuckets === 'string') {
-                  rate.imageBuckets = JSON.parse(rate.imageBuckets);
-                }
-
-                if (typeof parentRate.imageBuckets !== 'string') {
-                  for (let imageBucket of rate.imageBuckets) {
-                    parentRate.imageBuckets.push(imageBucket as BucketResponse);
-                  }
-                }
-
-                // update parentRate
-                return this.databaseService.updateRate(parentRate);
-              })
+                return this.updateParentRateImageBuckets(rate, 'noId');
+              }),
             );
           })
         )
@@ -307,6 +294,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.$id = this.editRate?.$id!;
         rate.rateTopic = this.rateTopic;
         rate.imageBuckets = this.summarizeImages(this.editRate?.imageBuckets ,result as unknown as BucketResponse[], deleteImages);
+        rate.imageBucketsGlobal = JSON.parse(this.editRate?.imageBucketsGlobal as unknown as string) as BucketResponse[];
         rate.title = this.form.get('title')?.value;
         rate.rating = this.form.get('rating')?.value;
         rate.tags = this.form.get('tags')?.value + ' ';
@@ -329,11 +317,11 @@ export class AddRateComponent implements OnInit, OnDestroy {
         return this.databaseService.updateRate(rate).pipe(
           concatMap(result => {
 
-            return this.updateParentRate(rate, deleteImages)
+            return this.updateParentRateImageBuckets(rate, result.$id);
           }),
-          concatMap(rate => {
-            return this.databaseService.updateRate(rate);
-          }),
+          // concatMap(rate => {
+          //   return this.databaseService.updateRate(rate);
+          // }),
           concatMap(() => {
             if (rate.childRate) {
               console.log('Childrate');
@@ -386,49 +374,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
     return newImages;
   }
 
-  // findToDeleteImages(images: Blob[]) {
-  //   const tmpImages: BlobGalleryItemContainer[] = [];
-  //   const searchImages: BlobCustom[] = images as BlobCustom[];
-  //
-  //   let blabla: BucketResponse[] = [];
-  //
-  //   if (typeof this.editRate?.imageBuckets === 'string') {
-  //     blabla = JSON.parse(this.editRate?.imageBuckets as string);
-  //   }else {
-  //     blabla = this.editRate?.imageBuckets as BucketResponse[];
-  //   }
-  //
-  //   const filteredActiveRateImages: BlobGalleryItemContainer[] = this.galleryLoadService.activeRateImages.value.filter(i => {
-  //
-  //     if (blabla.find(image => image.$id === i.bucketDocumentId)) {
-  //
-  //       return true;
-  //     }
-  //
-  //     return false;
-  //
-  //   });
-  //
-  //   console.log('searchIamges ids: ');
-  //   for (let searchImage of searchImages) {
-  //     console.log(searchImage.bucketDocumentId);
-  //   }
-  //
-  //   console.log(' ');
-  //   console.log('activeRateImages ids:');
-  //
-  //   for (let blobGalleryItemContainer of filteredActiveRateImages) {
-  //     console.log(blobGalleryItemContainer.bucketDocumentId);
-  //
-  //
-  //     if (!searchImages.find(i => i.bucketDocumentId === blobGalleryItemContainer.bucketDocumentId)) {
-  //       tmpImages.push(blobGalleryItemContainer);
-  //     }
-  //   }
-  //
-  //   return tmpImages;
-  // }
-
   findToDeleteImages(images: Blob[]): BlobGalleryItemContainer[] {
     const tmpImages: BlobGalleryItemContainer[] = [];
     const searchImages: BlobCustom[] = images as BlobCustom[];
@@ -462,50 +407,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
     return tmpImages;
   }
-
-
-  // summarizeImages(
-  //   originalImages: BucketResponse[] | string | undefined,
-  //   newImages: BucketResponse[],
-  //   toDeleteImages: BlobGalleryItemContainer[]) {
-  //
-  //   let updateImages: BucketResponse[] = [];
-  //   let tmpOriginalImages: BucketResponse[] = [];
-  //   if (typeof originalImages === "string") {
-  //     tmpOriginalImages = JSON.parse(originalImages);
-  //   } else {
-  //     tmpOriginalImages = originalImages!;
-  //   }
-  //
-  //    console.log('to delete images:');
-  //    console.log(toDeleteImages);
-  //    console.log(' ');
-  //    console.log('original images:');
-  //    console.log(tmpOriginalImages);
-  //
-  //
-  //   // delete images
-  //   if (toDeleteImages.length === 0) {
-  //     updateImages = tmpOriginalImages;
-  //   } else {
-  //
-  //     for (let tmpOriginalImage of tmpOriginalImages) {
-  //       if (!toDeleteImages.find(i => i.bucketDocumentId === tmpOriginalImage.$id)) {
-  //         updateImages.push(tmpOriginalImage);
-  //       }
-  //     }
-  //   }
-  //
-  //   // add new images
-  //   for (let newImage of newImages) {
-  //     updateImages.push(newImage);
-  //   }
-  //
-  //    console.log(' ');
-  //    console.log('updated images');
-  //    console.log(updateImages);
-  //   return updateImages;
-  // }
 
   summarizeImages(
     originalImages: BucketResponse[] | string | undefined,
@@ -549,89 +450,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
   }
 
 
-  updateParentRate(rate: Rate, deleteImages: BlobGalleryItemContainer[]) {
-    rate.$id = this.editRate?.$id!;
-
-    switch (rate.childRate) {
-
-      // #################################### CASE FALSE ######################################################
-
-      case false:
-        console.log('parentRate');
-        let rateImageBuckets: BucketResponse[] = [];
-        if (typeof rate.imageBuckets === "string") {
-          rateImageBuckets = JSON.parse(rate.imageBuckets);
-        }
-
-        console.log(rate);
-        return this.databaseService.getRatesByParentDocumentId(rate.$id).pipe(
-          map(foundRates => {
-
-            for (let foundRate of foundRates) {
-              // const imageBuckets: BucketResponse[] = foundRate.imageBuckets as unknown as BucketResponse[];
-              const imageBuckets: BucketResponse[] = JSON.parse(foundRate.imageBuckets as string);
-
-              for (let imageBucket of imageBuckets) {
-                rateImageBuckets.push(imageBucket);
-              }
-            }
-
-            rate.imageBuckets = rateImageBuckets;
-            return rate;
-          })
-        );
-
-
-      // #################################### CASE TRUE ######################################################
-
-      case true:
-        console.log('childRate');
-
-        console.log('look to parentid: ' + rate.parentDocumentId);
-
-        return this.databaseService.getRateById(rate.parentDocumentId).pipe(
-          map(parentRate => {
-            // console.log(parentRate.imageBuckets);
-            const rateImageBuckets: BucketResponse[] = JSON.parse(parentRate.imageBuckets as string);
-            // console.log('rateImageBuckets');
-            // console.log(rateImageBuckets);
-            // console.log(' ');
-            // console.log('deleteImages');
-            // console.log(deleteImages);
-
-            // delete deleted images
-            for (let rateImageBucket of rateImageBuckets) {
-              if (deleteImages.find(i => i.bucketDocumentId === rateImageBucket.$id)) {
-                rateImageBuckets.splice(rateImageBuckets.indexOf(rateImageBucket),1);
-                console.log('lösche bild');
-              }
-            }
-
-            // add new images
-            // const childRateImageBuckets: BucketResponse[] = rate.imageBuckets as unknown as BucketResponse[];
-            const childRateImageBuckets: BucketResponse[] = JSON.parse(rate.imageBuckets as string);
-            console.log(' ');
-            console.log('childRateImageBuckets');
-            console.log(childRateImageBuckets);
-
-            for (let childRateImageBucket of childRateImageBuckets) {
-              if (!rateImageBuckets.find(i => i.$id === childRateImageBucket.$id)) {
-                rateImageBuckets.push(childRateImageBucket);
-                console.log('füge bild hinzu');
-                console.log(childRateImageBucket);
-              }
-            }
-
-            parentRate.imageBuckets = rateImageBuckets;
-            console.log(parentRate.imageBuckets);
-            return parentRate;
-          })
-        )
-    }
-
-  }
-
-
   ngOnDestroy(): void {
     this.statesService.setStatus(Status.Idle);
     this.lastEditOrParentSub.unsubscribe();
@@ -651,4 +469,49 @@ export class AddRateComponent implements OnInit, OnDestroy {
     return filteredTagsArray.join(' ');
   }
 
+  private updateParentRateImageBuckets(rate: Rate, id: string) {
+
+    console.log(rate);
+
+    let toUpdatedRateId = id;
+    if (rate.parentDocumentId.length > 0) {
+      toUpdatedRateId = rate.parentDocumentId;
+      console.log('rate has parent id');
+    }
+
+
+
+    return this.databaseService.getRateById(toUpdatedRateId).pipe(
+      map((parentRate: Rate) => {
+
+        let rateImageBuckets = JSON.parse(rate.imageBuckets as string) as BucketResponse[];
+        let parentRateImageBucketsGlobal = JSON.parse(parentRate.imageBucketsGlobal as string) as BucketResponse[];
+
+        console.log('Länge parentRateImageBucketsGlobal vor löschen von user bildern ' + parentRateImageBucketsGlobal.length);
+
+        // remove all buckets
+        parentRateImageBucketsGlobal = parentRateImageBucketsGlobal.filter(bucket =>
+          !bucket.name.includes(this.authService.user()?.$id!)
+        );
+
+        console.log('Länge parentRateImageBucketsGlobal nach löschen von user bildern ' + parentRateImageBucketsGlobal.length);
+
+        // add images
+        rateImageBuckets.forEach(bucket => {
+          if (!parentRateImageBucketsGlobal.some(parentBucket => parentBucket.$id === bucket.$id)) {
+            parentRateImageBucketsGlobal.push(bucket);
+          }
+        });
+
+        parentRate.imageBucketsGlobal = parentRateImageBucketsGlobal;
+        parentRate.imageBuckets = JSON.parse(parentRate.imageBuckets as string) as BucketResponse[];
+
+        return parentRate;
+      }),
+      concatMap(parentRate => {
+
+        return this.databaseService.updateRate(parentRate);
+      })
+    )
+  }
 }

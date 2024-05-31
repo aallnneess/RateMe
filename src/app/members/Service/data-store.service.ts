@@ -29,7 +29,7 @@ export class DataStoreService {
     this.filterService.searchOb$.subscribe(search => {
       this.databaseService.getAllRatesWithQuery(search, this.filterService.getSearchArray()).subscribe(response => {
         response.documents.forEach(rate => {
-          rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
+          rate.imageBucketsGlobal = JSON.parse(rate.imageBucketsGlobal as unknown as string);
         });
 
         this.rates$.next(response.documents);
@@ -45,7 +45,7 @@ export class DataStoreService {
     return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch(), this.filterService.getSearchArray()).pipe(
       tap(response => {
         response.documents.forEach(rate => {
-          rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
+          rate.imageBucketsGlobal = JSON.parse(rate.imageBucketsGlobal as unknown as string);
         });
 
         this.rates$.next(response.documents);
@@ -61,6 +61,7 @@ export class DataStoreService {
 
   setEditRate(rate: Rate) {
     console.log('set edit rate');
+    console.log(rate);
     const editRate: ParentOrEdit = {
       rate: rate,
       edit: true,

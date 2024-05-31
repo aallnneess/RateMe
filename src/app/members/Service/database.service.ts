@@ -26,6 +26,7 @@ export class DatabaseService {
   addRate(rate: Rate) {
 
     rate.imageBuckets = JSON.stringify(rate.imageBuckets);
+    rate.imageBucketsGlobal = JSON.stringify(rate.imageBucketsGlobal);
 
     return from(this.databases.createDocument(
       this.databaseId,
@@ -37,6 +38,7 @@ export class DatabaseService {
 
   updateRate(rate: Rate) {
     rate.imageBuckets = JSON.stringify(rate.imageBuckets);
+    rate.imageBucketsGlobal = JSON.stringify(rate.imageBucketsGlobal);
 
     return from(this.databases.updateDocument(
       this.databaseId,

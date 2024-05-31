@@ -23,9 +23,9 @@ export class RateCardComponent implements OnInit {
   }
   loadImage() {
 
-    if (typeof this.rate.imageBuckets !== "string") {
+    if (typeof this.rate.imageBucketsGlobal !== "string") {
 
-      this.rate.imageBuckets.forEach(bucketResponse => {
+      this.rate.imageBucketsGlobal.forEach(bucketResponse => {
 
         let newBlobGalleryItemContainer = new BlobGalleryItemContainer();
         newBlobGalleryItemContainer.bucketDocumentId = bucketResponse.$id;
