@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {Databases, ID, Query} from "appwrite";
-import {concatMap, finalize, from, map, of, tap} from "rxjs";
+import {concatMap, finalize, forkJoin, from, map, Observable, of, tap} from "rxjs";
 import {AppwriteService} from "../../core/Services/appwrite.service";
 import {Rate} from "../../core/common/rate";
 import {RateContainer} from "../../core/common/rate-container";
@@ -60,18 +60,53 @@ export class DatabaseService {
     );
   }
 
-  getAllRatesWithQuery(query: string) {
+  getAllRatesWithQuery(search: string, searchWords?: string[]) {
+
+    let querys: Observable<RateContainer>[] = [];
+    let allQueries: string[] = [];
+
+    if (searchWords) {
+
+      if (searchWords.length > 0) {
+
+        searchWords.forEach(word => {
+          allQueries.push(
+            Query.or([
+              Query.contains('title', word),
+              Query.contains('tagsGlobal', word),
+              Query.contains('boughtAtGlobal', word)
+            ]),
+          );
+        });
+
+        if (search.length > 0) {
+          allQueries.push(
+            Query.or([
+              Query.contains('title', search),
+              Query.contains('tagsGlobal', search),
+              Query.contains('boughtAtGlobal', search)
+            ]),
+          );
+        }
+
+      } else {
+        allQueries.push(
+          Query.or([
+            Query.contains('title', search),
+            Query.contains('tagsGlobal', search),
+            Query.contains('boughtAtGlobal', search)
+          ]),
+        );
+      }
+    }
+
     return from(this.databases.listDocuments(
       this.databaseId,
       this.booksCollectionId,
       [
         Query.orderDesc('globalRating'),
         Query.equal('childRate', false),
-        Query.or([
-          Query.contains('title', query),
-          Query.contains('tagsGlobal', query),
-          Query.contains('boughtAtGlobal', query)
-        ]),
+        ...allQueries,
         Query.or([
           Query.equal('rateTopic', this.filterService.getCheckedRecipe() ? 'recipe' : ''),
           Query.equal('rateTopic', this.filterService.getCheckedProduct() ? 'product' : '')
@@ -80,7 +115,7 @@ export class DatabaseService {
     )).pipe(
       map(response => response as unknown as RateContainer),
       tap(rates => console.log(rates))
-    );
+    )
   }
 
   getRateById(id: string) {

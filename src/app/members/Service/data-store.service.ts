@@ -27,7 +27,7 @@ export class DataStoreService {
 
   constructor() {
     this.filterService.searchOb$.subscribe(search => {
-      this.databaseService.getAllRatesWithQuery(search).subscribe(response => {
+      this.databaseService.getAllRatesWithQuery(search, this.filterService.getSearchArray()).subscribe(response => {
         response.documents.forEach(rate => {
           rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);
         });
@@ -42,7 +42,7 @@ export class DataStoreService {
   // Muss von mehr als einer komponente aufgerufen und aboniert werden können.
   // Ergebnis soll aber nur hier verarbeitet werden, daher => tap
   updateRates() {
-    return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch()).pipe(
+    return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch(), this.filterService.getSearchArray()).pipe(
       tap(response => {
         response.documents.forEach(rate => {
           rate.imageBuckets = JSON.parse(rate.imageBuckets as unknown as string);

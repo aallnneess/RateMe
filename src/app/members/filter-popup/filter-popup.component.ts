@@ -74,4 +74,8 @@ export class FilterPopupComponent implements OnInit, OnDestroy, AfterViewInit{
     this.filterService.setSearch(this.form.get('search')?.value);
 
   }
+
+  removeSearchWord(item: string) {
+    this.filterService.removeSearchFromSearchArray(item);
+  }
 }

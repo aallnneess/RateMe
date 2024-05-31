@@ -12,6 +12,9 @@ export class FilterService {
   private search$ = new BehaviorSubject<string>('');
   searchOb$ = this.search$.asObservable();
 
+  private searchArray$ = new BehaviorSubject<string[]>([]);
+  searchArrayOb$ = this.searchArray$.asObservable();
+
   private checkedRecipe$ = new BehaviorSubject<boolean>(true);
   checkedRecipeObservable = this.checkedRecipe$.asObservable();
   private checkedProduct$ = new BehaviorSubject<boolean>(true);
@@ -39,6 +42,25 @@ export class FilterService {
 
   setSearchToNull() {
     this.search$.next('');
+  }
+
+  addSearchToSearchArray(search: string) {
+    let searchArray = this.searchArray$.value;
+    searchArray.push(search);
+    this.searchArray$.next(searchArray);
+    this.setSearchToNull();
+  }
+
+  removeSearchFromSearchArray(search: string) {
+    let searchArray = this.searchArray$.value;
+    searchArray.splice(searchArray.indexOf(search), 1);
+    this.searchArray$.next(searchArray);
+    // to trigger data-store getAllRatesWithQuery...
+    this.search$.next(this.search$.value);
+  }
+
+  getSearchArray() {
+    return this.searchArray$.value;
   }
 
   setCheckedRecipe(checkedRecipe: boolean) {

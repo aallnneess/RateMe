@@ -4,6 +4,7 @@ section {
   align-items: center;
   Z-index: 100;
 
+
   position: fixed;
   background-color: rgba(128, 128, 128, 0.7);
   top: 0;
@@ -30,6 +31,7 @@ section {
   gap: 1rem;
 
   margin-top: 8rem;
+  max-width: 30rem;
 
 
   background-color: white;
@@ -43,5 +45,38 @@ section {
 }
 
 .select-container {
-  margin-top: 2rem;
+  /*margin-top: 2rem;*/
+  text-align: center;
+}
+
+form {
+  position: relative;
+}
+
+.add-btn {
+  position: absolute;
+  height: 2rem;
+  top: 0.8rem;
+  right: 0.8rem;
+}
+
+.seach-words-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.search-item {
+  display: inline-block;
+  max-width: 30rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-item:hover {
+  cursor: pointer;
+  font-weight: 700;
 }
