@@ -75,7 +75,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
    // ####################################################################################
    // ####################################################################################
    // ####################################################################################
-   //                       Edit               ↓
+   //                       TO Edit               ↓
 
 
     switch (this.rateTopic) {
@@ -95,7 +95,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
 
 
-    //                      Edit               ↑
+    //                      TO Edit               ↑
     // ####################################################################################
     // ####################################################################################
     // ####################################################################################
@@ -129,7 +129,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
     this.fileService.addImage(images).pipe(
       concatMap(bucketResponses => {
 
-        // ###################### EDIT ##############################################################
+        // ###################### TO EDIT ##############################################################
 
         let rate = new Rate();
         rate.rateTopic = this.rateTopic;
@@ -174,7 +174,10 @@ export class AddRateComponent implements OnInit, OnDestroy {
         this.nodeServer.getFunctionStatus(this.currentFunctionExecutionId).then(status => {
           console.log('status: ' + status);
           this.currentFunctionExecutionId = '';
-          this.router.navigateByUrl('members');
+
+          this.datastoreService.updateRates().subscribe(() => {
+            this.router.navigateByUrl('members');
+          });
         });
 
 
@@ -197,7 +200,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
             // console.log('child send images:');
             // console.log(result);
 
-            // ###################### EDIT ##############################################################
+            // ###################### TO EDIT ##############################################################
 
             let rate = new Rate();
             rate.rateTopic = this.rateTopic;
@@ -299,7 +302,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
         console.log(this.editRate);
 
-        // ###################### EDIT ##############################################################
+        // ###################### TO EDIT ##############################################################
 
         rate.$id = this.editRate?.$id!;
         rate.rateTopic = this.rateTopic;

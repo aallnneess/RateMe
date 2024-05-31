@@ -51,9 +51,6 @@ export class LoginComponent implements OnInit {
     this.authService.login(
       this.loginForm.get('email')?.value,
       this.loginForm.get('password')?.value
-    ).pipe(
-      concatMap(() => this.authService.setUser()
-      )
     ).subscribe({
       complete: () => {
         this.cleanForm();

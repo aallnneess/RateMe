@@ -1,6 +1,6 @@
 import {computed, inject, Injectable, Signal, signal, WritableSignal} from '@angular/core';
 import {AppwriteService} from "./appwrite.service";
-import {catchError, finalize, from, of, tap, throwError} from "rxjs";
+import {catchError, concatMap, finalize, from, of, tap, throwError} from "rxjs";
 import {Models} from "appwrite";
 import {Router} from "@angular/router";
 import {NodeServerService} from "./node-server.service";
@@ -44,6 +44,7 @@ export class AuthService {
       tap(response => {
         this.loggedIn.set(response);
       }),
+      concatMap(() => this.setUser()),
       catchError(err => {
         return throwError(() => {
           return err.message
@@ -67,6 +68,7 @@ export class AuthService {
     return from(this.nodeServer.getUserWithId(this.loggedIn()?.userId!)).pipe(
       tap(user => {
         this.user.set(user);
+        console.log('setUser');
       })
     );
 

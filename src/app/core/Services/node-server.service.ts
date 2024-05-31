@@ -60,7 +60,7 @@ export class NodeServerService {
 
   async getFunctionStatus(executionId: string) {
     let status: string = '';
-    let attempts = 10;
+    let attempts = 20;
     const retryDelay = 1000;
 
     while (status !== 'completed' && attempts > 0) {
