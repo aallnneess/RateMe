@@ -106,6 +106,7 @@ export class DatabaseService {
       this.databaseId,
       this.booksCollectionId,
       [
+        Query.limit(100),
         Query.orderDesc('globalRating'),
         Query.equal('childRate', false),
         ...allQueries,
