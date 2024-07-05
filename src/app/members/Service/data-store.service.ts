@@ -27,6 +27,7 @@ export class DataStoreService {
   paginationLimit = 20;
   paginationOffset = 0;
   paginationStep = 20;
+  private documentHeightLastPagination = 0;
 
   doPagination() {
     this.paginationOffset += this.paginationStep;
@@ -36,7 +37,11 @@ export class DataStoreService {
 
 
   constructor() {
+
     this.filterService.searchOb$.subscribe(search => {
+
+      this.paginationOffset = 0;
+      this.documentHeightLastPagination = 0;
       this.databaseService.getAllRatesWithQuery(search, this.paginationLimit, this.paginationOffset, this.filterService.getSearchArray()).subscribe(response => {
         response.documents.forEach(rate => {
           rate.imageBucketsGlobal = JSON.parse(rate.imageBucketsGlobal as unknown as string);
@@ -52,7 +57,7 @@ export class DataStoreService {
   // Muss von mehr als einer komponente aufgerufen und aboniert werden können.
   // Ergebnis soll aber nur hier verarbeitet werden, daher => tap
   updateRates() {
-    return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch(), this.paginationLimit, this.paginationOffset,this.filterService.getSearchArray()).pipe(
+    return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch(),this.paginationLimit, this.paginationOffset, this.filterService.getSearchArray()).pipe(
       tap(response => {
         response.documents.forEach(rate => {
           rate.imageBucketsGlobal = JSON.parse(rate.imageBucketsGlobal as unknown as string);
@@ -106,4 +111,16 @@ export class DataStoreService {
     console.log('set editOrParentRateToNull');
     this.parentOrEditRate$.next(null);
   }
+
+
+  setDocumentHeightLastPagination(value: number) {
+    this.documentHeightLastPagination = value;
+  }
+
+  getDocumentHeightLastPagination() {
+    return this.documentHeightLastPagination;
+  }
+
+
+
 }

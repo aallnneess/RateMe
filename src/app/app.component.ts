@@ -9,8 +9,8 @@ export class AppComponent {
 
 
   // SEHR WICHTIG
-  // TODO: Filter funktioniert bei Rezepten nicht ?!
-  // TODO: Login-Loading Animattion
+  // TODO: Login-Loading Animation
+  // TODO: Pagination-Loading Animation
   // TODO: Versions Nummern einführen bzw. DIREKT vor dem upload nach EDIT erneut prüfen ob aktuellstes bild (appwrite changed at....)
   // Sonst kann e sja sein das dass aktuellste dokument in den edit view gekommen ist, aber es zu lange gedauert hat, es zu editieren und wer anders schneller war !
 
@@ -27,5 +27,6 @@ export class AppComponent {
   // TODO: Rezept-Löschen möglichkeit mit bestätigung von random key
   // TODO: User-Bereich
   // TODO: Login-Button loader....
+  // TODO: Pagination-Service
 
 }

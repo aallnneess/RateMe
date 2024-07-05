@@ -114,7 +114,7 @@ export class DatabaseService {
         Query.or([
           Query.equal('rateTopic', this.filterService.getCheckedRecipe() ? 'recipe' : ''),
           Query.equal('rateTopic', this.filterService.getCheckedProduct() ? 'product' : '')
-        ])
+        ]),
       ]
     )).pipe(
       map(response => response as unknown as RateContainer),

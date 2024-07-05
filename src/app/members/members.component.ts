@@ -17,7 +17,7 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   // documentHeight muss bei pagination gespeichert werden, um sicherzustellen, dass wirklich nur 1 x pagination durchgeführt wird
   // da 10px vom documentHeight abgezogen werden (damit es aufjedenfall funktioniert) würde es sonst zu weiteren paginationen kommen
-  documentHeightLastPagination = 0;
+
   documentHeight = 0;
   windowHeight = 0;
   scrollPosition = 0;
@@ -31,10 +31,10 @@ export class MembersComponent implements OnInit, OnDestroy {
     this.scrollPosition = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
 
     // siehe kommentar zu documentHeightLastPagination
-    if (this.windowHeight + this.scrollPosition >= (this.documentHeight) && (this.documentHeightLastPagination + 300) < this.documentHeight) {
+    if (this.windowHeight + this.scrollPosition >= (this.documentHeight) && (this.dataStore.getDocumentHeightLastPagination() + 300) < this.documentHeight) {
       console.log('pagination');
       this.pagination = true;
-      this.documentHeightLastPagination = this.documentHeight;
+      this.dataStore.setDocumentHeightLastPagination(this.documentHeight);
       this.dataStore.doPagination().pipe(
         finalize(() => {
           console.log('finalize');
