@@ -1,19 +1,49 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DataStoreService} from "./Service/data-store.service";
 import {Router} from "@angular/router";
 import {GalleryLoadService} from "./Service/gallery-load.service";
 import {BlobGalleryItemContainer} from "../core/common/blob-gallery-item-container";
 import {ViewportScroller} from "@angular/common";
 import {StateService} from "./Service/state.service";
-import {Subscription} from "rxjs";
+import {finalize, Subscription} from "rxjs";
 import {Rate} from "../core/common/rate";
 
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
-  styleUrl: './members.component.css'
+  styleUrl: './members.component.css',
 })
 export class MembersComponent implements OnInit, OnDestroy {
+
+  // documentHeight muss bei pagination gespeichert werden, um sicherzustellen, dass wirklich nur 1 x pagination durchgeführt wird
+  // da 10px vom documentHeight abgezogen werden (damit es aufjedenfall funktioniert) würde es sonst zu weiteren paginationen kommen
+  documentHeightLastPagination = 0;
+  documentHeight = 0;
+  windowHeight = 0;
+  scrollPosition = 0;
+  pagination = false;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.documentHeight = document.documentElement.scrollHeight - 150;
+    this.windowHeight = window.visualViewport?.height || window.innerHeight;
+    //this.scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    this.scrollPosition = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
+
+    // siehe kommentar zu documentHeightLastPagination
+    if (this.windowHeight + this.scrollPosition >= (this.documentHeight) && (this.documentHeightLastPagination + 300) < this.documentHeight) {
+      console.log('pagination');
+      this.pagination = true;
+      this.documentHeightLastPagination = this.documentHeight;
+      this.dataStore.doPagination().pipe(
+        finalize(() => {
+          console.log('finalize');
+          this.pagination = false;
+        })
+      ).subscribe();
+    }
+
+  }
 
   @ViewChild('membersSection') membersSection!: ElementRef<HTMLElement>;
 
@@ -29,6 +59,7 @@ export class MembersComponent implements OnInit, OnDestroy {
   rates: Rate[] = [];
 
   // Todo: Updated nicht vollständig,nur wenn cards gelöscht/hinzugefügt wurden, aber keine details !
+
   ngOnInit(): void {
     this.manageScrollTo();
   }
@@ -65,6 +96,5 @@ export class MembersComponent implements OnInit, OnDestroy {
     this.stateService.membersScrollYPosition.set(this.viewportScroller.getScrollPosition());
     this.destroyObs.unsubscribe();
   }
-
 
 }

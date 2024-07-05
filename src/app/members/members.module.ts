@@ -25,7 +25,6 @@ import {MemberNavComponent} from "./member-nav/member-nav.component";
 import { StartComponent } from './start/start.component';
 import { FilterPopupComponent } from './filter-popup/filter-popup.component';
 
-
 @NgModule({
     declarations: [
         MembersComponent,

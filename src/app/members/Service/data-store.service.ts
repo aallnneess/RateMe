@@ -24,10 +24,20 @@ export class DataStoreService {
   private parentOrEditRate$ = new BehaviorSubject<ParentOrEdit | null>(null);
   lastEditOrParentRate$  = this.parentOrEditRate$.asObservable();
 
+  paginationLimit = 20;
+  paginationOffset = 0;
+  paginationStep = 20;
+
+  doPagination() {
+    this.paginationOffset += this.paginationStep;
+    console.log('offset: ' + this.paginationOffset);
+    return this.updateRates();
+  }
+
 
   constructor() {
     this.filterService.searchOb$.subscribe(search => {
-      this.databaseService.getAllRatesWithQuery(search, this.filterService.getSearchArray()).subscribe(response => {
+      this.databaseService.getAllRatesWithQuery(search, this.paginationLimit, this.paginationOffset, this.filterService.getSearchArray()).subscribe(response => {
         response.documents.forEach(rate => {
           rate.imageBucketsGlobal = JSON.parse(rate.imageBucketsGlobal as unknown as string);
         });
@@ -42,15 +52,27 @@ export class DataStoreService {
   // Muss von mehr als einer komponente aufgerufen und aboniert werden können.
   // Ergebnis soll aber nur hier verarbeitet werden, daher => tap
   updateRates() {
-    return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch(), this.filterService.getSearchArray()).pipe(
+    return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch(), this.paginationLimit, this.paginationOffset,this.filterService.getSearchArray()).pipe(
       tap(response => {
         response.documents.forEach(rate => {
           rate.imageBucketsGlobal = JSON.parse(rate.imageBucketsGlobal as unknown as string);
         });
 
-        this.rates$.next(response.documents);
-        this.ratesTotal$.next(response.total);
-        console.log('Update Rates array');
+        if (this.paginationOffset > 0) {
+
+
+          for (let rate of response.documents) {
+            this.rates$.value.push(rate);
+          }
+
+          console.log('Update Rates array pagination');
+        } else {
+          this.rates$.next(response.documents);
+          this.ratesTotal$.next(response.total);
+          console.log('Update Rates array');
+        }
+
+
       })
     );
   }

@@ -62,7 +62,7 @@ export class DatabaseService {
     );
   }
 
-  getAllRatesWithQuery(search: string, searchWords?: string[]) {
+  getAllRatesWithQuery(search: string, paginationLimit: number, paginationOffset: number, searchWords?: string[]) {
 
     let querys: Observable<RateContainer>[] = [];
     let allQueries: string[] = [];
@@ -106,7 +106,8 @@ export class DatabaseService {
       this.databaseId,
       this.booksCollectionId,
       [
-        Query.limit(100),
+        Query.limit(paginationLimit),
+        Query.offset(paginationOffset),
         Query.orderDesc('globalRating'),
         Query.equal('childRate', false),
         ...allQueries,
