@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {FullScreenLoaderService} from "./shared/services/full-screen-loader.service";
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,6 @@ import {Component} from '@angular/core';
 export class AppComponent {
 
   // SEHR WICHTIG
-  // TODO: Login-Loading Animation
   // TODO: Pagination-Loading Animation
   // TODO: Versions Nummern einführen bzw. DIREKT vor dem upload nach EDIT erneut prüfen ob aktuellstes bild (appwrite changed at....)
   // Sonst kann e sja sein das dass aktuellste dokument in den edit view gekommen ist, aber es zu lange gedauert hat, es zu editieren und wer anders schneller war !
@@ -17,7 +17,6 @@ export class AppComponent {
   // Normal Wichtig
   // TODO : Komplette Image verarbeiten neu gestalten......
   // TODO: User-Back von Recipe-Detail-Card zurück zum Grid -> keine neue Datenbankanfrage !
-  // TODO: Loader bei Edit/New/Rate Rate nicht als Button Loader sondern als Popup damit es besser wahrgenommen wird
   // TODO: addRates..... Es gibt Probleme bei den Bildern...es wird immer versucht eins zu löschen bei parents....auch auch wenn garkein bild geändert wurde werden bilder gelöscht
   // TODO: Ab und zu merkt "er" sich nicht die scroll position ?!
 
