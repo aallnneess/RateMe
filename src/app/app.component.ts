@@ -9,6 +9,7 @@ import {FullScreenLoaderService} from "./shared/services/full-screen-loader.serv
 export class AppComponent {
 
   // SEHR WICHTIG
+  // TODO: Login-Fehlermeldung anzeigen - Login zurücksetzen !
   // TODO: Pagination-Loading Animation
   // TODO: Versions Nummern einführen bzw. DIREKT vor dem upload nach EDIT erneut prüfen ob aktuellstes bild (appwrite changed at....)
   // Sonst kann e sja sein das dass aktuellste dokument in den edit view gekommen ist, aber es zu lange gedauert hat, es zu editieren und wer anders schneller war !
