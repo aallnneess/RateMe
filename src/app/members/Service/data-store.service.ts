@@ -3,6 +3,7 @@ import {BehaviorSubject, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {FilterService} from "./filter.service";
 import {DatabaseService} from "./database.service";
+import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
 
 export type ParentOrEdit = {
   rate: Rate;
@@ -17,6 +18,7 @@ export class DataStoreService {
 
   databaseService: DatabaseService = inject(DatabaseService);
   filterService: FilterService = inject(FilterService);
+  fullscreenLoaderService = inject(FullScreenLoaderService);
 
   private rates$ = new BehaviorSubject<Rate[]>([]);
   ratesOb$ = this.rates$.asObservable();
@@ -50,6 +52,8 @@ export class DataStoreService {
         this.rates$.next(response.documents);
         this.ratesTotal$.next(response.total);
         console.log('Update Rates array');
+        this.fullscreenLoaderService.setLoadingOff();
+
       });
     });
   }
@@ -75,6 +79,7 @@ export class DataStoreService {
           this.rates$.next(response.documents);
           this.ratesTotal$.next(response.total);
           console.log('Update Rates array');
+          this.fullscreenLoaderService.setLoadingOff();
         }
 
 
@@ -109,6 +114,7 @@ export class DataStoreService {
 
   setEditOrParentRateToNull() {
     console.log('set editOrParentRateToNull');
+    this.fullscreenLoaderService.setLoadingOff();
     this.parentOrEditRate$.next(null);
   }
 

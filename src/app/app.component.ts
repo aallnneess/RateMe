@@ -7,7 +7,6 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
 
-
   // SEHR WICHTIG
   // TODO: Login-Loading Animation
   // TODO: Pagination-Loading Animation
@@ -28,7 +27,5 @@ export class AppComponent {
   // TODO: User-Bereich
   // TODO: Login-Button loader....
   // TODO: Pagination-Service
-
-
 
 }

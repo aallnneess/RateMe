@@ -3,17 +3,6 @@
     <app-rate-card #rateCard [rate]="book" (click)="openRecipeDetail(book.$id, rateCard.images)"></app-rate-card>
   }
 
-<!--  <div class="debug">-->
-<!--    <span>scrollPosition: {{scrollPosition}}</span>-->
-<!--    <span>windowHeight: {{windowHeight}}</span>-->
-<!--    <span>documenthigh - (s+w): {{documentHeight - (scrollPosition + windowHeight)}}</span>-->
-<!--    <span>-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
-<!--    <span>documentHeight: {{documentHeight}}</span>-->
-<!--    <span>documentHeightLastPagination: {{documentHeightLastPagination}}</span>-->
-<!--    <span>-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
-<!--    <span>pagination: {{pagination}}</span>-->
-<!--  </div>-->
-
   @if (pagination) {
     <div class="debug2">
       Lade...

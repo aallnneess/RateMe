@@ -56,8 +56,6 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   destroyObs!: Subscription;
 
-  rates: Rate[] = [];
-
   // Todo: Updated nicht vollständig,nur wenn cards gelöscht/hinzugefügt wurden, aber keine details !
 
   ngOnInit(): void {

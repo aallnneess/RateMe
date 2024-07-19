@@ -11,6 +11,7 @@ import { InputComponent } from './core/Controls/input/input.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {HttpClientModule} from "@angular/common/http";
 import { PopupComponent } from './core/popup/popup.component';
+import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
     declarations: [
@@ -21,13 +22,14 @@ import { PopupComponent } from './core/popup/popup.component';
         InputComponent,
         PopupComponent
     ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
-        HttpClientModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    SharedModule
+  ],
     providers: [],
   exports: [
     InputComponent,

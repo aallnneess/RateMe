@@ -4,6 +4,7 @@ import {AuthService} from "../Services/auth.service";
 import {InputComponent} from "../Controls/input/input.component";
 import {Router} from "@angular/router";
 import {concatMap} from "rxjs";
+import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   fb: FormBuilder = inject(FormBuilder);
   router: Router = inject(Router);
+  fullScreenLoadingService = inject(FullScreenLoaderService);
 
   error = '';
 
@@ -44,6 +46,7 @@ export class LoginComponent implements OnInit {
       this.passwordInput.checkErrors();
       return;
     }
+    this.fullScreenLoadingService.setLoadingOn();
 
     this.loginButton.nativeElement.disabled = true;
 
@@ -58,6 +61,7 @@ export class LoginComponent implements OnInit {
       },
       error: err => {
         this.createErrorMessages(err);
+        this.fullScreenLoadingService.setLoadingOff();
       }
     });
   }

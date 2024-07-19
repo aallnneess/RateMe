@@ -18,6 +18,7 @@ import {PopupService} from "../../core/Services/popup.service";
 import {RecipeTopic} from "./topics/RecipeTopic";
 import {ProductTopic} from "./topics/ProductTopic";
 import {DatabaseService} from "../Service/database.service";
+import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
 
 @Component({
   selector: 'app-add-rate',
@@ -40,6 +41,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
   datastoreService = inject(DataStoreService);
   statesService = inject(StateService);
   popupService = inject(PopupService);
+  fullScreenLoaderService = inject(FullScreenLoaderService);
 
   form!: FormGroup;
 
@@ -112,6 +114,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
     console.log('Send Data Form Valid ? ' + this.form.valid);
     if (this.form.invalid || images.length === 0) return;
+
+    this.fullScreenLoaderService.setLoadingOn();
 
     //console.log('absenden');
     this.submitButton.nativeElement.disabled = true;
