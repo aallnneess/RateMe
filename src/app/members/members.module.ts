@@ -9,7 +9,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MemberInputComponent} from './MemberControls/member-input/member-input.component';
 import {ImageGalleryComponent} from './image-cr/image-gallery/image-gallery.component';
 import { GalleryModule} from "ng-gallery";
-import {SpinnerComponent} from "./MemberControls/spinner/spinner.component";
 import { RateCardDetailsComponent } from './rate-card-details/rate-card-details.component';
 import { AddRateComponent } from './add-rate/add-rate.component';
 import {RateCardComponent} from "./rate-card/recipe-card.component";
@@ -24,6 +23,7 @@ import { ProductViewComponent } from './rate-card-details/product-view/product-v
 import {MemberNavComponent} from "./member-nav/member-nav.component";
 import { StartComponent } from './start/start.component';
 import { FilterPopupComponent } from './filter-popup/filter-popup.component';
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
     declarations: [
@@ -31,7 +31,6 @@ import { FilterPopupComponent } from './filter-popup/filter-popup.component';
         ImageCrComponent,
         MemberInputComponent,
         ImageGalleryComponent,
-        SpinnerComponent,
         RateCardComponent,
         RateCardDetailsComponent,
         AddRateComponent,
@@ -54,7 +53,8 @@ import { FilterPopupComponent } from './filter-popup/filter-popup.component';
     FormsModule,
     ReactiveFormsModule,
     GalleryModule,
-    LightboxDirective
+    LightboxDirective,
+    SharedModule
 
   ]
 })
