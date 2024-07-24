@@ -46,6 +46,12 @@ export class AuthService {
       }),
       concatMap(() => this.setUser()),
       catchError(err => {
+
+        // Ist eine session vorhanden, soll diese genutzt werden
+        if (err === 'Creation of a session is prohibited when a session is active.') {
+          return this.getSession();
+        }
+
         return throwError(() => {
           return err.message
         })

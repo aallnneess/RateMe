@@ -27,5 +27,6 @@ export class AppComponent {
   // TODO: User-Bereich
   // TODO: Login-Button loader....
   // TODO: Pagination-Service
+  // TODO: Mehrere Bilder gleichzeitig hochladen
 
 }

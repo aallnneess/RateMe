@@ -5,6 +5,7 @@ import {InputComponent} from "../Controls/input/input.component";
 import {Router} from "@angular/router";
 import {concatMap} from "rxjs";
 import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
+import {PopupService} from "../Services/popup.service";
 
 @Component({
   selector: 'app-login',
@@ -15,12 +16,12 @@ export class LoginComponent implements OnInit {
 
   @ViewChild('mailInput') mailInput!: InputComponent;
   @ViewChild('passwordInput') passwordInput!: InputComponent;
-  @ViewChild('loginButton') loginButton!: ElementRef<HTMLButtonElement>;
 
   loginForm!: FormGroup;
   fb: FormBuilder = inject(FormBuilder);
   router: Router = inject(Router);
   fullScreenLoadingService = inject(FullScreenLoaderService);
+  popupService = inject(PopupService);
 
   error = '';
 
@@ -48,9 +49,6 @@ export class LoginComponent implements OnInit {
     }
     this.fullScreenLoadingService.setLoadingOn();
 
-    this.loginButton.nativeElement.disabled = true;
-
-
     this.authService.login(
       this.loginForm.get('email')?.value,
       this.loginForm.get('password')?.value
@@ -77,15 +75,43 @@ export class LoginComponent implements OnInit {
 
     console.log(err);
 
-    if (err === 'Invalid credentials. Please check the email and password.') {
-      this.error = 'E-Mail oder Passwort falsch.'
+    switch (err) {
+
+      case 'Invalid credentials. Please check the email and password.': {
+        this.error = 'E-Mail oder Passwort falsch.'
+        break;
+      }
+
+      case 'Invalid `email` param: Value must be a valid email address': {
+        this.error = 'E-Mail ist ungültig.'
+        break;
+      }
+
+      case 'Rate limit for the current endpoint has been exceeded. Please try again after some time.': {
+        this.error = 'Zu viele Login Versuche. Bitte eine Weile warten.'
+        break;
+      }
+
+      case 'Network request failed': {
+        this.error = 'Verbindung fehlgeschlagen.'
+        break;
+      }
+
+
+
+      default: {
+        this.error = err.toString();
+      }
+
     }
 
-    if (err === 'Invalid `email` param: Value must be a valid email address') {
-      this.error = 'E-Mail ist ungültig.'
-    }
-
-
+    // if (err === 'Invalid credentials. Please check the email and password.') {
+    //   this.error = 'E-Mail oder Passwort falsch.'
+    // }
+    //
+    // if (err === 'Invalid `email` param: Value must be a valid email address') {
+    //   this.error = 'E-Mail ist ungültig.'
+    // }
 
   }
 
