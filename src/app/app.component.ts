@@ -9,13 +9,14 @@ import {FullScreenLoaderService} from "./shared/services/full-screen-loader.serv
 export class AppComponent {
 
   // SEHR WICHTIG
-  // TODO: Login-Fehlermeldung anzeigen - Login zurücksetzen !
-  // TODO: Pagination-Loading Animation
+  // TODO: Gelöst ?! - > Nach edit ist änderung nicht aktualisiert
+  // TODO: image loader
   // TODO: Versions Nummern einführen bzw. DIREKT vor dem upload nach EDIT erneut prüfen ob aktuellstes bild (appwrite changed at....)
   // Sonst kann e sja sein das dass aktuellste dokument in den edit view gekommen ist, aber es zu lange gedauert hat, es zu editieren und wer anders schneller war !
 
 
   // Normal Wichtig
+  // TODO: Pagination-Loading Animation
   // TODO : Komplette Image verarbeiten neu gestalten......
   // TODO: User-Back von Recipe-Detail-Card zurück zum Grid -> keine neue Datenbankanfrage !
   // TODO: addRates..... Es gibt Probleme bei den Bildern...es wird immer versucht eins zu löschen bei parents....auch auch wenn garkein bild geändert wurde werden bilder gelöscht

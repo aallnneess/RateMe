@@ -77,6 +77,7 @@ export class DataStoreService {
           console.log('Update Rates array pagination');
         } else {
           this.rates$.next(response.documents);
+          //console.log(response.documents);
           this.ratesTotal$.next(response.total);
           console.log('Update Rates array');
           this.fullscreenLoaderService.setLoadingOff();

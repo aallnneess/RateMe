@@ -117,7 +117,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
     this.fullScreenLoaderService.setLoadingOn();
 
-    //console.log('absenden');
+    console.log('absenden');
     this.submitButton.nativeElement.disabled = true;
 
     if (this.parentRate && !this.editRate) {
@@ -192,7 +192,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
-        this.popupService.setErrorMessage(e);
+        this.popupService.setErrorMessage('Verbindung fehlgeschlagen.');
+        this.submitButton.nativeElement.disabled = false;
       }})
   }
 
@@ -268,7 +269,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
-        this.popupService.setErrorMessage(e);
+        this.popupService.setErrorMessage('Verbindung fehlgeschlagen');
+        this.submitButton.nativeElement.disabled = false;
       }});
   }
 
@@ -345,7 +347,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
       })
     ).subscribe({
       next: () => {
-
         this.datastoreService.updateRates().subscribe(() => {
           this.router.navigateByUrl('members');
         });
@@ -354,7 +355,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
-        this.popupService.setErrorMessage(e);
+        this.popupService.setErrorMessage('Verbindung fehlgeschlagen.');
+        this.submitButton.nativeElement.disabled = false;
       }
     });
 
