@@ -27,7 +27,7 @@ export class MembersComponent implements OnInit, OnDestroy {
   onWindowScroll() {
     this.documentHeight = document.documentElement.scrollHeight - 150;
     this.windowHeight = window.visualViewport?.height || window.innerHeight;
-    //this.scrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+
     this.scrollPosition = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
 
     // siehe kommentar zu documentHeightLastPagination

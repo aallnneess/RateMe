@@ -7,8 +7,5 @@ import {FullScreenLoaderService} from "../services/full-screen-loader.service";
   styleUrl: './fullscreen-spinner.component.css'
 })
 export class FullscreenSpinnerComponent {
-
   fullScreenLoaderService = inject(FullScreenLoaderService);
-
-
 }
