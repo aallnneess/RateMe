@@ -9,13 +9,12 @@ import { LoginComponent } from './core/login/login.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { InputComponent } from './core/Controls/input/input.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {HttpClientModule} from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { PopupComponent } from './core/popup/popup.component';
 import {SharedModule} from "./shared/shared.module";
 import { NotFoundComponent } from './core/not-found/not-found.component';
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         HomeComponent,
         TopNavComponent,
@@ -24,19 +23,13 @@ import { NotFoundComponent } from './core/not-found/not-found.component';
         PopupComponent,
         NotFoundComponent
     ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    SharedModule
-  ],
-    providers: [],
-  exports: [
-    InputComponent,
-    PopupComponent
-  ],
-    bootstrap: [AppComponent]
-})
+    exports: [
+        InputComponent,
+        PopupComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        SharedModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
