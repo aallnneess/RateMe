@@ -1,7 +1,7 @@
-import {computed, inject, Injectable, Signal, signal, WritableSignal} from '@angular/core';
+import {inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {AppwriteService} from "./appwrite.service";
-import {catchError, concatMap, finalize, from, of, tap, throwError} from "rxjs";
-import {Models} from "appwrite";
+import {catchError, concatMap, from, Observable, tap, throwError} from "rxjs";
+import {ID, Models} from "appwrite";
 import {Router} from "@angular/router";
 import {NodeServerService} from "./node-server.service";
 import {UserInfo} from "../common/user-info";
@@ -17,10 +17,6 @@ export class AuthService {
   appwrite = inject(AppwriteService);
   router = inject(Router);
   nodeServer = inject(NodeServerService);
-
-  constructor() {
-
-  }
 
   getSession() {
     return from(this.appwrite.account.getSession('current')).pipe(

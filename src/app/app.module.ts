@@ -12,6 +12,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {HttpClientModule} from "@angular/common/http";
 import { PopupComponent } from './core/popup/popup.component';
 import {SharedModule} from "./shared/shared.module";
+import { NotFoundComponent } from './core/not-found/not-found.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import {SharedModule} from "./shared/shared.module";
         TopNavComponent,
         LoginComponent,
         InputComponent,
-        PopupComponent
+        PopupComponent,
+        NotFoundComponent
     ],
   imports: [
     BrowserModule,

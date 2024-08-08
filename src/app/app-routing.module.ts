@@ -2,12 +2,16 @@ import {inject, NgModule} from '@angular/core';
 import {CanMatchFn, RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from "./core/home/home.component";
 import {LoginComponent} from "./core/login/login.component";
+import {NotFoundComponent} from "./core/not-found/not-found.component";
 import {AuthService} from "./core/Services/auth.service";
 
 const canMatchUser: CanMatchFn = () => {
-  //console.log('canMatchFn');
-  return !!inject(AuthService).loggedIn();
-}
+  console.log('canMatchFn');
+
+  const authService = inject(AuthService);
+
+  return authService.loggedIn() !== null;
+};
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -16,7 +20,7 @@ const routes: Routes = [
     loadChildren: () => import('./members/members.module').then(m => m.MembersModule),
     canMatch: [canMatchUser]
   },
-   { path: '**', component: HomeComponent }
+   { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
@@ -24,3 +28,6 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+
+

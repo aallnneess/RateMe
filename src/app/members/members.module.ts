@@ -24,6 +24,7 @@ import {MemberNavComponent} from "./member-nav/member-nav.component";
 import { StartComponent } from './start/start.component';
 import { FilterPopupComponent } from './filter-popup/filter-popup.component';
 import {SharedModule} from "../shared/shared.module";
+import {RouterOutlet} from "@angular/router";
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import {SharedModule} from "../shared/shared.module";
     ReactiveFormsModule,
     GalleryModule,
     LightboxDirective,
-    SharedModule
+    SharedModule,
+    RouterOutlet
 
   ]
 })

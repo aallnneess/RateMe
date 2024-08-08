@@ -1,5 +1,4 @@
-import {Component, inject} from '@angular/core';
-import {FullScreenLoaderService} from "./shared/services/full-screen-loader.service";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
