@@ -1,5 +1,5 @@
 import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Rate} from "../../core/common/rate";
 import {DataStoreService} from "../Service/data-store.service";
 import {GalleryItem} from "ng-gallery";
@@ -8,7 +8,6 @@ import {AuthService} from "../../core/Services/auth.service";
 import {Subject, takeUntil} from "rxjs";
 import {DatabaseService} from "../Service/database.service";
 import {AppwriteService} from "../../core/Services/appwrite.service";
-import {ID} from "appwrite";
 
 
 @Component({
@@ -17,6 +16,9 @@ import {ID} from "appwrite";
   styleUrl: './rate-card-details.component.css'
 })
 export class RateCardDetailsComponent implements OnInit, OnDestroy {
+
+
+
   route = inject(ActivatedRoute);
   router = inject(Router);
   dataStore = inject(DataStoreService);
@@ -36,23 +38,6 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   appwriteService = inject(AppwriteService);
-
-  constructor() {
-
-    window.addEventListener('popstate', () => {
-
-      this.appwriteService.databases.createDocument(
-        '66b4abb3003643a78720',
-        '66b4abcc0019de1c1653',
-        ID.unique(),
-        {
-          href: location.href
-        }
-      );
-
-    });
-
-  }
 
   ngOnInit(): void {
     this.rate = this.dataStore.getRate(this.route.snapshot.paramMap.get('id')!)!;
@@ -121,15 +106,6 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
 
-    this.appwriteService.databases.createDocument(
-      '66b4abb3003643a78720',
-      '66b4abcc0019de1c1653',
-      ID.unique(),
-      {
-        href: location.href,
-        destroy: 'true'
-      }
-    );
   }
 
 }

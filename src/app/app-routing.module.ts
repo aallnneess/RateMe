@@ -20,7 +20,7 @@ const routes: Routes = [
     loadChildren: () => import('./members/members.module').then(m => m.MembersModule),
     canMatch: [canMatchUser]
   },
-   { path: '**', component: NotFoundComponent }
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

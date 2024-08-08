@@ -5,14 +5,12 @@ import {AddRateComponent} from "./add-rate/add-rate.component";
 import {StartComponent} from "./start/start.component";
 import {MembersComponent} from "./members.component";
 
-
 const routes: Routes = [
   { path: '', component: StartComponent, children: [
       { path: '', redirectTo: 'cards', pathMatch: 'full' },
       { path: 'cards', component: MembersComponent},
       { path: 'addRate/:id', component: AddRateComponent},
-      { path: 'rateRecipe/:id', component: RateCardDetailsComponent},
-      { path: 'bbb', component: MembersComponent }
+      { path: 'rateRecipe/:id', component: RateCardDetailsComponent}
     ]},
 ];
 
