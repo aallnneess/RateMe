@@ -1,77 +1,43 @@
-import {inject, Injectable, signal, WritableSignal} from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
+import {Models} from "appwrite";
 import {AppwriteService} from "./appwrite.service";
-import {catchError, concatMap, from, Observable, tap, throwError} from "rxjs";
-import {ID, Models} from "appwrite";
 import {Router} from "@angular/router";
-import {NodeServerService} from "./node-server.service";
-import {UserInfo} from "../common/user-info";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  loggedIn: WritableSignal<Models.Session|null> = signal(null);
-  user: WritableSignal<UserInfo|null> = signal(null);
-
-  appwrite = inject(AppwriteService);
+  appwriteService = inject(AppwriteService);
   router = inject(Router);
-  nodeServer = inject(NodeServerService);
 
-  getSession() {
-    return from(this.appwrite.account.getSession('current')).pipe(
-      tap(response => {
-        this.setSession(response);
-        this.router.navigateByUrl('members')
-      }),
-      catchError(err => {
-        return throwError(() => {
-          return 'No Session';
-        })
-      })
-    )
+  #sessionSignal = signal<Models.Session | null | undefined>(undefined);
+  session = this.#sessionSignal.asReadonly();
+
+  loggedIn = computed(() => !!this.session());
+
+  async lookForSession(): Promise<Models.Session> {
+    console.log('authService lookForSession');
+    const session = await this.appwriteService.account.getSession('current');
+    console.log('authService lookForSession', session);
+    if (!session) this.#sessionSignal.set(session);
+    this.#sessionSignal.set(session);
+    return session;
   }
 
-  login(email: string, password: string) {
-    return from(this.appwrite.account.createEmailPasswordSession(
+  async login(email: string, password: string): Promise<Models.Session | null> {
+    const session = await this.appwriteService.account.createEmailPasswordSession(
       email,
       password
-    )).pipe(
-      tap(response => {
-        this.loggedIn.set(response);
-      }),
-      concatMap(() => this.setUser()),
-      catchError(err => {
-
-        // Ist eine session vorhanden, soll diese genutzt werden
-        if (err === 'Creation of a session is prohibited when a session is active.') {
-          return this.getSession();
-        }
-
-        return throwError(() => {
-          return err.message
-        })
-      })
     );
+    this.#sessionSignal.set(session);
+    return session;
   }
 
-  setSession(session: Models.Session) {
-    //console.log('Set session:');
-    this.loggedIn.set(session);
-
-    if (this.loggedIn()) {
-      this.nodeServer.getUserWithId(this.loggedIn()?.userId!).subscribe(user => {
-        this.user.set(user);
-      });
-    }
+  async logout(): Promise<void> {
+    const result = await this.appwriteService.account.deleteSession(this.session()!.$id);
+    this.#sessionSignal.set(null);
+    this.router.navigate(['/']);
   }
 
-  setUser() {
-    return from(this.nodeServer.getUserWithId(this.loggedIn()?.userId!)).pipe(
-      tap(user => {
-        this.user.set(user);
-        console.log('setUser');
-      })
-    );
-  }
 }

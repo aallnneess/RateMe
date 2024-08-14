@@ -1,9 +1,8 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, effect, inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../Services/auth.service";
 import {InputComponent} from "../Controls/input/input.component";
 import {Router} from "@angular/router";
-import {concatMap} from "rxjs";
 import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
 import {PopupService} from "../Services/popup.service";
 
@@ -27,6 +26,15 @@ export class LoginComponent implements OnInit {
 
   authService = inject(AuthService);
 
+
+  constructor() {
+    effect(() => {
+      if (this.authService.loggedIn()) {
+        this.router.navigate(['/members']);
+      }
+    });
+  }
+
   ngOnInit(): void {
 
     this.loginForm = this.fb.group({
@@ -40,7 +48,7 @@ export class LoginComponent implements OnInit {
   }
 
 
-  login() {
+  async login() {
     console.log('Login: ' + this.loginForm.status);
     if (this.loginForm.invalid) {
       this.mailInput.checkErrors();
@@ -49,19 +57,18 @@ export class LoginComponent implements OnInit {
     }
     this.fullScreenLoadingService.setLoadingOn();
 
-    this.authService.login(
-      this.loginForm.get('email')?.value,
-      this.loginForm.get('password')?.value
-    ).subscribe({
-      complete: () => {
-        this.cleanForm();
-        this.router.navigateByUrl('members');
-      },
-      error: err => {
-        this.createErrorMessages(err);
-        this.fullScreenLoadingService.setLoadingOff();
-      }
-    });
+    try {
+      const session = await this.authService.login(
+        this.loginForm.get('email')?.value,
+        this.loginForm.get('password')?.value
+      );
+      this.cleanForm();
+      this.router.navigateByUrl('members');
+    } catch (err) {
+      this.createErrorMessages(err as string);
+      this.fullScreenLoadingService.setLoadingOff();
+    }
+
   }
 
   cleanForm() {

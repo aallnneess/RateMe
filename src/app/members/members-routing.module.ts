@@ -4,13 +4,16 @@ import {RateCardDetailsComponent} from "./rate-card-details/rate-card-details.co
 import {AddRateComponent} from "./add-rate/add-rate.component";
 import {StartComponent} from "./start/start.component";
 import {MembersComponent} from "./members.component";
+import {rateRecipeGuard} from "../core/guards/rateRecipe.guard";
+
+
 
 const routes: Routes = [
   { path: '', component: StartComponent, children: [
       { path: '', redirectTo: 'cards', pathMatch: 'full' },
       { path: 'cards', component: MembersComponent},
       { path: 'addRate/:id', component: AddRateComponent},
-      { path: 'rateRecipe/:id', component: RateCardDetailsComponent}
+      { path: 'rateRecipe/:id', component: RateCardDetailsComponent, canActivate: [rateRecipeGuard]}
     ]},
 ];
 

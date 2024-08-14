@@ -8,6 +8,7 @@ import {AuthService} from "../../core/Services/auth.service";
 import {Subject, takeUntil} from "rxjs";
 import {DatabaseService} from "../Service/database.service";
 import {AppwriteService} from "../../core/Services/appwrite.service";
+import {UserService} from "../../core/Services/user.service";
 
 
 @Component({
@@ -23,6 +24,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   galleryLoadService = inject(GalleryLoadService);
   dataBaseService = inject(DatabaseService);
   authService = inject(AuthService);
+  userService = inject(UserService);
 
   @ViewChild('galleryDiv') galleryDiv!: ElementRef<HTMLDivElement>;
   @ViewChild('galleryDivAbsolut') galleryDivAbsolut!: ElementRef<HTMLDivElement>;
@@ -63,7 +65,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   }
 
   showAddChildRate() {
-    this.dataBaseService.checkIfUserHasRated(this.authService.user()!.$id,this.rate.notesCollectionId).subscribe(result => {
+    this.dataBaseService.checkIfUserHasRated(this.userService.user()!.$id,this.rate.notesCollectionId).subscribe(result => {
       if (result.total === 0) {
         this.showAddChildButton = true;
       }
@@ -73,11 +75,11 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
 
   editRate() {
 
-    if (this.rate.userId !== this.authService.user()!.$id) {
+    if (this.rate.userId !== this.userService.user()!.$id) {
 
       // We need everytime the latest image
       this.dataBaseService.getRateByUserIdAndParentDocumentId(
-        this.authService.user()!.$id,
+        this.userService.user()!.$id,
         this.rate.$id
       ).subscribe(result => {
         if (result) {

@@ -19,6 +19,7 @@ import {RecipeTopic} from "./topics/RecipeTopic";
 import {ProductTopic} from "./topics/ProductTopic";
 import {DatabaseService} from "../Service/database.service";
 import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
+import {UserService} from "../../core/Services/user.service";
 
 @Component({
   selector: 'app-add-rate',
@@ -28,6 +29,7 @@ import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.
 export class AddRateComponent implements OnInit, OnDestroy {
 
   authService = inject(AuthService);
+  userService = inject(UserService);
 
   submitButton!: ElementRef<HTMLButtonElement>;
 
@@ -144,8 +146,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.rating = this.form.get('rating')?.value;
         rate.tags = this.form.get('tags')?.value + ' ';
         rate.tagsGlobal = rate.tags;
-        rate.username = this.authService.user()!.name;
-        rate.userId = this.authService.user()!.$id;
+        rate.username = this.userService.user()!.name;
+        rate.userId = this.userService.user()!.$id;
         rate.globalRating = rate.rating;
 
         // Recipe
@@ -218,8 +220,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
             // rate.tags = this.form.get('tags')?.value;
             rate.tags = this.removeParentTags(this.form.get('tags')?.value, this.parentRate?.tags!);
 
-            rate.username = this.authService.user()!.name;
-            rate.userId = this.authService.user()!.$id;
+            rate.username = this.userService.user()!.name;
+            rate.userId = this.userService.user()!.$id;
             rate.notesCollectionId = this.parentRate!.notesCollectionId;
             rate.parentDocumentId = this.parentRate!.$id;
             rate.childRate = true;
@@ -497,7 +499,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
         // remove all buckets
         parentRateImageBucketsGlobal = parentRateImageBucketsGlobal.filter(bucket =>
-          !bucket.name.includes(this.authService.user()?.$id!)
+          !bucket.name.includes(this.userService.user()?.$id!)
         );
 
         console.log('Länge parentRateImageBucketsGlobal nach löschen von user bildern ' + parentRateImageBucketsGlobal.length);

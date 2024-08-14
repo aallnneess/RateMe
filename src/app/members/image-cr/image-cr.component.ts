@@ -6,6 +6,7 @@ import {StateService, Status} from "../Service/state.service";
 import {BlobCustom} from "../../core/common/blob-custom";
 import {GalleryItemCustom} from "../../core/common/gallery-item-custom";
 import {AuthService} from "../../core/Services/auth.service";
+import {UserService} from "../../core/Services/user.service";
 
 @Component({
   selector: 'app-image-cr',
@@ -15,6 +16,7 @@ import {AuthService} from "../../core/Services/auth.service";
 export class ImageCrComponent implements OnInit {
 
   authService = inject(AuthService);
+  userService = inject(UserService);
   galleryLoadService: GalleryLoadService = inject(GalleryLoadService);
   statesService = inject(StateService);
 
@@ -62,7 +64,7 @@ export class ImageCrComponent implements OnInit {
           break;
 
         case Status.Edit:
-          if (blob.userId === this.authService.user()?.$id) {
+          if (blob.userId === this.userService.user()?.$id) {
             this.blobs.push(blob);
           }
           break;

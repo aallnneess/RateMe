@@ -1,4 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {AuthService} from "./core/Services/auth.service";
+import {UserService} from "./core/Services/user.service";
 
 @Component({
   selector: 'app-root',
@@ -6,7 +8,27 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  authService = inject(AuthService);
+  userService = inject(UserService);
 
+  constructor() {
+    this.checkLogin();
+  }
+
+  async checkLogin()
+  {
+    if (!this.authService.loggedIn()) {
+      try {
+        const session = await this.authService.lookForSession();
+        if (session) {
+          await this.userService.loadUser(session.userId);
+        }
+      } catch (err) {
+        console.error('isUserAuthenticated Error: ', err);
+      }
+
+    }
+  }
   // SEHR WICHTIG
   // TODO: image loader
   // TODO: Versions Nummern einführen bzw. DIREKT vor dem upload nach EDIT erneut prüfen ob aktuellstes objekt (appwrite changed at....)

@@ -1,7 +1,7 @@
 section {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100svh;
   align-items: center;
   justify-content: center;
 }

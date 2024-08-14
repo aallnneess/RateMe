@@ -128,6 +128,10 @@ export class DataStoreService {
     return this.documentHeightLastPagination;
   }
 
+  getRatesSize() {
+    return this.rates$.value.length;
+  }
+
 
 
 }

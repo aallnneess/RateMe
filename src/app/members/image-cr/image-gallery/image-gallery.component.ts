@@ -4,6 +4,7 @@ import {GalleryLoadService} from "../../Service/gallery-load.service";
 import {Subject, takeUntil} from "rxjs";
 import {AuthService} from "../../../core/Services/auth.service";
 import {StateService, Status} from "../../Service/state.service";
+import {UserService} from "../../../core/Services/user.service";
 
 @Component({
   selector: 'app-image-gallery',
@@ -20,6 +21,7 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
   galleryLoadService: GalleryLoadService = inject(GalleryLoadService);
   authService: AuthService = inject(AuthService);
   statesService = inject(StateService);
+  userService = inject(UserService);
 
   items: GalleryItem[] = [];
   state!: GalleryState;
@@ -59,7 +61,7 @@ export class ImageGalleryComponent implements OnInit, AfterViewChecked, OnDestro
     if (this.statesService.currentStatus() === Status.Edit) {
 
       if (this.items[this.imageIndex].data && this.items[this.imageIndex].data!.args && this.items[this.imageIndex].data!.args['userId']) {
-        return this.authService.user()?.$id! === this.items[this.imageIndex]!.data!.args['userId'];
+        return this.userService.user()?.$id! === this.items[this.imageIndex]!.data!.args['userId'];
       }
     }
 

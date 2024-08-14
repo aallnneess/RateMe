@@ -4,6 +4,7 @@ import {ID, Models, Storage} from "appwrite";
 import {catchError, forkJoin, from, Observable, of} from "rxjs";
 import {AuthService} from "./auth.service";
 import {BlobGalleryItemContainer} from "../common/blob-gallery-item-container";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class FileService {
 
   appwriteService: AppwriteService = inject(AppwriteService);
   authService = inject(AuthService);
+  userService = inject(UserService);
   storage!: Storage;
 
   imagesBucket: string = '6571b3d3847e479344fd';
@@ -26,7 +28,7 @@ export class FileService {
       return of([]); // Rückgabe eines Observables mit einem leeren Array
     }
 
-    const fileName = 'userId-' + this.authService.user()?.$id + '-userName-' + this.authService.user()?.name;
+    const fileName = 'userId-' + this.userService.user()?.$id + '-userName-' + this.userService.user()?.name;
 
     const observables: Observable<Models.File | string>[] = images.map(image => {
 

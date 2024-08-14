@@ -4,6 +4,7 @@ import {Note} from "../../../core/common/note";
 import {NotesService} from "../../Service/notes.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../core/Services/auth.service";
+import {UserService} from "../../../core/Services/user.service";
 
 @Component({
   selector: 'app-note',
@@ -20,6 +21,7 @@ export class NoteComponent implements OnInit {
   notesService = inject(NotesService);
   formBuilder = inject(FormBuilder);
   authService = inject(AuthService);
+  userService = inject(UserService);
 
   @Input() rate!: Rate;
   notes: Note[] = [];
@@ -42,8 +44,8 @@ export class NoteComponent implements OnInit {
 
       const note = new Note(
         this.addForm.get('addNote')?.value,
-        this.authService.user()!.name,
-        this.authService.user()!.$id
+        this.userService.user()!.name,
+        this.userService.user()!.$id
       );
 
       this.notesService.addNote(this.rate.notesCollectionId,note).subscribe(() => {

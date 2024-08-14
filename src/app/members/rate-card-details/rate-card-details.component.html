@@ -27,7 +27,7 @@
       reviews
     </span>
     </button>
-  } @else if (authService.user()?.$id && showAddChildButtonChecked) {
+  } @else if (userService.user()?.$id && showAddChildButtonChecked) {
     <button class="icon-button add-rate-button" (click)="editRate()">
       <span class="material-symbols-outlined">
       edit

@@ -130,11 +130,11 @@ html {
   /* 10px default... */
   /* Browser Default 16px / 62.5% = 10px */
   font-size: 62.5%;
-  height: 100%;
+  height: 100svh;
 }
 
 body {
-  height: 100%;
+  height: 100svh;
   font-family: 'Roboto', sans-serif;
 }
 
