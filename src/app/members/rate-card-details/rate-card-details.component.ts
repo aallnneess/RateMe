@@ -17,8 +17,6 @@ import {AppwriteService} from "../../core/Services/appwrite.service";
 })
 export class RateCardDetailsComponent implements OnInit, OnDestroy {
 
-
-
   route = inject(ActivatedRoute);
   router = inject(Router);
   dataStore = inject(DataStoreService);
