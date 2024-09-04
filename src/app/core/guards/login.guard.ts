@@ -3,7 +3,7 @@ import {inject} from "@angular/core";
 import {AuthService} from "../Services/auth.service";
 import {UserService} from "../Services/user.service";
 
-export const isUserAuthenticated: CanActivateFn = async (
+export const checkLogin: CanActivateFn = async (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot) => {
 
@@ -11,7 +11,7 @@ export const isUserAuthenticated: CanActivateFn = async (
   const userService = inject(UserService);
   const router = inject(Router);
 
-  console.log('Guard');
+  console.log('Login Guard');
 
   // If the user is not logged in, a current session is checked
   // if there is one, the user is logged in
@@ -28,16 +28,13 @@ export const isUserAuthenticated: CanActivateFn = async (
   }
 
 
-  if (authService.loggedIn()) {
-    console.log('return true');
+  if (!authService.loggedIn()) {
     return true;
   }
 
   else {
-    console.log('return false');
-    return router.navigate(['/login']);
+    return router.navigate(['/members']);    //    <----------- ANPASSEN !! --------------------------->
   }
 }
-
 
 

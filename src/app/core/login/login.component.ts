@@ -5,6 +5,7 @@ import {InputComponent} from "../Controls/input/input.component";
 import {Router} from "@angular/router";
 import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
 import {PopupService} from "../Services/popup.service";
+import {UserService} from "../Services/user.service";
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginComponent implements OnInit {
   error = '';
 
   authService = inject(AuthService);
+  userService = inject(UserService);
 
 
   constructor() {
@@ -62,6 +64,11 @@ export class LoginComponent implements OnInit {
         this.loginForm.get('email')?.value,
         this.loginForm.get('password')?.value
       );
+
+      if (session) {
+        await this.userService.loadUser(session.userId);
+      }
+
       this.cleanForm();
       this.router.navigateByUrl('members');
     } catch (err) {

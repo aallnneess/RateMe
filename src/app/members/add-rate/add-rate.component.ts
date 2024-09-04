@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {AuthService} from "../../core/Services/auth.service";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {FileService} from "../../core/Services/file.service";
@@ -20,6 +20,7 @@ import {ProductTopic} from "./topics/ProductTopic";
 import {DatabaseService} from "../Service/database.service";
 import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
 import {UserService} from "../../core/Services/user.service";
+import {Models} from "appwrite";
 
 @Component({
   selector: 'app-add-rate',

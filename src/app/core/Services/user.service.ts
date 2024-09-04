@@ -11,14 +11,12 @@ export class UserService {
 
   appwriteService = inject(AppwriteService);
 
-  constructor() { }
-
   async loadUser(userId: string) {
     // get user
     const user = await this.getUser(userId);
     if (user) {
       this.user.set(user);
-      console.log('User ' + this.user()?.email + ' loaded.');
+      console.log('User ' + this.user()?.name + ' loaded.');
     }
   }
 
