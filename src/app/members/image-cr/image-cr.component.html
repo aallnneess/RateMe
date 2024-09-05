@@ -1,7 +1,7 @@
 <div class="image-container">
 
   <label class="blue-button">
-    <input #input type="file" (change)="fileChangeEvent($event)" (input)="imageSelect()" />
+    <input #input type="file" (change)="fileChangeEvent($event)" (input)="imageSelect()" accept="image/*" />
     <h3 class="text-small">
       Bild auswählen
     </h3>
@@ -15,7 +15,7 @@
 
 
 
-  @if (input.value) {
+  @if (input.value && !inputInvalid) {
 
     <span class="blue-button material-symbols-outlined add-button" (click)="add()">
       add

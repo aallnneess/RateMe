@@ -37,6 +37,8 @@ export class ImageCrComponent implements OnInit {
   croppedImage: any = '';
   croppedImageBlob!: Blob | null;
 
+  inputInvalid = false;
+
   ngOnInit(): void {
     // clean imagesNewOrEdit array
     this.galleryLoadService.imagesNewOrEdit.set([]);
@@ -98,10 +100,10 @@ export class ImageCrComponent implements OnInit {
     this.showLoader = true;
   }
 
-
-
   fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
+    if (this.isValid(event)) {
+      this.imageChangedEvent = event;
+    }
   }
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.objectUrl;
@@ -129,6 +131,23 @@ export class ImageCrComponent implements OnInit {
     this.galleryLoadService.addBlobImages(this.blobs);
      console.log('state: ' + stateId);
      console.log(this.blobs);
+  }
+
+  isValid(event: any) {
+    this.inputInvalid = false;
+    const file = event.target.files[0];
+    const filesArrayLength = event.target.files.length;
+
+    if (file && file.type.startsWith('image/') && filesArrayLength === 1) {
+      console.log('image input valid');
+      return true;
+    } else {
+      console.log('image input invalid');
+      this.inputInvalid = true;
+      this.showCropper = false;
+      this.showLoader = false;
+      return;
+    }
   }
 
 
