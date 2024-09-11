@@ -66,6 +66,7 @@ export class LoginComponent implements OnInit {
       );
 
       if (session) {
+        console.log('############ await loadUser');
         await this.userService.loadUser(session.userId);
       }
 

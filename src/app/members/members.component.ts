@@ -6,7 +6,7 @@ import {BlobGalleryItemContainer} from "../core/common/blob-gallery-item-contain
 import {ViewportScroller} from "@angular/common";
 import {StateService} from "./Service/state.service";
 import {finalize, Subscription} from "rxjs";
-import {Rate} from "../core/common/rate";
+import {FullScreenLoaderService} from "../shared/services/full-screen-loader.service";
 
 @Component({
   selector: 'app-members',
@@ -53,6 +53,8 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   viewportScroller = inject(ViewportScroller);
   stateService = inject(StateService);
+  fullscreenLoaderService = inject(FullScreenLoaderService);
+
 
   destroyObs!: Subscription;
 
@@ -60,6 +62,12 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.manageScrollTo();
+
+    // after logging out & in without closing browser, the dataStore service dont load new data ->
+    // and dont close spinner, so we must check it here
+    if (this.dataStore.getTotalResizeCount() > 0) {
+      this.fullscreenLoaderService.setLoadingOff();
+    }
   }
 
   manageScrollTo() {

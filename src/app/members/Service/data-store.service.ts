@@ -80,7 +80,7 @@ export class DataStoreService {
           //console.log(response.documents);
           this.ratesTotal$.next(response.total);
           console.log('Update Rates array');
-          this.fullscreenLoaderService.setLoadingOff();
+          //this.fullscreenLoaderService.setLoadingOff();
         }
 
 
@@ -130,6 +130,10 @@ export class DataStoreService {
 
   getRatesSize() {
     return this.rates$.value.length;
+  }
+
+  getTotalResizeCount() {
+    return this.ratesTotal$.value;
   }
 
 
