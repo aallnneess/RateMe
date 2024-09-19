@@ -204,6 +204,7 @@ export class DatabaseService {
     ))
   }
 
+  // Es werden nur globale variablen geändert, kein fälschliches überschreiben möglich
   updateParentsGlobalAttributes(parentDocumentId: string) {
     //console.log(' XXX ');
     const ratings: Rate[] = [];
