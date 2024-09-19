@@ -1,15 +1,17 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
+  ElementRef, inject,
   Input,
   OnDestroy,
-  QueryList,
+  QueryList, signal,
   ViewChild,
   ViewChildren
 } from '@angular/core';
 import KeenSlider, {KeenSliderInstance} from "keen-slider";
 import {GalleryItem} from "ng-gallery";
+import {GalleryItemCustom} from "../../../core/common/gallery-item-custom";
+import {HelpersService} from "../../Service/helpers.service";
 
 @Component({
   selector: 'app-keen-sl',
@@ -28,13 +30,19 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
 
   slider!: KeenSliderInstance;
 
+  helperService = inject(HelpersService);
+  currentImageUserName = signal<string>('');
+  currentImageUpdatedAt = signal<string>('');
+
 
   ngAfterViewInit() {
     this.slider = new KeenSlider(this.sliderRef.nativeElement, {
       slideChanged: (s) => {
           this.updatedImageIndex = s.track.details.rel;
+          this.updateNameAndUpdatedAt();
       }
     });
+    this.updateNameAndUpdatedAt();
   }
 
   ngOnDestroy() {
@@ -79,7 +87,6 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
    */
   updateZoom() {
     this.zoomImages.get(this.updatedImageIndex)!.nativeElement.style.transform = `scale(${this.scale})`;
-    //this.zoomImage.nativeElement.style.transform = `scale(${this.scale})`;
   }
 
 
@@ -88,6 +95,13 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
     this.initialDistance = null; // Reset the initial distance
     this.scale = 1;
     this.updateZoom();
+  }
+
+  updateNameAndUpdatedAt() {
+    this.currentImageUserName.set((this.items[this.updatedImageIndex] as unknown as GalleryItemCustom).userName);
+    this.currentImageUpdatedAt.set(this.helperService.formatDateToGermanDate(
+      (this.items[0] as unknown as GalleryItemCustom).updatedAt
+    ));
   }
 
 }

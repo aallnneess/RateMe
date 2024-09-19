@@ -8,9 +8,9 @@ import {Component} from '@angular/core';
 export class AppComponent {
 
   // SEHR WICHTIG
-  // TODO: Es dürfen nur Bilder ausgewählt werden beim image cropper ! sonst gibts nen error beim hochladen
   // TODO: image loader
-  // TODO: Versions Nummern einführen bzw. DIREKT vor dem upload nach EDIT erneut prüfen ob aktuellstes objekt (appwrite changed at....)
+  // TODO: Versions Nummern einführen bzw. DIREKT vor dem upload nach EDIT erneut prüfen ob aktuellstes objekt (appwrite changed at....) da =>
+  //  GLOBALIMAGEBUCKETS von mehreren usern gleichzeitig geändert/überschrieben werden könnte....!!!
   // Sonst kann e sja sein das dass aktuellste dokument in den edit view gekommen ist, aber es zu lange gedauert hat, es zu editieren und wer anders schneller war !
 
 

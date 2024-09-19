@@ -46,7 +46,12 @@
         [thumb]="false"
         [autoHeight]="true"
         [id]="'1'"
+        (indexChange)="updateNameAndUpdatedAt($event.currIndex!)"
       ></gallery>
+
+      <div class="img-text">
+        <span>{{currentImageUserName()}} - {{currentImageUpdatedAt()}}</span>
+      </div>
 
       <button class="button1 material-symbols-outlined" (click)="galleryToggle()">
         fullscreen
@@ -60,7 +65,12 @@
         [thumb]="false"
         [autoHeight]="true"
         [id]="'2'"
+        (indexChange)="updateNameAndUpdatedAt($event.currIndex!)"
       ></gallery>
+
+      <div class="img-text">
+        <span>{{currentImageUserName()}} - {{currentImageUpdatedAt()}}</span>
+      </div>
 
       <button class="button2 material-symbols-outlined" (click)="galleryToggle()">
         fullscreen_exit

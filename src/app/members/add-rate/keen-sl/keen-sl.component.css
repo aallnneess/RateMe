@@ -17,3 +17,21 @@ img {
 
   overflow: visible!important;
 }
+
+.zoom-container {
+  position: relative;
+}
+
+.img-text {
+  position: absolute;
+  left: 0;
+  bottom: 0.5rem;
+  right: 0;
+
+  padding: 1rem;
+
+  font-size: 1.5rem;
+
+  background-color: rgba(17, 60, 77, 0.35);
+}
+

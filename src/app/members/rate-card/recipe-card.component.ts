@@ -37,6 +37,7 @@ export class RateCardComponent implements OnInit {
         tmpGalleryItemCustom.bucketDocumentId = bucketResponse.$id;
         tmpGalleryItemCustom.userId = this.getUserId(bucketResponse.name)!;
         tmpGalleryItemCustom.userName = this.getUserName(bucketResponse.name)!;
+        tmpGalleryItemCustom.updatedAt = bucketResponse.$updatedAt;
 
         newBlobGalleryItemContainer.galleryItem = tmpGalleryItemCustom;
 

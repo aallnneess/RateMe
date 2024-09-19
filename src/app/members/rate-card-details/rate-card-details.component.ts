@@ -1,14 +1,16 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, signal, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Rate} from "../../core/common/rate";
 import {DataStoreService} from "../Service/data-store.service";
-import {GalleryItem} from "ng-gallery";
+import {GalleryItem, GalleryState} from "ng-gallery";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {AuthService} from "../../core/Services/auth.service";
 import {Subject, takeUntil} from "rxjs";
 import {DatabaseService} from "../Service/database.service";
 import {AppwriteService} from "../../core/Services/appwrite.service";
 import {UserService} from "../../core/Services/user.service";
+import {GalleryItemCustom} from "../../core/common/gallery-item-custom";
+import {HelpersService} from "../Service/helpers.service";
 
 
 @Component({
@@ -25,6 +27,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   dataBaseService = inject(DatabaseService);
   authService = inject(AuthService);
   userService = inject(UserService);
+  helperService = inject(HelpersService);
 
   @ViewChild('galleryDiv') galleryDiv!: ElementRef<HTMLDivElement>;
   @ViewChild('galleryDivAbsolut') galleryDivAbsolut!: ElementRef<HTMLDivElement>;
@@ -39,6 +42,9 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
 
   appwriteService = inject(AppwriteService);
 
+  currentImageUserName = signal<string>('');
+  currentImageUpdatedAt = signal<string>('');
+
   ngOnInit(): void {
     this.rate = this.dataStore.getRate(this.route.snapshot.paramMap.get('id')!)!;
 
@@ -46,9 +52,19 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(images => {
       this.images = this.galleryLoadService.getAllGalleryItemsFromBlobGalleryItemsArray(images);
+
+      if (this.images.length > 0) {
+
+        this.updateNameAndUpdatedAt(0);
+
+      }
+
+
     });
 
     this.showAddChildRate();
+
+
   }
 
 
@@ -105,8 +121,13 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-
   }
 
+  updateNameAndUpdatedAt(index: number) {
+    this.currentImageUserName.set((this.images[index] as unknown as GalleryItemCustom).userName);
+    this.currentImageUpdatedAt.set(this.helperService.formatDateToGermanDate(
+      (this.images[0] as unknown as GalleryItemCustom).updatedAt
+    ));
+  }
 }
 

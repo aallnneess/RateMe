@@ -14,7 +14,8 @@ import { PopupComponent } from './core/popup/popup.component';
 import {SharedModule} from "./shared/shared.module";
 import { NotFoundComponent } from './core/not-found/not-found.component';
 
-@NgModule({ declarations: [
+@NgModule({
+  declarations: [
         AppComponent,
         HomeComponent,
         TopNavComponent,
@@ -23,13 +24,21 @@ import { NotFoundComponent } from './core/not-found/not-found.component';
         PopupComponent,
         NotFoundComponent
     ],
-    exports: [
+
+  exports: [
         InputComponent,
         PopupComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        BrowserAnimationsModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
-        SharedModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+  bootstrap: [
+    AppComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    SharedModule],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi())
+  ]
+})
 export class AppModule { }
