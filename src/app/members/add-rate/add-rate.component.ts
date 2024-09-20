@@ -4,7 +4,7 @@ import {GalleryLoadService} from "../Service/gallery-load.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {concatMap, map, Subscription, tap} from "rxjs";
+import {concatMap, interval, map, Subscription, switchMap, takeWhile, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
@@ -478,6 +478,13 @@ export class AddRateComponent implements OnInit, OnDestroy {
     return filteredTagsArray.join(' ');
   }
 
+  // TODO: Es müssen ALLE Childrates aus der Datenbank geholt werden.
+  // TODO: Außerdem muss sichergestellt werden, das erstmal der editierte Rate in der Datenbank geupdated wird
+
+  // TODO: Nützt nichts.....wenn es GLEICHZEIIG mehree  User das selbe parent rate editieren kann es zu fehlern kommen.
+
+  // TODO: Also entweder sperren oder keine globalen variablen (Master Lösung)
+
   private updateParentRateImageBuckets(rate: Rate, id: string) {
 
     console.log(rate);
@@ -487,8 +494,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
       toUpdatedRateId = rate.parentDocumentId;
       console.log('rate has parent id');
     }
-
-
 
     return this.databaseService.getRateById(toUpdatedRateId).pipe(
       map((parentRate: Rate) => {
@@ -523,4 +528,14 @@ export class AddRateComponent implements OnInit, OnDestroy {
       })
     )
   }
+
+  checkIfOccupied(rateId: string, maxTakes: number) {
+    return interval(1000).pipe(
+      tap(() => console.log('check occupied...')),
+      switchMap(() => this.databaseService.getRateById(rateId)),
+      takeWhile((rate, index) => rate.active && index < maxTakes)
+    );
+  }
+
+
 }

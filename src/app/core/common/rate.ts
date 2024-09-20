@@ -25,6 +25,9 @@ export class Rate {
   manufacturer: string = '';
   boughtAt: string = '';
   boughtAtGlobal: string = '';
+
+  // Edit / Update Flag
+  active: boolean = false;
 }
 
 
