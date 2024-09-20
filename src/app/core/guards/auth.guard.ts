@@ -29,12 +29,12 @@ export const isUserAuthenticated: CanActivateFn = async (
 
 
   if (authService.loggedIn()) {
-    console.log('return true');
+    //console.log('return true');
     return true;
   }
 
   else {
-    console.log('return false');
+    //console.log('return false');
     return router.navigate(['/login']);
   }
 }

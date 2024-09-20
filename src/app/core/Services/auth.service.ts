@@ -19,7 +19,6 @@ export class AuthService {
   async lookForSession(): Promise<Models.Session> {
     console.log('authService lookForSession');
     const session = await this.appwriteService.account.getSession('current');
-    console.log('authService lookForSession', session);
     if (!session) this.#sessionSignal.set(session);
     this.#sessionSignal.set(session);
     return session;

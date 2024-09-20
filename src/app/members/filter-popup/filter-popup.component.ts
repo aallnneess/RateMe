@@ -41,7 +41,7 @@ export class FilterPopupComponent implements OnInit, OnDestroy, AfterViewInit{
       } else {
         this.section.nativeElement.classList.remove('show-section');
       }
-      console.log('toggle popup');
+      //console.log('toggle popup');
     });
   }
 

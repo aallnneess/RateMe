@@ -22,9 +22,9 @@ export class FullScreenLoaderService {
   }
 
   setLoadingOff() {
-    console.log('setLoadingOff');
+    //console.log('setLoadingOff');
     const test = (this.minTimeToLoad - (Date.now() - this.loadingStartTime));
-    console.log(test);
+    //console.log(test);
 
     if (test > 0) {
       setTimeout(() => {
@@ -37,7 +37,7 @@ export class FullScreenLoaderService {
   }
 
   private setLoadingFalse() {
-    console.log('set false');
+    //console.log('setLoadingFalse');
     this.toggleAnimationSub$.next(false);
     setTimeout(() => {
       this.loading$.next(false);

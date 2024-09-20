@@ -529,13 +529,4 @@ export class AddRateComponent implements OnInit, OnDestroy {
     )
   }
 
-  checkIfOccupied(rateId: string, maxTakes: number) {
-    return interval(1000).pipe(
-      tap(() => console.log('check occupied...')),
-      switchMap(() => this.databaseService.getRateById(rateId)),
-      takeWhile((rate, index) => rate.active && index < maxTakes)
-    );
-  }
-
-
 }

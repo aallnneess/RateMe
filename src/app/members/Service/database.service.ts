@@ -160,7 +160,7 @@ export class DatabaseService {
   }
 
   getRatesByParentDocumentId(parentDocumentId: string) {
-    console.log(parentDocumentId);
+    //console.log(parentDocumentId);
     return from(this.databases.listDocuments(
       this.databaseId,
       this.booksCollectionId,
@@ -171,6 +171,19 @@ export class DatabaseService {
       map(response => response.documents as unknown as Rate[])
     )
   }
+
+  getRatesByParentDocumentIds(parentDocumentIds: string[]) {
+    return from(this.databases.listDocuments(
+      this.databaseId,
+      this.booksCollectionId,
+      [
+        Query.contains('parentDocumentId', parentDocumentIds),  // Nutze Query.contains um mehrere IDs gleichzeitig abzufragen
+      ]
+    )).pipe(
+      map(response => response.documents as unknown as Rate[])
+    );
+  }
+
 
 
   filterRateProperties(obj: any): Rate {
