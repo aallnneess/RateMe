@@ -8,11 +8,10 @@ import {Component} from '@angular/core';
 export class AppComponent {
 
   // SEHR WICHTIG
+  // TODO: man kann nach tags/boughtAt suchen, es werden aber mom. nur parentRates berücksichtigt da es keine globaltags mehr gibt
   // TODO: image loader
-  // TODO: Versions Nummern einführen bzw. DIREKT vor dem upload nach EDIT erneut prüfen ob aktuellstes objekt (appwrite changed at....) da =>
-  //  GLOBALIMAGEBUCKETS von mehreren usern gleichzeitig geändert/überschrieben werden könnte....!!!
-  // Sonst kann e sja sein das dass aktuellste dokument in den edit view gekommen ist, aber es zu lange gedauert hat, es zu editieren und wer anders schneller war !
-
+  // TODO: Fehlerbehandlung Add/Update/Edit Rate: Zurück zur Eingabe-Maske, Info an User: später probieren.
+      // TODO: Evtl. automatische reinigung einmal die Stunde durchführen wo nicht vollständige rates gelöscht werden.
 
   // Normal Wichtig
   // TODO: Pagination-Loading Animation

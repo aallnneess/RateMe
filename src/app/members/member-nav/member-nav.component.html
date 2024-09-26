@@ -17,6 +17,7 @@
             <li (click)="reloadComponent(['addRate', 'product'])" class="popup-menu-li">Produkt</li>
           </div>
         </div>
+
       </div>
 
 
@@ -29,6 +30,7 @@
       <div class="left-menu-container">
         <li class="blue-button-white material-symbols-outlined" (click)="filterService.showPopup()">Settings</li>
         <li class="blue-button-white material-symbols-outlined" (click)="this.authService.logout()">Logout</li>
+
         <div (mouseleave)="popupMenu.classList.remove('popup-menu-show')">
           <li class="blue-button-white material-symbols-outlined"
               (mouseenter)="popupMenu.classList.add('popup-menu-show')">
@@ -39,6 +41,7 @@
             <li (click)="reloadComponent(['addRate', 'product'])" class="popup-menu-li">Produkt</li>
           </div>
         </div>
+
       </div>
 
     </ul>

@@ -2,7 +2,7 @@ import {Component, ElementRef, inject, OnDestroy, OnInit, signal, ViewChild} fro
 import {ActivatedRoute, Router} from "@angular/router";
 import {Rate} from "../../core/common/rate";
 import {DataStoreService} from "../Service/data-store.service";
-import {GalleryItem, GalleryState} from "ng-gallery";
+import {GalleryItem} from "ng-gallery";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {AuthService} from "../../core/Services/auth.service";
 import {Subject, takeUntil} from "rxjs";

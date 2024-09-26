@@ -1,5 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import {Rate} from "../../../core/common/rate";
+import {HelpersService} from "../../Service/helpers.service";
 
 @Component({
   selector: 'app-product-view',
@@ -8,9 +9,13 @@ import {Rate} from "../../../core/common/rate";
 })
 export class ProductViewComponent {
 
+  helperService = inject(HelpersService);
+
   @Input() rate!: Rate;
 
   ngOnInit(): void {
   }
+
+
 
 }

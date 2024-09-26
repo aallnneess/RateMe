@@ -45,7 +45,7 @@ export class DataStoreService {
 
       this.paginationOffset = 0;
       this.documentHeightLastPagination = 0;
-      this.databaseService.getAllRatesWithQuery(search, this.paginationLimit, this.paginationOffset, this.filterService.getSearchArray()).pipe(
+      this.databaseService.getAllParentRatesWithQuery(search, this.paginationLimit, this.paginationOffset, this.filterService.getSearchArray()).pipe(
         tap(response => this.ratesTotal$.next(response.total)),
         concatMap(response => this.getAllImages(response.documents))
       ).subscribe(rates => {
@@ -60,7 +60,7 @@ export class DataStoreService {
   // Muss von mehr als einer komponente aufgerufen und aboniert werden können.
   // Ergebnis soll aber nur hier verarbeitet werden, daher => tap
   updateRates() {
-    return this.databaseService.getAllRatesWithQuery(this.filterService.getSearch(),this.paginationLimit, this.paginationOffset, this.filterService.getSearchArray()).pipe(
+    return this.databaseService.getAllParentRatesWithQuery(this.filterService.getSearch(),this.paginationLimit, this.paginationOffset, this.filterService.getSearchArray()).pipe(
       tap((r) => {
         this.ratesTotal$.next(r.total);
       }),
@@ -120,8 +120,13 @@ export class DataStoreService {
     console.log('getAllImages');
 
     // Initialisiere die imageBucketsGlobal für jede Rate
+    // Füge parent rate.rating zur parentGlobalRating hinzu
+    // Ebenfalls tags/bought
     rates.forEach(rate => {
       rate.imageBucketsGlobal = JSON.parse(rate.imageBuckets as string) as BucketResponse[];
+      rate.parentGlobalRating.push(rate.rating);
+      rate.tagsGlobal = rate.tags;
+      rate.boughtAtGlobal = rate.boughtAt;
     });
 
     // Extrahiere die Parent-Rate-IDs, um sie auf einmal abzufragen
@@ -144,6 +149,17 @@ export class DataStoreService {
               ...parentRate.imageBucketsGlobal,
               ...childRate.imageBuckets
             ];
+
+            // globalRating
+            parentRate.parentGlobalRating.push(childRate.rating);
+
+            // tagsGlobal
+            parentRate.tagsGlobal += childRate.tags;
+
+            // boughtAtGlobal
+            parentRate.boughtAtGlobal +=', ' + childRate.boughtAt;
+
+
           }
         });
       }),

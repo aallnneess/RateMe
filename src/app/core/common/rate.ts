@@ -7,16 +7,17 @@ export class Rate {
   imageBuckets: BucketResponse[] | string = [];
   imageBucketsGlobal: BucketResponse[] | string = [];
   tags: string = '';
-  tagsGlobal: string = '';
   rateTopic: string = '';
   username: string = '';
   userId: string = '';
   notesCollectionId: string = '';
+  globalRating: number = 0;
 
   // Child Rates
   childRate: boolean = false;
   parentDocumentId: string = '';
-  globalRating: number = 0;
+  parentGlobalRating: number[] = [];
+
 
   // Recipes
   quelle: string = '';
@@ -24,11 +25,44 @@ export class Rate {
   // Products
   manufacturer: string = '';
   boughtAt: string = '';
-  boughtAtGlobal: string = '';
 
   // Edit / Update Flag
   active: boolean = false;
+
+  tagsGlobal: string = '';
+  boughtAtGlobal: string = '';
 }
+
+export interface RateResponse {
+  $id: string;
+  title: string;
+  rating: number;
+  imageBuckets: BucketResponse[] | string;
+  imageBucketsGlobal: BucketResponse[] | string;
+  tags: string;
+  rateTopic: string;
+  username: string;
+  userId: string;
+  notesCollectionId: string;
+  globalRating: number;
+
+  // Child Rates
+  childRate: boolean;
+  parentDocumentId: string;
+  parentGlobalRating: number[];
+
+  // Recipes
+  quelle: string;
+
+  // Products
+  manufacturer: string;
+  boughtAt: string;
+
+  // Edit / Update Flag
+  active: boolean;
+}
+
+
 
 
 

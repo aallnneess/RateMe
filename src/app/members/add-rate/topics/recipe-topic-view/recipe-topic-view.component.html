@@ -11,7 +11,7 @@
                     [name]="'Titel'"
                     [textFieldType]="'text'"
                     [value]="getFormControl('title')"
-                    [disabled]="editRate === null && parentRate !== null">
+                    [disabled]="!!editRate?.parentDocumentId || parentRate !== null">
   </app-member-input>
 
 
@@ -20,7 +20,7 @@
                     [name]="'Quelle'"
                     [textFieldType]="'text'"
                     [value]="getFormControl('quelle')"
-                    [disabled]="editRate === null && parentRate !== null">
+                    [disabled]="!!editRate?.parentDocumentId || parentRate !== null">
   </app-member-input>
 
 

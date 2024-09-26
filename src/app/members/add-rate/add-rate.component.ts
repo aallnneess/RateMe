@@ -1,10 +1,10 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../../core/Services/auth.service";
 import {GalleryLoadService} from "../Service/gallery-load.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {concatMap, interval, map, Subscription, switchMap, takeWhile, tap} from "rxjs";
+import {concatMap, Subscription, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
@@ -20,7 +20,6 @@ import {ProductTopic} from "./topics/ProductTopic";
 import {DatabaseService} from "../Service/database.service";
 import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
 import {UserService} from "../../core/Services/user.service";
-import {Models} from "appwrite";
 
 @Component({
   selector: 'app-add-rate',
@@ -145,14 +144,15 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.imageBucketsGlobal = bucketResponses as unknown as BucketResponse[];
         rate.title = this.form.get('title')?.value;
         rate.rating = this.form.get('rating')?.value;
-        rate.tags = this.form.get('tags')?.value + ' ';
+        let tags = this.form.get('tags')?.value;
+        rate.tags = tags.trim() + ' ';
         rate.tagsGlobal = rate.tags;
         rate.username = this.userService.user()!.name;
         rate.userId = this.userService.user()!.$id;
-        rate.globalRating = rate.rating;
 
         // Recipe
         rate.quelle = this.form.get('quelle')?.value;
+        rate.globalRating = rate.rating;
 
         // Product
         rate.manufacturer = this.form.get('manufacturer')?.value;
@@ -177,7 +177,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
             )
           })
         )
-      })
+      }),
     ).subscribe({
       next: () => {
         this.nodeServer.getFunctionStatus(this.currentFunctionExecutionId).then(status => {
@@ -218,7 +218,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
             rate.title = this.form.get('title')?.value;
             rate.rating = this.form.get('rating')?.value;
 
-            // rate.tags = this.form.get('tags')?.value;
             rate.tags = this.removeParentTags(this.form.get('tags')?.value, this.parentRate?.tags!);
 
             rate.username = this.userService.user()!.name;
@@ -243,20 +242,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
                 ))
               }),
               concatMap(() => {
-                if (rate.childRate) {
-                  return this.databaseService.updateParentsGlobalAttributes(rate.parentDocumentId);
-                } else {
-                  return this.databaseService.updateParentsGlobalAttributes(rate.$id);
-                }
-              }),
-              concatMap(() => {
-                // get parent rate to update image bucket
-                return this.databaseService.getRateById(rate.parentDocumentId);
-              }),
-              concatMap(result => {
-
-                return this.updateParentRateImageBuckets(rate, 'noId');
-              }),
+                return this.nodeServer.checkGlobalRate(rate.parentDocumentId);
+              })
             );
           })
         )
@@ -306,7 +293,8 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.imageBucketsGlobal = JSON.parse(this.editRate?.imageBucketsGlobal as unknown as string) as BucketResponse[];
         rate.title = this.form.get('title')?.value;
         rate.rating = this.form.get('rating')?.value;
-        rate.tags = this.form.get('tags')?.value + ' ';
+        let tags = this.form.get('tags')?.value;
+        rate.tags = tags.trim() + ' ';
         rate.username = this.editRate?.username!;
         rate.userId = this.editRate?.userId!;
         rate.notesCollectionId = this.editRate?.notesCollectionId!;
@@ -324,27 +312,24 @@ export class AddRateComponent implements OnInit, OnDestroy {
         rate.boughtAt = this.form.get('boughtAt')?.value;
 
         return this.databaseService.updateRate(rate).pipe(
-          concatMap(result => {
-
-            return this.updateParentRateImageBuckets(rate, result.$id);
-          }),
-          // concatMap(rate => {
-          //   return this.databaseService.updateRate(rate);
-          // }),
           concatMap(() => {
-            if (rate.childRate) {
-              console.log('Childrate');
-              return this.databaseService.updateParentsGlobalAttributes(rate.parentDocumentId);
+
+            let parentRateId = '';
+            if (rate.parentDocumentId) {
+              parentRateId = rate.parentDocumentId;
             } else {
-              console.log('ParentRate');
-              console.log(this.editRate?.$id);
-              return this.databaseService.updateParentsGlobalAttributes(this.editRate?.$id!);
+              parentRateId = rate.$id;
             }
+
+            console.log('##### parentid: ' + parentRateId);
+
+            return this.nodeServer.checkGlobalRate(parentRateId);
           })
         );
       }),
       concatMap(result => {
         console.log('delete images');
+        // TODO: Hä ? wasn das hier
 
         return this.fileService.removeImage(deleteImages);
       })
@@ -476,57 +461,6 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
     // Füge die bereinigten Tags wieder zu einem String zusammen
     return filteredTagsArray.join(' ');
-  }
-
-  // TODO: Es müssen ALLE Childrates aus der Datenbank geholt werden.
-  // TODO: Außerdem muss sichergestellt werden, das erstmal der editierte Rate in der Datenbank geupdated wird
-
-  // TODO: Nützt nichts.....wenn es GLEICHZEIIG mehree  User das selbe parent rate editieren kann es zu fehlern kommen.
-
-  // TODO: Also entweder sperren oder keine globalen variablen (Master Lösung)
-
-  private updateParentRateImageBuckets(rate: Rate, id: string) {
-
-    console.log(rate);
-
-    let toUpdatedRateId = id;
-    if (rate.parentDocumentId.length > 0) {
-      toUpdatedRateId = rate.parentDocumentId;
-      console.log('rate has parent id');
-    }
-
-    return this.databaseService.getRateById(toUpdatedRateId).pipe(
-      map((parentRate: Rate) => {
-
-        let rateImageBuckets = JSON.parse(rate.imageBuckets as string) as BucketResponse[];
-        let parentRateImageBucketsGlobal = JSON.parse(parentRate.imageBucketsGlobal as string) as BucketResponse[];
-
-        console.log('Länge parentRateImageBucketsGlobal vor löschen von user bildern ' + parentRateImageBucketsGlobal.length);
-
-        // remove all buckets
-        parentRateImageBucketsGlobal = parentRateImageBucketsGlobal.filter(bucket =>
-          !bucket.name.includes(this.userService.user()?.$id!)
-        );
-
-        console.log('Länge parentRateImageBucketsGlobal nach löschen von user bildern ' + parentRateImageBucketsGlobal.length);
-
-        // add images
-        rateImageBuckets.forEach(bucket => {
-          if (!parentRateImageBucketsGlobal.some(parentBucket => parentBucket.$id === bucket.$id)) {
-            parentRateImageBucketsGlobal.push(bucket);
-          }
-        });
-
-        parentRate.imageBucketsGlobal = parentRateImageBucketsGlobal;
-        parentRate.imageBuckets = JSON.parse(parentRate.imageBuckets as string) as BucketResponse[];
-
-        return parentRate;
-      }),
-      concatMap(parentRate => {
-
-        return this.databaseService.updateRate(parentRate);
-      })
-    )
   }
 
 }

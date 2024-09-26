@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {Databases, ID, Query} from "appwrite";
-import {concatMap, finalize, forkJoin, from, map, Observable, of, tap} from "rxjs";
+import {from, map, Observable, tap} from "rxjs";
 import {AppwriteService} from "../../core/Services/appwrite.service";
-import {Rate} from "../../core/common/rate";
+import {Rate, RateResponse} from "../../core/common/rate";
 import {RateContainer} from "../../core/common/rate-container";
 import {FilterService} from "./filter.service";
 
@@ -26,13 +26,29 @@ export class DatabaseService {
   addRate(rate: Rate) {
 
     rate.imageBuckets = JSON.stringify(rate.imageBuckets);
-    rate.imageBucketsGlobal = JSON.stringify(rate.imageBucketsGlobal);
 
     return from(this.databases.createDocument(
       this.databaseId,
       this.booksCollectionId,
       ID.unique(),
-      rate
+      <RateResponse>{
+        $id: rate.$id,
+        rating: rate.rating,
+        active: rate.active,
+        childRate: rate.childRate,
+        imageBuckets: rate.imageBuckets,
+        notesCollectionId: rate.notesCollectionId,
+        parentDocumentId: rate.parentDocumentId,
+        rateTopic: rate.rateTopic,
+        quelle: rate.quelle,
+        boughtAt: rate.boughtAt,
+        userId: rate.userId,
+        tags: rate.tags,
+        title: rate.title,
+        manufacturer: rate.manufacturer,
+        username: rate.username,
+        globalRating: rate.globalRating
+      }
     ));
   }
 
@@ -40,11 +56,29 @@ export class DatabaseService {
     rate.imageBuckets = JSON.stringify(rate.imageBuckets);
     rate.imageBucketsGlobal = JSON.stringify(rate.imageBucketsGlobal);
 
+    // const filteredRate = this.filterRateProperties(rate);
+
     return from(this.databases.updateDocument(
       this.databaseId,
       this.booksCollectionId,
       rate.$id,
-      this.filterRateProperties(rate)
+      <RateResponse>{
+        $id: rate.$id,
+        rating: rate.rating,
+        active: rate.active,
+        childRate: rate.childRate,
+        imageBuckets: rate.imageBuckets,
+        notesCollectionId: rate.notesCollectionId,
+        parentDocumentId: rate.parentDocumentId,
+        rateTopic: rate.rateTopic,
+        quelle: rate.quelle,
+        boughtAt: rate.boughtAt,
+        userId: rate.userId,
+        tags: rate.tags,
+        title: rate.title,
+        manufacturer: rate.manufacturer,
+        username: rate.username
+      }
     ))
   }
 
@@ -62,7 +96,7 @@ export class DatabaseService {
     );
   }
 
-  getAllRatesWithQuery(search: string, paginationLimit: number, paginationOffset: number, searchWords?: string[]) {
+  getAllParentRatesWithQuery(search: string, paginationLimit: number, paginationOffset: number, searchWords?: string[]) {
 
     let querys: Observable<RateContainer>[] = [];
     let allQueries: string[] = [];
@@ -75,8 +109,8 @@ export class DatabaseService {
           allQueries.push(
             Query.or([
               Query.contains('title', word),
-              Query.contains('tagsGlobal', word),
-              Query.contains('boughtAtGlobal', word)
+              Query.contains('tags', word),
+              Query.contains('boughtAt', word)
             ]),
           );
         });
@@ -85,8 +119,8 @@ export class DatabaseService {
           allQueries.push(
             Query.or([
               Query.contains('title', search),
-              Query.contains('tagsGlobal', search),
-              Query.contains('boughtAtGlobal', search)
+              Query.contains('tags', search),
+              Query.contains('boughtAt', search)
             ]),
           );
         }
@@ -95,8 +129,8 @@ export class DatabaseService {
         allQueries.push(
           Query.or([
             Query.contains('title', search),
-            Query.contains('tagsGlobal', search),
-            Query.contains('boughtAtGlobal', search)
+            Query.contains('tags', search),
+            Query.contains('boughtAt', search)
           ]),
         );
       }
@@ -173,11 +207,19 @@ export class DatabaseService {
   }
 
   getRatesByParentDocumentIds(parentDocumentIds: string[]) {
+
+    let queries = Query.contains('parentDocumentId', parentDocumentIds);
+
+    // if no parentDocumentIds, Query.contains throws error, so we use Query.equal
+    if (parentDocumentIds.length === 0) {
+      queries = Query.equal('parentDocumentId', 'no queries')
+    }
+
     return from(this.databases.listDocuments(
       this.databaseId,
       this.booksCollectionId,
       [
-        Query.contains('parentDocumentId', parentDocumentIds),  // Nutze Query.contains um mehrere IDs gleichzeitig abzufragen
+        queries
       ]
     )).pipe(
       map(response => response.documents as unknown as Rate[])
@@ -217,84 +259,7 @@ export class DatabaseService {
     ))
   }
 
-  // Es werden nur globale variablen geändert, kein fälschliches überschreiben möglich
-  updateParentsGlobalAttributes(parentDocumentId: string) {
-    //console.log(' XXX ');
-    const ratings: Rate[] = [];
-    let globalRating: number = 0;
-    let tagsGlobal = '';
-    let boughtAtGlobal = '';
 
-    return from(this.databases.getDocument(
-      this.databaseId,
-      this.booksCollectionId,
-      parentDocumentId
-    )).pipe(
-      map(response => response as unknown as Rate),
-      tap(parentRate => {
-        //console.log('Get Parentrate...');
-        ratings.push(parentRate);
-        //console.log('Size of ratings Array after adding Parentrate: ' + ratings.length);
-      }),
-      concatMap(() => {
-        return from(this.databases.listDocuments(
-          this.databaseId,
-          this.booksCollectionId,
-          [
-            Query.equal('parentDocumentId', parentDocumentId)
-          ]
-        )).pipe(
-          map(response => response.documents as unknown as Rate[]),
-          tap(rates => {
-            //console.log('Get ' + rates.length + ' Child Rates.');
-            ratings.push(...rates);
-            //console.log('Size of ratings Array after adding childs: ' + ratings.length);
-
-            // GlobalRating calculation #######################################################
-
-            for (let rating of ratings) {
-              globalRating += rating.rating;
-            }
-
-            globalRating = globalRating / ratings.length;
-
-            // tagsGlobal concats #######################################################
-
-            for (let rating of ratings) {
-              tagsGlobal += rating.tags;
-            }
-
-            // boughtAtGlobal concats #######################################################
-
-            for (let rating of ratings) {
-              boughtAtGlobal += rating.boughtAt + ' ';
-            }
-
-
-
-          })
-        )
-      }),
-      concatMap(() => {
-
-        //console.log(globalRating);
-        return from(this.databases.updateDocument(
-          this.databaseId,
-          this.booksCollectionId,
-          parentDocumentId,
-          {
-            globalRating: globalRating,
-            tagsGlobal: tagsGlobal,
-            boughtAtGlobal: boughtAtGlobal,
-          }
-        ))
-      }),
-      finalize(() => {
-        console.log('global rating successfully updated to ' + globalRating);
-        //console.log(' XXX ');
-      })
-    );
-  }
 
 
 

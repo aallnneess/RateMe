@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {UserInfo} from "../common/user-info";
 import {AppwriteService} from "./appwrite.service";
-import {from, map} from "rxjs";
-import {ExecutionMethod} from "appwrite";
+import {from, map, Observable, tap} from "rxjs";
+import {ExecutionMethod, Models} from "appwrite";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,19 @@ export class NodeServerService {
   appwriteService = inject(AppwriteService);
 
   url = 'https://rateme-function.vezept.de';
+
+  checkGlobalRate(parentId: string): Observable<Models.Document> {
+    return from(this.appwriteService.functions.createExecution(
+      '65c3cd5f3c2d915cfc15',
+      parentId,
+      false,
+      '/checkGlobalRate',
+      ExecutionMethod.GET
+    )).pipe(
+      tap(result => console.log(result)),
+      map(result => result.responseBody as unknown as Models.Document)
+    )
+  }
 
   getUserWithId(id: string) {
 

@@ -12,7 +12,7 @@
                     [name]="'Titel'"
                     [textFieldType]="'text'"
                     [value]="getFormControl('title')"
-                    [disabled]="editRate === null && parentRate !== null">
+                    [disabled]="!!editRate?.parentDocumentId || parentRate !== null">
   </app-member-input>
 
 
@@ -21,7 +21,7 @@
                     [name]="'Hersteller'"
                     [textFieldType]="'text'"
                     [value]="getFormControl('manufacturer')"
-                    [disabled]="editRate === null && parentRate !== null">
+                    [disabled]="!!editRate?.parentDocumentId || parentRate !== null">
   </app-member-input>
 
   <app-member-input #input3

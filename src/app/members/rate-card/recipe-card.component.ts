@@ -4,6 +4,7 @@ import {GalleryItem, ImageItem} from "ng-gallery";
 import {FileService} from "../../core/Services/file.service";
 import {BlobGalleryItemContainer} from "../../core/common/blob-gallery-item-container";
 import {GalleryItemCustom} from "../../core/common/gallery-item-custom";
+import {HelpersService} from "../Service/helpers.service";
 
 @Component({
   selector: 'app-rate-card',
@@ -12,6 +13,7 @@ import {GalleryItemCustom} from "../../core/common/gallery-item-custom";
 })
 export class RateCardComponent implements OnInit {
 
+  helperService = inject(HelpersService);
   fileService: FileService = inject(FileService);
 
   @Input( {required: true} ) rate!: Rate;

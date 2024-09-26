@@ -24,6 +24,7 @@ export class RecipeTopicViewComponent implements OnInit {
   @Output() sendDataToParent = new EventEmitter<Blob[]>();
 
   ngOnInit(): void {
+
     if (this.editRate === undefined) this.editRate = null;
     if (this.parentRate === undefined) this.parentRate = null;
   }

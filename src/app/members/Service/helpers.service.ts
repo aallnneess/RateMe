@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Rate} from "../../core/common/rate";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,11 @@ export class HelpersService {
 
     // Ergebnis als DD.MM.YYYY formatieren
     return `${day}.${month}.${year}`;
+  }
+
+  calcGlobalRate(rate: Rate) {
+    let result: number = rate.parentGlobalRating.reduce((acc,current) => acc+current, 0);
+    return result / rate.parentGlobalRating.length;
   }
 
 }
