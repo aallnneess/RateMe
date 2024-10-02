@@ -1,5 +1,5 @@
 <section #membersSection>
-  @for (book of dataStore.ratesOb$ | async; track book.title) {
+  @for (book of dataStore.ratesOb$ | async; track book.$id) {
     <app-rate-card #rateCard [rate]="book" (click)="openRecipeDetail(book.$id, rateCard.images)"></app-rate-card>
   }
 

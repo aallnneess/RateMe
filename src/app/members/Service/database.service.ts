@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {Databases, ID, Query} from "appwrite";
-import {from, map, Observable, tap} from "rxjs";
+import {concatMap, forkJoin, from, map, Observable, of, tap} from "rxjs";
 import {AppwriteService} from "../../core/Services/appwrite.service";
 import {Rate, RateResponse} from "../../core/common/rate";
 import {RateContainer} from "../../core/common/rate-container";
@@ -143,7 +143,7 @@ export class DatabaseService {
         Query.limit(paginationLimit),
         Query.offset(paginationOffset),
         Query.orderDesc('globalRating'),
-        Query.equal('childRate', false),
+        //Query.equal('childRate', false),
         ...allQueries,
         Query.or([
           Query.equal('rateTopic', this.filterService.getCheckedRecipe() ? 'recipe' : ''),
@@ -152,6 +152,51 @@ export class DatabaseService {
       ]
     )).pipe(
       map(response => response as unknown as RateContainer),
+      concatMap(response => {
+
+        // alle rates mit parentDocumentId (also childs) speichern
+        const childs = response.documents.filter(r => r.parentDocumentId);
+
+        // wenn es childs gibt....
+        if (childs.length > 0) {
+
+          const ob$: Observable<Rate>[] = [];
+
+          childs.forEach(child => {
+            ob$.push(from(
+              this.databases.getDocument(
+                this.databaseId,
+                this.booksCollectionId,
+                child.parentDocumentId
+              )
+            ).pipe(
+              map(document => document as unknown as Rate)
+            ));
+          });
+
+          // Alle child rates aussortieren aus ursp. Response
+          const onlyParentRates = response.documents.filter(r => !r.childRate);
+
+          // childs durch parents tauschen (es sollen nur parents in den view)
+          return forkJoin(ob$).pipe(
+            map(parentRates => {
+
+              // ein Set der ids vom ursp. parentRates Response
+              const existingIds = new Set(onlyParentRates.map(r => r.$id));
+
+              // nur "getauschte" parentRates hinzufügen, welche nicht schon im original Response enthalten sind
+              const uniqueParentRates = parentRates
+                .filter(rate => !existingIds.has(rate.$id));
+
+              response.documents = [...onlyParentRates, ...uniqueParentRates];
+              return response;
+            })
+          )
+
+        } else {
+          return of(response);
+        }
+      }),
       tap(rates => console.log(rates))
     )
   }

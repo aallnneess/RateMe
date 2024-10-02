@@ -50,7 +50,7 @@ export class DataStoreService {
         concatMap(response => this.getAllImages(response.documents))
       ).subscribe(rates => {
         this.rates$.next(rates);
-        console.log('Update Rates array');
+        console.log('Init Rates array');
         this.fullscreenLoaderService.setLoadingOff();
 
       });
@@ -69,8 +69,14 @@ export class DataStoreService {
 
         if (this.paginationOffset > 0) {
 
+          // Set of ids from rates$ array
+          const existingIds = new Set(this.rates$.value.map(r => r.$id));
+
+          // check if new rate already in the array
           for (let rate of recipes) {
-            this.rates$.value.push(rate);
+            if (!existingIds.has(rate.$id)) {
+              this.rates$.value.push(rate);
+            }
           }
 
           console.log('Update Rates array pagination');
