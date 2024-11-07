@@ -35,6 +35,11 @@
             <input [checked]="form.get('produkt')?.value" #produktCheckbox type="checkbox" formArrayName="produkt" (change)="updateCheckbox('produkt', produktCheckbox.checked)">
             Produkt
           </label>
+
+          <label>
+            <input [checked]="form.get('foodtruck')?.value" #foodtruckCheckbox type="checkbox" formArrayName="foodtruck" (change)="updateCheckbox('foodtruck', foodtruckCheckbox.checked)">
+            Foodtruck
+          </label>
         </div>
 
 

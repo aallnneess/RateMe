@@ -19,6 +19,8 @@ export class FilterService {
   checkedRecipeObservable = this.checkedRecipe$.asObservable();
   private checkedProduct$ = new BehaviorSubject<boolean>(true);
   checkedProductObservable = this.checkedProduct$.asObservable();
+  private checkedFoodtruck$ = new BehaviorSubject<boolean>(false);
+  checkedFoodtruckObservable = this.checkedFoodtruck$.asObservable()
 
 
   constructor() { }
@@ -73,6 +75,11 @@ export class FilterService {
     console.log(this.checkedProduct$.value);
   }
 
+  setCheckedFoodtruck(checkedFoodtruck: boolean) {
+    this.checkedFoodtruck$.next(checkedFoodtruck);
+    console.log(this.checkedFoodtruck$.value);
+  }
+
   getCheckedRecipe() {
     return this.checkedRecipe$.value;
   }
@@ -80,6 +87,11 @@ export class FilterService {
   getCheckedProduct(){
     return this.checkedProduct$.value;
   }
+
+  getCheckedFoodtruck() {
+    return this.checkedFoodtruck$.value;
+  }
+
 
 
 }

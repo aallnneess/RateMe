@@ -147,7 +147,8 @@ export class DatabaseService {
         ...allQueries,
         Query.or([
           Query.equal('rateTopic', this.filterService.getCheckedRecipe() ? 'recipe' : ''),
-          Query.equal('rateTopic', this.filterService.getCheckedProduct() ? 'product' : '')
+          Query.equal('rateTopic', this.filterService.getCheckedProduct() ? 'product' : ''),
+          Query.equal('rateTopic', this.filterService.getCheckedFoodtruck() ? 'foodtruck' : '')
         ]),
       ]
     )).pipe(
