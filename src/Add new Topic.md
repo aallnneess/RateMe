@@ -2,6 +2,8 @@
 
 2.) Add new properties in appwrite rateme_database database
 
+8.) member-nav-component.html: 2 x <li> Element hinzufügen. ==> Hier wird das rateTopic gesetzt !
+
 3.) Create new XXXTopic.ts in add-rate/topics... and implements TopicsInterface 
 
 4.) Create new XXXTopicViewComponent in add-rate/topics ===> (nur rüber kopieren im *.TS)
@@ -11,8 +13,6 @@
 6.) add-rate.ts: switch case hinzufügen
 
 7.) add-rate.html: switch case hinzufügen
-
-8.) member-nav-component.html: 2 x <li> Element hinzufügen 
 
 9.) Create new XXXViewComponent in rate-card-details/....
 

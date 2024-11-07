@@ -20,6 +20,7 @@ import {ProductTopic} from "./topics/ProductTopic";
 import {DatabaseService} from "../Service/database.service";
 import {FullScreenLoaderService} from "../../shared/services/full-screen-loader.service";
 import {UserService} from "../../core/Services/user.service";
+import {FoodtruckTopic} from "./topics/FoodtruckTopic";
 
 @Component({
   selector: 'app-add-rate',
@@ -93,6 +94,11 @@ export class AddRateComponent implements OnInit, OnDestroy {
       case 'product': {
         const product = new ProductTopic(this.statesService, this.rateTopic,this.parentRate,this.editRate);
         this.form = product.generateForm(this.fb,this.form);
+      } break;
+
+      case 'foodtruck': {
+        const recipe = new FoodtruckTopic(this.statesService, this.rateTopic,this.parentRate,this.editRate);
+        this.form = recipe.generateForm(this.fb,this.form);
       } break;
 
       case '': {} break;

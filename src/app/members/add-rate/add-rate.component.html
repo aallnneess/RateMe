@@ -33,6 +33,17 @@
         </app-product-topic-view>
       }
 
+      @case ('foodtruck') {
+        <app-foodtruck-topic-view
+          [parentRate]="parentRate"
+          [editRate]="editRate"
+          [form]="form"
+          (sendDataToParent)="sendData($event)"
+          (submitButtonForParent)="submitButton = $event"
+        >
+        </app-foodtruck-topic-view>
+      }
+
     }
 
 <!--                                  ↑                               -->
