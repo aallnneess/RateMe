@@ -223,6 +223,13 @@ body {
   font-weight: 700;
 }
 
+.text_bold_center {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
 .text-truncate {
   text-overflow: ellipsis;
   white-space: nowrap;
