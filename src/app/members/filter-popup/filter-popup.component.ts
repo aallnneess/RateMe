@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, viewChild, ViewChild} from '@angular/core';
 import {Subscription} from "rxjs";
 import {FilterService} from "../Service/filter.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
@@ -69,7 +69,17 @@ export class FilterPopupComponent implements OnInit, OnDestroy, AfterViewInit{
 
       case 'rezept': this.filterService.setCheckedRecipe(checked); break;
       case 'produkt': this.filterService.setCheckedProduct(checked); break;
-      case 'foodtruck': this.filterService.setCheckedFoodtruck(checked); break;
+      case 'foodtruck': {
+        this.filterService.setCheckedFoodtruck(checked);
+
+        // wenn foodtruck selektiert wird, sollen die anderen de-selektiert werden - und wieder zurück
+        this.filterService.setCheckedProduct(!checked);
+        this.form.get('rezept')?.setValue(!checked);
+        this.filterService.setCheckedRecipe(!checked);
+        this.form.get('produkt')?.setValue(!checked);
+
+        break;
+      }
     }
 
     this.filterService.setSearch(this.form.get('search')?.value);

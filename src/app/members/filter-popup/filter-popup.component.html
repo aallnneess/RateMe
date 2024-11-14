@@ -27,17 +27,18 @@
 
         <div class="select-container">
           <label>
-            <input [checked]="form.get('rezept')?.value" #rezeptCheckbox type="checkbox" formArrayName="rezept" (change)="updateCheckbox('rezept', rezeptCheckbox.checked)">
+            <input #rezeptSelect [checked]="form.get('rezept')?.value" #rezeptCheckbox type="checkbox" formArrayName="rezept" (change)="updateCheckbox('rezept', rezeptCheckbox.checked)">
             Rezept
           </label>
 
           <label>
-            <input [checked]="form.get('produkt')?.value" #produktCheckbox type="checkbox" formArrayName="produkt" (change)="updateCheckbox('produkt', produktCheckbox.checked)">
+            <input #productSelect [checked]="form.get('produkt')?.value" #produktCheckbox type="checkbox" formArrayName="produkt" (change)="updateCheckbox('produkt', produktCheckbox.checked)">
             Produkt
           </label>
 
           <label>
-            <input [checked]="form.get('foodtruck')?.value" #foodtruckCheckbox type="checkbox" formArrayName="foodtruck" (change)="updateCheckbox('foodtruck', foodtruckCheckbox.checked)">
+            <input [checked]="form.get('foodtruck')?.value" #foodtruckCheckbox type="checkbox" formArrayName="foodtruck"
+                   (change)="updateCheckbox('foodtruck', foodtruckCheckbox.checked)">
             Foodtruck
           </label>
         </div>
