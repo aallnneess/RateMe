@@ -126,7 +126,7 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
   updateNameAndUpdatedAt(index: number) {
     this.currentImageUserName.set((this.images[index] as unknown as GalleryItemCustom).userName);
     this.currentImageUpdatedAt.set(this.helperService.formatDateToGermanDate(
-      (this.images[0] as unknown as GalleryItemCustom).updatedAt
+      (this.images[index] as unknown as GalleryItemCustom).updatedAt
     ));
   }
 }

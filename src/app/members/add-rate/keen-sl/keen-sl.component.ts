@@ -32,17 +32,15 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
 
   helperService = inject(HelpersService);
   currentImageUserName = signal<string>('');
-  currentImageUpdatedAt = signal<string>('');
-
 
   ngAfterViewInit() {
     this.slider = new KeenSlider(this.sliderRef.nativeElement, {
       slideChanged: (s) => {
           this.updatedImageIndex = s.track.details.rel;
-          this.updateNameAndUpdatedAt();
+          this.updateName();
       }
     });
-    this.updateNameAndUpdatedAt();
+    this.updateName();
   }
 
   ngOnDestroy() {
@@ -97,11 +95,15 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
     this.updateZoom();
   }
 
-  updateNameAndUpdatedAt() {
+  updateName() {
+    console.log('updateNameAndUpdatedAt');
+    console.log(this.items[0] as unknown as GalleryItemCustom)
+
     this.currentImageUserName.set((this.items[this.updatedImageIndex] as unknown as GalleryItemCustom).userName);
-    this.currentImageUpdatedAt.set(this.helperService.formatDateToGermanDate(
-      (this.items[0] as unknown as GalleryItemCustom).updatedAt
-    ));
+  }
+
+  updateUpdatedAt(item: GalleryItem)  {
+    return this.helperService.formatDateToGermanDate((item as unknown as GalleryItemCustom).updatedAt);
   }
 
 }
