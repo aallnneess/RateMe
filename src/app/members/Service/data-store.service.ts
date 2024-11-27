@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {BehaviorSubject, concatMap, finalize, from, map, tap, toArray} from "rxjs";
+import {BehaviorSubject, concatMap, map, tap} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {FilterService} from "./filter.service";
 import {DatabaseService} from "./database.service";
@@ -35,6 +35,13 @@ export class DataStoreService {
   doPagination() {
     this.paginationOffset += this.paginationStep;
     console.log('offset: ' + this.paginationOffset);
+
+    // TODO: Pagination wird auch ausgelöst wenn es einfach weniger als 20 Cards gibt und man den boden erreicht....
+    // Problem wird hiermit gelöst
+    if (this.ratesTotal$.value <= this.paginationStep) {
+      this.paginationOffset = 0;
+    }
+
     return this.updateRates();
   }
 

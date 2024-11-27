@@ -96,9 +96,6 @@ export class KeenSLComponent implements AfterViewInit, OnDestroy {
   }
 
   updateName() {
-    console.log('updateNameAndUpdatedAt');
-    console.log(this.items[0] as unknown as GalleryItemCustom)
-
     this.currentImageUserName.set((this.items[this.updatedImageIndex] as unknown as GalleryItemCustom).userName);
   }
 

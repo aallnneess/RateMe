@@ -342,10 +342,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: () => {
         this.datastoreService.updateRates().subscribe(() => {
-          setTimeout(() => {
-            this.router.navigateByUrl('members');
-          });
-
+          this.router.navigateByUrl('members');
         });
 
       },
