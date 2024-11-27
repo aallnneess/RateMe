@@ -10,7 +10,7 @@ export class AppComponent {
   // SEHR WICHTIG
   // TODO: man kann nach tags/boughtAt suchen, es werden aber mom. nur parentRates berücksichtigt da es keine globaltags mehr gibt
   // TODO: image loader
-  // TODO: Fehlerbehandlung Add/Update/Edit Rate: Zurück zur Eingabe-Maske, Info an User: später probieren.
+  // TODO: Fehlerbehandlung Add/Update/Edit Rate mit retry rxjs (siehe checkGlobalRate): Zurück zur Eingabe-Maske, Info an User: später probieren.
       // TODO: Evtl. automatische reinigung einmal die Stunde durchführen wo nicht vollständige rates gelöscht werden.
 
   // Normal Wichtig
