@@ -4,7 +4,7 @@ import {GalleryLoadService} from "../Service/gallery-load.service";
 import {FileService} from "../../core/Services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {concatMap, Subscription, tap} from "rxjs";
+import {concatMap, retry, retryWhen, Subscription, tap, timer} from "rxjs";
 import {Rate} from "../../core/common/rate";
 import {BucketResponse} from "../../core/common/bucket-response";
 import {Note} from "../../core/common/note";
@@ -248,7 +248,15 @@ export class AddRateComponent implements OnInit, OnDestroy {
                 ))
               }),
               concatMap(() => {
-                return this.nodeServer.checkGlobalRate(rate.parentDocumentId);
+                return this.nodeServer.checkGlobalRate(rate.parentDocumentId).pipe(
+                  retry({
+                    count: 5,
+                    delay: (error, retryCount) => {
+                      console.error(`Fehler bei checkGlobalRate (Versuch ${retryCount}):`, error);
+                      return timer(2000);
+                    }
+                  })
+                );
               })
             );
           })
@@ -329,7 +337,15 @@ export class AddRateComponent implements OnInit, OnDestroy {
 
             console.log('##### parentid: ' + parentRateId);
 
-            return this.nodeServer.checkGlobalRate(parentRateId);
+            return this.nodeServer.checkGlobalRate(parentRateId).pipe(
+              retry({
+                count: 5,
+                delay: (error, retryCount) => {
+                  console.error(`Fehler bei checkGlobalRate (Versuch ${retryCount}):`, error);
+                  return timer(2000);
+                }
+              })
+            );
           })
         );
       }),
