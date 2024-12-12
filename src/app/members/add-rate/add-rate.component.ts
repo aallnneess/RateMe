@@ -201,7 +201,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
-        this.popupService.setErrorMessage('Verbindung fehlgeschlagen.');
+        this.popupService.setErrorMessage('Fehler: ' + e);
         this.submitButton.nativeElement.disabled = false;
       }})
   }
@@ -273,7 +273,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
-        this.popupService.setErrorMessage('Verbindung fehlgeschlagen');
+        this.popupService.setErrorMessage('Fehler: ' + e);
         this.submitButton.nativeElement.disabled = false;
       }});
   }
@@ -365,7 +365,7 @@ export class AddRateComponent implements OnInit, OnDestroy {
       error: (e) => {
         // TODO: Errorbehandlung:
         console.error(e);
-        this.popupService.setErrorMessage('Verbindung fehlgeschlagen.');
+        this.popupService.setErrorMessage('Fehler: ' + e);
         this.submitButton.nativeElement.disabled = false;
       }
     });

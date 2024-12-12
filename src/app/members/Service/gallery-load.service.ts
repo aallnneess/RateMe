@@ -90,6 +90,7 @@ export class GalleryLoadService {
   }
 
   async urlToBlob(url: string) {
+    console.log('### ' + url);
     const response = await fetch(url);
     return await response.blob();
   }

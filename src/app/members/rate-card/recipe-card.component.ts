@@ -49,13 +49,36 @@ export class RateCardComponent implements OnInit {
 
   }
 
-  getAllGalleryItems() {
-    const images: GalleryItem[] = [];
-    for (let image of this.images) {
-      images.push(image.galleryItem);
+
+  // TODO: Nur Foodtruck Bilder werden von Neu -> Alt sortiert !
+  getAllGalleryItems(): GalleryItem[] {
+
+    if (this.rate.rateTopic !== 'foodtruck') {
+      let images: GalleryItem[] = [];
+      for (let image of this.images) {
+        images.push(image.galleryItem);
+      }
+
+      images = images.sort((a: any, b: any) => a.updatedAt - b.updatedAt);
+
+      return images;
     }
-    return images;
+
+
+    return this.images
+      .map(image => image.galleryItem)
+      .sort((a, b) => {
+        // Temporärer Cast auf `any` oder ein erweitertes Interface
+        const updatedAtA = (a as any).updatedAt;
+        const updatedAtB = (b as any).updatedAt;
+
+        // Sortieren nach `updatedAt`, falls vorhanden
+        // return(updatedAtB ?? 0) - (updatedAtA ?? 0);
+        return (new Date(updatedAtB).getTime() ?? 0) - (new Date(updatedAtA).getTime() ?? 0);
+      });
   }
+
+
 
   getUserId(imageName: string) {
 

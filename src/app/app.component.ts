@@ -12,7 +12,7 @@ export class AppComponent {
   // TODO: image loader
   // TODO: Fehlerbehandlung Add/Update/Edit Rate mit retry rxjs (siehe checkGlobalRate): Zurück zur Eingabe-Maske, Info an User: später probieren.
       // TODO: Evtl. automatische reinigung einmal die Stunde durchführen wo nicht vollständige rates gelöscht werden.
-
+  // TODO: Bilder Anzahl begrenzt da die bucket objekte als string gespeichert werden (maximale chars...) eig. Datenbank _______(!?) wär besser
   // Normal Wichtig
   // TODO: Pagination-Loading Animation
   // TODO : Komplette Image verarbeiten neu gestalten......
