@@ -19,6 +19,7 @@ export class RateCardComponent implements OnInit {
   @Input( {required: true} ) rate!: Rate;
 
   images: BlobGalleryItemContainer[] = [];
+  sortedImages: GalleryItem[] = [];
 
   ngOnInit(): void {
     this.loadImage();
@@ -47,6 +48,7 @@ export class RateCardComponent implements OnInit {
       });
     }
 
+    this.sortedImages = this.getAllGalleryItems();
   }
 
 

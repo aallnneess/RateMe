@@ -53,6 +53,8 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
     ).subscribe(images => {
       this.images = this.galleryLoadService.getAllGalleryItemsFromBlobGalleryItemsArray(images);
 
+      this.images = this.getSortedGalleryItems();
+
       if (this.images.length > 0) {
 
         this.updateNameAndUpdatedAt(0);
@@ -128,6 +130,34 @@ export class RateCardDetailsComponent implements OnInit, OnDestroy {
     this.currentImageUpdatedAt.set(this.helperService.formatDateToGermanDate(
       (this.images[index] as unknown as GalleryItemCustom).updatedAt
     ));
+  }
+
+  // TODO: Nur Foodtruck Bilder werden von Neu -> Alt sortiert !
+  getSortedGalleryItems(): GalleryItem[] {
+
+    if (this.rate.rateTopic !== 'foodtruck') {
+      let images: GalleryItem[] = [];
+      for (let image of this.images) {
+        images.push(image);
+      }
+
+      images = images.sort((a: any, b: any) => a.updatedAt - b.updatedAt);
+
+      return images;
+    }
+
+
+    return this.images
+      .map(image => image)
+      .sort((a, b) => {
+        // Temporärer Cast auf `any` oder ein erweitertes Interface
+        const updatedAtA = (a as any).updatedAt;
+        const updatedAtB = (b as any).updatedAt;
+
+        // Sortieren nach `updatedAt`, falls vorhanden
+        // return(updatedAtB ?? 0) - (updatedAtA ?? 0);
+        return (new Date(updatedAtB).getTime() ?? 0) - (new Date(updatedAtA).getTime() ?? 0);
+      });
   }
 }
 
